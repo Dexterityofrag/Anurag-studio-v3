@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* ─── TAILWIND THEME ─────────────────────────────────────── */
+@theme inline {
+  --color-bg:        #050505;
+  --color-bg-alt:    #0a0a0a;
+  --color-fg:        #f0f0f0;
+  --color-muted:     rgba(240, 240, 240, 0.5);
+  --color-accent:    #E4FE9A;
+  --color-border:    rgba(255, 255, 255, 0.06);
+  --color-lavender:  #BF96C9;
+  --color-peach:     #F9C4BB;
+  --color-andy:      #a78bfa;
+}
+
+/* ─── CSS VARIABLES ──────────────────────────────────────── */
+:root {
+  /* ── New design tokens ── */
+  --color-bg:        #050505;
+  --color-bg-alt:    #0a0a0a;
+  --color-fg:        #f0f0f0;
+  --color-muted:     rgba(240, 240, 240, 0.5);
+  --color-accent:    #E4FE9A;
+  --color-border:    rgba(255, 255, 255, 0.06);
+  --color-lavender:  #BF96C9;
+  --color-peach:     #F9C4BB;
+  --color-andy:      #a78bfa;
+
+  /* ── Fonts — resolved by next/font CSS vars on <body> ── */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body:    "DM Sans", sans-serif;
+  --font-mono:    "DM Mono", monospace;
+
+  /* ── Layout ── */
+  --max-width:   1440px;
+  --gutter:      40px;
+  --nav-h:       72px;
+  --page-px:     clamp(1.5rem, 5vw, 6rem);
+
+  /* ── Border radius ── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+
+  /* ── Transitions ── */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* ── Z-index scale ── */
+  --z-base:         1;
+  --z-content:      5;
+  --z-float:        50;
+  --z-mobile-menu:  490;
+  --z-header:       500;
+  --z-loader:       6000;
+  --z-transition:   7000;
+  --z-grain:        8000;
+  --z-cursor:       10100;
+
+  /* ── Backward-compat aliases (components use these — keep forever) ── */
+  --bg:          var(--color-bg);
+  --surface:     var(--color-bg-alt);
+  --surface-2:   #111111;
+  --border:      var(--color-border);
+  --accent:      var(--color-accent);   /* runtime-overridden by admin DB */
+  --accent-dim:  rgba(228, 254, 154, 0.12);
+  --text:        var(--color-fg);
+  --muted:       var(--color-muted);
+  --muted-2:     rgba(240, 240, 240, 0.25);
+}
+
+/* ── Responsive gutter ── */
+@media (max-width: 768px) {
+  :root { --gutter: 20px; }
+}
+
+/* ─── BASE ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* html keeps the solid base colour for scrollbar gutters + fallback */
+html {
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  scroll-padding-top: 72px;
+}
+
+/* Hide default cursor on non-touch devices */
+body:not(.is-touch),
+body:not(.is-touch) a,
+body:not(.is-touch) button,
+body:not(.is-touch) [role="button"],
+body:not(.is-touch) .pcard,
+body:not(.is-touch) .bcard,
+body:not(.is-touch) .bpost,
+body:not(.is-touch) .fw-card,
+body:not(.is-touch) .ww-row {
+  cursor: none;
+}
+
+
+/* body is transparent — MeshGradientBg (position:fixed) is the backdrop */
+body {
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+
+
+/* ─── MARQUEE ────────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── SCROLLBAR ──────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ─── FOCUS ──────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* ─── SELECTION ──────────────────────────────────────────── */
+::selection { background: var(--accent); color: var(--bg); }
+
+/* ─── AVAILABLE BADGE ────────────────────────────────────── */
+@keyframes available-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+.available-glow { animation: available-pulse 2s ease-in-out infinite; }
+
+/* ─── SECTION TONES ─────────────────────────────────────── */
+.tone-a { background: #050505; }
+.tone-b { background: #0a0a0a; }
+
+/* ─── REVEAL UTILITY ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.8s cubic-bezier(.22,1,.36,1),
+    transform 0.8s cubic-bezier(.22,1,.36,1);
+}
+.reveal.vis { opacity: 1; transform: translateY(0); }
+.rd1 { transition-delay: 80ms; }
+.rd2 { transition-delay: 160ms; }
+.rd3 { transition-delay: 240ms; }
+
+/* ─── SKELETON SHIMMER ───────────────────────────────────── */
+@keyframes skeleton-shimmer {
+  from { background-position: -400px 0; }
+  to   { background-position:  400px 0; }
+}
+.skeleton-bar {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* ─── REDUCED MOTION ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}

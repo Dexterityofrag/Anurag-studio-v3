@@ -1,0 +1,51 @@
+name: anurag-studio
+region: nyc
+services:
+  - name: web
+    source_dir: /
+    github:
+      repo: YOUR_GITHUB_USERNAME/anurag-studio
+      branch: main
+      deploy_on_push: true
+    build_command: npm run build
+    run_command: npm start
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-1gb
+    http_port: 3000
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: DO_SPACES_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: DO_SPACES_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: DO_SPACES_REGION
+        scope: RUN_TIME
+        value: nyc3
+      - key: DO_SPACES_BUCKET
+        scope: RUN_TIME
+        value: anurag-studio-media
+      - key: AUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: ADMIN_EMAIL
+        scope: RUN_TIME
+        type: SECRET
+      - key: ADMIN_PASSWORD_HASH
+        scope: RUN_TIME
+        type: SECRET
+      - key: RESEND_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: REVALIDATE_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: NEXTAUTH_URL
+        scope: RUN_AND_BUILD_TIME
+        value: https://anurag.studio
+      - key: NODE_ENV
+        scope: RUN_AND_BUILD_TIME
+        value: production

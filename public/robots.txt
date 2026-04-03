@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /x/
+Allow: /
+
+Sitemap: https://anurag.studio/sitemap.xml
