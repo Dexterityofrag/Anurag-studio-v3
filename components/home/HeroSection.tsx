@@ -356,16 +356,17 @@ const css = /* css */ `
   inset: 0;
   will-change: transform;
   transform-style: preserve-3d;
-  /* Center the name block in the viewport, leaving room for the fixed nav */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 72px; /* nav height offset so optical center is below nav */
+  /* Optical center: shift content down by half the nav height
+     so the visual mass sits in the true center of the usable viewport */
+  margin-top: 36px;
 }
 
-/* ── Particle canvas ── */
-.v3-hero-canvas {
+/* ── Orbital SVG ── */
+.v3-orbits {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -373,9 +374,23 @@ const css = /* css */ `
   z-index: 2;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 1.2s ease 0.4s;
+  transition: opacity 1.6s ease 0.6s;
+  overflow: hidden;
 }
-.v3-hero-canvas.in { opacity: 1; }
+.v3-orbits.in { opacity: 1; }
+
+/* Subtle center glow pulse */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.9; }
+}
+.v3-orbit-glow { animation: glow-pulse 6s ease-in-out infinite; }
+
+/* Satellite dot glow */
+@keyframes sat-glow {
+  0%, 100% { r: 2.5; filter: blur(0px); }
+  50%       { r: 3.8; filter: blur(1px); }
+}
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
@@ -442,7 +457,7 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
   const tiltRef = useRef<HTMLDivElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const orbitsRef = useRef<SVGSVGElement>(null)
   const snapCursorRef = useRef<HTMLDivElement>(null)
   const snapBubbleRef = useRef<HTMLDivElement>(null)
   const snapZoneRef = useRef<HTMLDivElement>(null)
@@ -490,112 +505,16 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     }
   }, [])
 
-  /* ── Particle constellation loop ── */
+  /* ── Orbital SVG fade in ── */
   useEffect(() => {
-    const cv = canvasRef.current
-    if (!cv) return
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const cx = cv.getContext('2d')!
-    if (!cx) return
-
-    // skip for reduced-motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-    const N = 58           // particle count
-    const LINK_DIST = 155  // max connection distance (px)
-    const SPEED = 0.28     // base drift speed
-
-    interface Particle {
-      x: number; y: number
-      vx: number; vy: number
-      r: number; alpha: number
+    const svg = orbitsRef.current
+    if (!svg) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      svg.classList.add('in')
+      return
     }
-
-    let W = 0, H = 0
-    const particles: Particle[] = []
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const el = cv!
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const c = cx!
-
-    function resize() {
-      W = el.offsetWidth
-      H = el.offsetHeight
-      el.width  = W * devicePixelRatio
-      el.height = H * devicePixelRatio
-      c.scale(devicePixelRatio, devicePixelRatio)
-    }
-
-    function spawn(): Particle {
-      const angle = Math.random() * Math.PI * 2
-      return {
-        x: Math.random() * W,
-        y: Math.random() * H,
-        vx: Math.cos(angle) * SPEED * (0.4 + Math.random() * 0.6),
-        vy: Math.sin(angle) * SPEED * (0.4 + Math.random() * 0.6),
-        r: 1.2 + Math.random() * 1.2,
-        alpha: 0.25 + Math.random() * 0.45,
-      }
-    }
-
-    resize()
-    for (let i = 0; i < N; i++) particles.push(spawn())
-    el.classList.add('in')
-
-    let rafId: number
-
-    function draw() {
-      c.clearRect(0, 0, W, H)
-
-      // Move + wrap
-      for (const p of particles) {
-        p.x += p.vx
-        p.y += p.vy
-        if (p.x < -10) p.x = W + 10
-        if (p.x > W + 10) p.x = -10
-        if (p.y < -10) p.y = H + 10
-        if (p.y > H + 10) p.y = -10
-      }
-
-      // Connecting lines
-      for (let i = 0; i < N; i++) {
-        for (let j = i + 1; j < N; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < LINK_DIST) {
-            const t = 1 - dist / LINK_DIST
-            c.beginPath()
-            c.moveTo(particles[i].x, particles[i].y)
-            c.lineTo(particles[j].x, particles[j].y)
-            c.strokeStyle = `rgba(0,255,148,${t * 0.13})`
-            c.lineWidth = t * 0.8
-            c.stroke()
-          }
-        }
-      }
-
-      // Dots
-      for (const p of particles) {
-        c.beginPath()
-        c.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        c.fillStyle = `rgba(0,255,148,${p.alpha})`
-        c.fill()
-      }
-
-      rafId = requestAnimationFrame(draw)
-    }
-
-    draw()
-
-    const ro = new ResizeObserver(resize)
-    ro.observe(el)
-
-    return () => {
-      cancelAnimationFrame(rafId)
-      ro.disconnect()
-    }
+    const raf = requestAnimationFrame(() => svg.classList.add('in'))
+    return () => cancelAnimationFrame(raf)
   }, [])
 
   /* ── GSAP scroll tilt ── */
@@ -723,8 +642,93 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
             {/* Ruler grid */}
             <div className="v3-hero-grid" aria-hidden="true" />
 
-            {/* Particle constellation */}
-            <canvas ref={canvasRef} className="v3-hero-canvas" aria-hidden="true" />
+            {/* Orbital rings */}
+            <svg
+              ref={orbitsRef}
+              className="v3-orbits"
+              viewBox="0 0 1440 900"
+              preserveAspectRatio="xMidYMid slice"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                {/* Soft center radial glow */}
+                <radialGradient id="center-glow" cx="50%" cy="50%" r="25%">
+                  <stop offset="0%" stopColor="#00FF94" stopOpacity="0.07" />
+                  <stop offset="100%" stopColor="#00FF94" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+
+              {/* Ambient center glow */}
+              <ellipse
+                className="v3-orbit-glow"
+                cx="720" cy="450"
+                rx="340" ry="200"
+                fill="url(#center-glow)"
+              />
+
+              {/* Ring 1 — wide flat orbit (like looking at a tilted ring from slightly above) */}
+              <ellipse
+                id="op1"
+                cx="720" cy="450"
+                rx="440" ry="88"
+                fill="none"
+                stroke="rgba(0,255,148,0.10)"
+                strokeWidth="0.75"
+              />
+              {/* Satellite on ring 1 */}
+              <circle r="2.8" fill="#00FF94" opacity="0.65">
+                <animateMotion dur="26s" repeatCount="indefinite">
+                  <mpath href="#op1" />
+                </animateMotion>
+              </circle>
+
+              {/* Ring 2 — more upright, rotated 40° in plane */}
+              <ellipse
+                id="op2"
+                cx="720" cy="450"
+                rx="220" ry="340"
+                fill="none"
+                stroke="rgba(0,255,148,0.055)"
+                strokeWidth="0.65"
+                transform="rotate(38 720 450)"
+              />
+              {/* Slower satellite on ring 2 */}
+              <circle r="2" fill="#00FF94" opacity="0.45">
+                <animateMotion dur="42s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1">
+                  <mpath href="#op2" />
+                </animateMotion>
+              </circle>
+
+              {/* Ring 3 — medium, opposite tilt */}
+              <ellipse
+                id="op3"
+                cx="720" cy="450"
+                rx="310" ry="170"
+                fill="none"
+                stroke="rgba(0,255,148,0.045)"
+                strokeWidth="0.6"
+                transform="rotate(-22 720 450)"
+              />
+              {/* No satellite on ring 3 — just the ring */}
+
+              {/* Ring 4 — small tight inner ring */}
+              <ellipse
+                id="op4"
+                cx="720" cy="450"
+                rx="140" ry="52"
+                fill="none"
+                stroke="rgba(0,255,148,0.07)"
+                strokeWidth="0.5"
+                transform="rotate(15 720 450)"
+              />
+              {/* Fast small satellite */}
+              <circle r="1.5" fill="#00FF94" opacity="0.55">
+                <animateMotion dur="14s" repeatCount="indefinite">
+                  <mpath href="#op4" />
+                </animateMotion>
+              </circle>
+            </svg>
 
             {/* Center kinetic name */}
             <div className="v3-name-wrap" aria-label="Anurag">
