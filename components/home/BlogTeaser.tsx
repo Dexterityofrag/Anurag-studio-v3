@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { BlogPost } from '@/lib/types'
@@ -56,6 +56,31 @@ const css = /* css */ `
   gap: 16px;
 }
 
+/* Card stagger reveal */
+.bcard {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+    transform 0.7s cubic-bezier(0.22,1,0.36,1),
+    box-shadow 0.55s ease;
+}
+.bcard.vis {
+  opacity: 1;
+  transform: translateY(0);
+}
+.bcard:nth-child(1) { transition-delay: 0s; }
+.bcard:nth-child(2) { transition-delay: 0.1s; }
+.bcard:nth-child(3) { transition-delay: 0.2s; }
+
+/* Header slide in */
+.blog-teaser__header {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.blog-teaser__header.vis { opacity: 1; transform: translateY(0); }
+
 /* ─── Card ───────────────────────────────────────────────────── */
 .bcard {
   --rx: 0deg;
@@ -89,7 +114,7 @@ const css = /* css */ `
   border-radius: 12px;
   background: radial-gradient(
     circle at var(--mx) var(--my),
-    rgba(255, 77, 0, 0.09) 0%,
+    rgba(0, 255, 148, 0.09) 0%,
     transparent 60%
   );
   opacity: var(--glow);
@@ -140,7 +165,7 @@ const css = /* css */ `
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 3px 10px;
-  border: 1px solid rgba(255, 77, 0, 0.2);
+  border: 1px solid rgba(0, 255, 148, 0.2);
   border-radius: 999px;
 }
 
@@ -160,7 +185,7 @@ const css = /* css */ `
   left: 0;
   width: 0%;
   height: 1px;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .bcard:hover .bcard__title::after { width: 100%; }
@@ -300,11 +325,30 @@ function BCard({ post }: { post: BlogPost }) {
 /* ────────────────────────────────────────────────────────────── */
 
 export default function BlogTeaser({ posts }: { posts: BlogPost[] }) {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+    const targets = section.querySelectorAll('.blog-teaser__header, .bcard')
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          targets.forEach(el => el.classList.add('vis'))
+          io.disconnect()
+        }
+      },
+      { threshold: 0.15 }
+    )
+    io.observe(section)
+    return () => io.disconnect()
+  }, [])
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
-      <section className="blog-teaser" id="blog-teaser">
+      <section ref={sectionRef} className="blog-teaser" id="blog-teaser">
         <div className="blog-teaser__header">
           <div className="blog-teaser__label">
             <span className="blog-teaser__num">03</span>

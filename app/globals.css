@@ -185,6 +185,112 @@ body {
     transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ─── REVEAL VARIANTS ────────────────────────────────────── */
+/* Fade up (default .reveal already exists) */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1);
+}
+.reveal-left.vis { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.reveal-scale.vis { opacity: 1; transform: scale(1); }
+
+/* Stagger delays */
+.rd4  { transition-delay: 320ms; }
+.rd5  { transition-delay: 400ms; }
+.rd6  { transition-delay: 480ms; }
+
+/* ─── ACCENT BUTTON / CTA ────────────────────────────────── */
+/* Pill CTA with fill sweep */
+.cta-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border: 1px solid rgba(0, 255, 148, 0.35);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-accent);
+  overflow: hidden;
+  transition: color 0.35s ease;
+}
+.cta-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  transform: translateX(-101%);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+}
+.cta-pill:hover { color: #060606; }
+.cta-pill:hover::before { transform: translateX(0); }
+.cta-pill > * { position: relative; z-index: 1; }
+
+/* ─── UNDERLINE DRAW ─────────────────────────────────────── */
+.ul-draw {
+  position: relative;
+  display: inline-block;
+}
+.ul-draw::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0%; height: 1px;
+  background: var(--color-accent);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ul-draw:hover::after { width: 100%; }
+
+/* ─── SECTION ACCENT LINE ────────────────────────────────── */
+/* Thin neon line that draws in on scroll */
+.section-line {
+  display: block;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent);
+  margin-bottom: 20px;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0.5;
+}
+.section-line.vis { width: 48px; }
+
+/* ─── WORD SPLIT REVEAL ──────────────────────────────────── */
+.sr-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.sr-word-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sr-word.vis .sr-word-inner { transform: translateY(0); }
+
+/* ─── MAGNETIC BUTTON ────────────────────────────────────── */
+.mag-btn {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ─── COUNTER NUMBER ─────────────────────────────────────── */
+.count-up {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ─── REDUCED MOTION ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -192,6 +298,8 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .reveal { opacity: 1; transform: none; }
+  .reveal, .reveal-left, .reveal-scale { opacity: 1; transform: none; }
   .st-char { opacity: 1; filter: none; transform: none; }
+  .sr-word-inner { transform: translateY(0); }
+  .section-line.vis { width: 48px; }
 }

@@ -102,6 +102,7 @@ const css = /* css */ `
   position: relative;
   will-change: transform;
   cursor: none;
+  transform-style: preserve-3d;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 .fw-card:hover {
@@ -346,6 +347,25 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
     const img     = imgRef.current
     if (!wrapper || !card) return
 
+    // Magnetic 3D tilt on mouse move
+    const onMove = (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect()
+      const x = (e.clientX - rect.left) / rect.width  - 0.5
+      const y = (e.clientY - rect.top)  / rect.height - 0.5
+      gsap.to(card, {
+        rotateY:  x * 5,
+        rotateX: -y * 3,
+        duration: 0.5,
+        ease: 'power2.out',
+        overwrite: true,
+      })
+    }
+    const onLeave = () => {
+      gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.7, ease: 'elastic.out(1,0.6)', overwrite: true })
+    }
+    card.addEventListener('mousemove', onMove)
+    card.addEventListener('mouseleave', onLeave)
+
     // Card scale-in as it enters its sticky slot
     const cardST = ScrollTrigger.create({
       trigger: wrapper,
@@ -374,6 +394,8 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
     }
 
     return () => {
+      card.removeEventListener('mousemove', onMove)
+      card.removeEventListener('mouseleave', onLeave)
       cardST.kill()
       imgST?.kill()
     }
