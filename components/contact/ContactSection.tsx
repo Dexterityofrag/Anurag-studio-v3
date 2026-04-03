@@ -200,7 +200,7 @@ const css = /* css */ `
 .cf-select:focus,
 .cf-textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 2px 8px rgba(200, 255, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(255, 77, 0, 0.08);
 }
 
 /* Float label on focus or filled */
@@ -266,9 +266,9 @@ const css = /* css */ `
   text-align: center;
 }
 .cf-feedback--success {
-  background: rgba(200, 255, 0, 0.08);
+  background: rgba(255, 77, 0, 0.08);
   color: var(--accent);
-  border: 1px solid rgba(200, 255, 0, 0.15);
+  border: 1px solid rgba(255, 77, 0, 0.15);
 }
 .cf-feedback--error {
   background: rgba(239, 68, 68, 0.08);

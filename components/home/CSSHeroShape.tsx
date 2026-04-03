@@ -34,23 +34,23 @@ const css = /* css */ `
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1.5px solid rgba(200, 255, 0, 0.20);
+  border: 1.5px solid rgba(255, 77, 0, 0.20);
   will-change: transform;
 }
 
 /* Ring 1 - primary equatorial plane */
 .hero-shape__ring--1 {
-  border-color: rgba(200, 255, 0, 0.22);
+  border-color: rgba(255, 77, 0, 0.22);
   animation: ring-spin-1 9s linear infinite;
 }
 /* Ring 2 - tilted 42° on X, 55° on Y */
 .hero-shape__ring--2 {
-  border-color: rgba(200, 255, 0, 0.16);
+  border-color: rgba(255, 77, 0, 0.16);
   animation: ring-spin-2 14s linear infinite;
 }
 /* Ring 3 - mostly vertical */
 .hero-shape__ring--3 {
-  border-color: rgba(200, 255, 0, 0.13);
+  border-color: rgba(255, 77, 0, 0.13);
   animation: ring-spin-3 19s linear infinite reverse;
 }
 
@@ -77,10 +77,10 @@ const css = /* css */ `
   border-radius: 50%;
   background: var(--accent);
   box-shadow:
-    0 0 0 1px rgba(200, 255, 0, 0.5),
-    0 0 18px 4px rgba(200, 255, 0, 0.55),
-    0 0 55px 14px rgba(200, 255, 0, 0.18),
-    0 0 120px 35px rgba(200, 255, 0, 0.07);
+    0 0 0 1px rgba(255, 77, 0, 0.5),
+    0 0 18px 4px rgba(255, 77, 0, 0.55),
+    0 0 55px 14px rgba(255, 77, 0, 0.18),
+    0 0 120px 35px rgba(255, 77, 0, 0.07);
   animation: node-pulse 3s ease-in-out infinite;
 }
 @keyframes node-pulse {
@@ -94,7 +94,7 @@ const css = /* css */ `
   width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 8px 2px rgba(200, 255, 0, 0.7);
+  box-shadow: 0 0 8px 2px rgba(255, 77, 0, 0.7);
 }
 .hero-shape__dot--n { top: -2px;   left: 50%; transform: translateX(-50%); }
 .hero-shape__dot--s { bottom: -2px;left: 50%; transform: translateX(-50%); }
@@ -108,8 +108,8 @@ const css = /* css */ `
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(200, 255, 0, 0.06) 0%,
-    rgba(200, 255, 0, 0.02) 40%,
+    rgba(255, 77, 0, 0.06) 0%,
+    rgba(255, 77, 0, 0.02) 40%,
     transparent 70%
   );
   pointer-events: none;

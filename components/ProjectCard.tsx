@@ -32,9 +32,9 @@ const css = /* css */ `
 .pcard:hover {
   transform: translateY(-6px);
   box-shadow:
-    0 0 40px 6px rgba(200,255,0,0.22),
-    0 0 90px 24px rgba(200,255,0,0.09),
-    0 24px 64px 0 rgba(200,255,0,0.10);
+    0 0 40px 6px rgba(255,77,0,0.22),
+    0 0 90px 24px rgba(255,77,0,0.09),
+    0 24px 64px 0 rgba(255,77,0,0.10);
 }
 
 /* ── Animated border sweep on hover ── */
@@ -53,7 +53,7 @@ const css = /* css */ `
     from var(--pcard-sweep),
     transparent 0%,
     var(--accent) 15%,
-    rgba(200,255,0,0.35) 25%,
+    rgba(255,77,0,0.35) 25%,
     transparent 30%
   );
   opacity: 0;

@@ -107,7 +107,7 @@ const css = /* css */ `
   border-radius: 0;
   -webkit-appearance: none;
 }
-.ped__input:focus { border-color: #C8FF00; }
+.ped__input:focus { border-color: #FF4D00; }
 .ped__textarea {
   resize: vertical;
   min-height: 80px;
@@ -136,7 +136,7 @@ const css = /* css */ `
   transition: background 0.2s ease;
   flex-shrink: 0;
 }
-.ped__switch--on { background: #C8FF00; }
+.ped__switch--on { background: #FF4D00; }
 .ped__switch__knob {
   position: absolute;
   top: 3px;
@@ -179,7 +179,7 @@ const css = /* css */ `
   transition: background 0.15s ease, color 0.15s ease;
 }
 .ped__toolbar-btn:hover { background: #262626; color: #FAFAFA; }
-.ped__toolbar-btn--active { background: #262626; color: #C8FF00; }
+.ped__toolbar-btn--active { background: #262626; color: #FF4D00; }
 
 .ped__editor-content {
   padding: 16px;
@@ -193,8 +193,8 @@ const css = /* css */ `
 .ped__editor-content .tiptap h2 { font-family: var(--font-display); font-size: 1.4em; margin: 1em 0 0.5em; color: #FAFAFA; }
 .ped__editor-content .tiptap h3 { font-family: var(--font-display); font-size: 1.2em; margin: 1em 0 0.5em; color: #FAFAFA; }
 .ped__editor-content .tiptap p { margin-bottom: 0.8em; }
-.ped__editor-content .tiptap blockquote { border-left: 3px solid #C8FF00; padding-left: 16px; color: #8A8A8A; font-style: italic; margin: 1em 0; }
-.ped__editor-content .tiptap a { color: #C8FF00; }
+.ped__editor-content .tiptap blockquote { border-left: 3px solid #FF4D00; padding-left: 16px; color: #8A8A8A; font-style: italic; margin: 1em 0; }
+.ped__editor-content .tiptap a { color: #FF4D00; }
 .ped__editor-content .tiptap img { max-width: 100%; border: 1px solid #262626; margin: 1em 0; }
 
 /* Collapsible SEO section */
@@ -242,7 +242,7 @@ const css = /* css */ `
 }
 .ped__submit {
   padding: 12px 28px;
-  background: #C8FF00;
+  background: #FF4D00;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;
@@ -257,7 +257,7 @@ const css = /* css */ `
   font-family: var(--font-mono);
   font-size: 12px;
 }
-.ped__feedback--ok { color: #C8FF00; }
+.ped__feedback--ok { color: #FF4D00; }
 .ped__feedback--err { color: #FF4444; }
 
 @media (max-width: 640px) {

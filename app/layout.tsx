@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans, DM_Mono } from "next/font/google";
+import { Space_Grotesk, DM_Sans, JetBrains_Mono } from "next/font/google";
 import LenisProvider from "@/components/providers/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
 import Preloader from "@/components/Preloader";
@@ -28,10 +28,10 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-const dmMono = DM_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
@@ -63,7 +63,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Read dynamic settings from DB (with fallback if DB unreachable)
-  let accentColor = '#E4FE9A'
+  let accentColor = '#FF4D00'
   try {
     const row = await db
       .select({ value: siteContent.value })
@@ -83,7 +83,7 @@ export default async function RootLayout({
         {/* Dynamic theme from admin settings */}
         <style dangerouslySetInnerHTML={{ __html: dynamicCss }} />
       </head>
-      <body className={`${spaceGrotesk.variable} ${dmSans.variable} ${dmMono.variable} antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}>
         {/* Global animated mesh gradient - position:fixed, z:0 */}
         <MeshGradientBg />
         {/* Live procedural grain - position:fixed, z:8000, mix-blend-mode:overlay */}

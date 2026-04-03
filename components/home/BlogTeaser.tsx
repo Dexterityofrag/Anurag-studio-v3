@@ -89,7 +89,7 @@ const css = /* css */ `
   border-radius: 12px;
   background: radial-gradient(
     circle at var(--mx) var(--my),
-    rgba(200, 255, 0, 0.09) 0%,
+    rgba(255, 77, 0, 0.09) 0%,
     transparent 60%
   );
   opacity: var(--glow);
@@ -140,7 +140,7 @@ const css = /* css */ `
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 3px 10px;
-  border: 1px solid rgba(200, 255, 0, 0.2);
+  border: 1px solid rgba(255, 77, 0, 0.2);
   border-radius: 999px;
 }
 
@@ -160,7 +160,7 @@ const css = /* css */ `
   left: 0;
   width: 0%;
   height: 1px;
-  background: var(--accent, #C8FF00);
+  background: var(--accent, #FF4D00);
   transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .bcard:hover .bcard__title::after { width: 100%; }

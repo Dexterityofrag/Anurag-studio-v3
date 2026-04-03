@@ -40,7 +40,7 @@ const css = /* css */ `
   letter-spacing: -0.02em;
 }
 .login__brand-dot {
-  color: #C8FF00;
+  color: #FF4D00;
 }
 .login__role {
   font-family: var(--font-mono);
@@ -89,8 +89,8 @@ const css = /* css */ `
   -webkit-appearance: none;
 }
 .login__input:focus {
-  border-color: #C8FF00;
-  box-shadow: 0 0 0 1px rgba(200, 255, 0, 0.1);
+  border-color: #FF4D00;
+  box-shadow: 0 0 0 1px rgba(255, 77, 0, 0.1);
 }
 .login__input--error {
   border-color: #ef4444;
@@ -119,7 +119,7 @@ const css = /* css */ `
 .login__submit {
   width: 100%;
   padding: 14px;
-  background: #C8FF00;
+  background: #FF4D00;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;

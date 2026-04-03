@@ -68,7 +68,7 @@ const css = /* css */ `
   outline: none;
   transition: border-color 0.25s ease;
 }
-.se__input:focus { border-color: #C8FF00; }
+.se__input:focus { border-color: #FF4D00; }
 .se__select {
   width: 100%;
   background: #1A1A1A;
@@ -177,7 +177,7 @@ const css = /* css */ `
 }
 .se__save-btn {
   padding: 10px 28px;
-  background: #C8FF00;
+  background: #FF4D00;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;
@@ -191,7 +191,7 @@ const css = /* css */ `
 .se__status {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: #C8FF00;
+  color: #FF4D00;
   display: flex;
   align-items: center;
 }
@@ -219,7 +219,7 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
     const [isPending, startTransition] = useTransition()
     const [saved, setSaved] = useState(false)
 
-    const [accentColor, setAccentColor] = useState(settings['settings.accentColor'] ?? '#C8FF00')
+    const [accentColor, setAccentColor] = useState(settings['settings.accentColor'] ?? '#FF4D00')
     const [element3d, setElement3d] = useState(settings['settings.element3d'] ?? 'icosahedron')
     const [fontDisplay, setFontDisplay] = useState(settings['settings.fontDisplay'] ?? 'Clash Display')
 
@@ -237,7 +237,7 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
     }
 
     const PRESETS = [
-        { hex: '#C8FF00', name: 'Lime' },
+        { hex: '#FF4D00', name: 'Lime' },
         { hex: '#00F5FF', name: 'Cyan' },
         { hex: '#FF6B35', name: 'Orange' },
         { hex: '#8B5CF6', name: 'Violet' },
@@ -290,7 +290,7 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                                 className="se__input"
                                 value={accentColor}
                                 onChange={(e) => setAccentColor(e.target.value)}
-                                placeholder="#C8FF00"
+                                placeholder="#FF4D00"
                                 style={{ flex: 1, fontFamily: 'var(--font-mono)', fontSize: '13px' }}
                             />
                         </div>

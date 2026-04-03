@@ -53,7 +53,7 @@ export async function submitContact(
               <td style="padding: 8px 0; font-size: 15px;">${projectType}</td>
             </tr>
           </table>
-          <div style="margin-top: 24px; padding: 16px; background: #f9f9f9; border-left: 3px solid #C8FF00; font-size: 14px; line-height: 1.7;">
+          <div style="margin-top: 24px; padding: 16px; background: #f9f9f9; border-left: 3px solid #FF4D00; font-size: 14px; line-height: 1.7;">
             ${message.replace(/\n/g, '<br />')}
           </div>
           <p style="margin-top: 32px; font-size: 12px; color: #aaa;">

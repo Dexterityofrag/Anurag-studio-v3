@@ -67,8 +67,8 @@ const css = /* css */ `
 }
 .am__tab:hover { color: #FAFAFA; }
 .am__tab--active {
-  color: #C8FF00;
-  border-bottom-color: #C8FF00;
+  color: #FF4D00;
+  border-bottom-color: #FF4D00;
 }
 
 .am__header {
@@ -82,7 +82,7 @@ const css = /* css */ `
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #C8FF00;
+  background: #FF4D00;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;
@@ -145,7 +145,7 @@ const css = /* css */ `
 }
 .am__proficiency-fill {
   height: 100%;
-  background: #C8FF00;
+  background: #FF4D00;
   border-radius: 2px;
 }
 
@@ -221,7 +221,7 @@ const css = /* css */ `
   border-radius: 0;
   transition: border-color 0.25s ease;
 }
-.am__input:focus { border-color: #C8FF00; }
+.am__input:focus { border-color: #FF4D00; }
 .am__textarea { resize: vertical; min-height: 80px; }
 
 .am__slider-row {
@@ -241,13 +241,13 @@ const css = /* css */ `
   -webkit-appearance: none;
   width: 16px; height: 16px;
   border-radius: 50%;
-  background: #C8FF00;
+  background: #FF4D00;
   cursor: pointer;
 }
 .am__slider-val {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: #C8FF00;
+  color: #FF4D00;
   min-width: 36px;
   text-align: right;
 }
@@ -257,7 +257,7 @@ const css = /* css */ `
 .am__submit {
   width: 100%;
   padding: 12px;
-  background: #C8FF00;
+  background: #FF4D00;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;

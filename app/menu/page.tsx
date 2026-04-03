@@ -61,7 +61,7 @@ const css = /* css */ `
 .menu-page__orb--lime {
   width: 700px;
   height: 700px;
-  background: rgba(200, 255, 0, 0.08);
+  background: rgba(255, 77, 0, 0.08);
   top: -10%;
   right: -5%;
 }

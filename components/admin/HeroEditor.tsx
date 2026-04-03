@@ -119,7 +119,7 @@ const css = /* css */ `
   font-family: 'DM Mono', monospace;
   font-size: 10px;
   color: #0A0A0A;
-  background: #C8FF00;
+  background: #FF4D00;
   padding: 3px 10px;
   border-radius: 999px;
   font-weight: 600;
@@ -183,7 +183,7 @@ const css = /* css */ `
   resize: none;
   border-radius: 0;
 }
-.he__input:focus { border-color: #C8FF00; }
+.he__input:focus { border-color: #FF4D00; }
 
 /* Actions bar */
 .he__actions {
@@ -194,7 +194,7 @@ const css = /* css */ `
 }
 .he__save-btn {
   padding: 10px 28px;
-  background: #C8FF00;
+  background: #FF4D00;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;
@@ -209,7 +209,7 @@ const css = /* css */ `
 .he__saved {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: #C8FF00;
+  color: #FF4D00;
 }
 .he__err {
   font-family: var(--font-mono);

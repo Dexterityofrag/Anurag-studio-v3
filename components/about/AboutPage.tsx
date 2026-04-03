@@ -186,9 +186,9 @@ const css = /* css */ `
 
 /* ─── RESET / SHARED ─────────────────────────────────────────── */
 .abt-section-label {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   padding-bottom: 14px;
@@ -202,7 +202,7 @@ const css = /* css */ `
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--accent, #C8FF00);
+  background: var(--accent, #FF4D00);
   flex-shrink: 0;
 }
 
@@ -224,7 +224,7 @@ const css = /* css */ `
   border: 1px solid rgba(255,255,255,0.08);
   border-bottom: none;
   color: rgba(255,255,255,0.45);
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -237,12 +237,12 @@ const css = /* css */ `
 }
 .abt-cert-tab:first-child { border-radius: 0 0 0 6px; }
 .abt-cert-tab:last-child  { border-radius: 6px 6px 0 0; }
-.abt-cert-tab:hover { color: var(--accent, #C8FF00); background: rgba(30,30,30,0.95); }
+.abt-cert-tab:hover { color: var(--accent, #FF4D00); background: rgba(30,30,30,0.95); }
 .abt-cert-tab-dot {
   display: inline-block;
   width: 5px; height: 5px;
   border-radius: 50%;
-  background: var(--accent, #C8FF00);
+  background: var(--accent, #FF4D00);
   margin-right: 6px;
   vertical-align: middle;
   opacity: 0.7;
@@ -269,9 +269,9 @@ const css = /* css */ `
   align-self: start;
 }
 .abt-index {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-bottom: 28px;
@@ -283,7 +283,7 @@ const css = /* css */ `
   content: '';
   display: inline-block;
   width: 24px; height: 1px;
-  background: var(--accent, #C8FF00);
+  background: var(--accent, #FF4D00);
 }
 .abt-h1 {
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
@@ -392,7 +392,7 @@ const css = /* css */ `
 
 /* ─── STATS BAND ──────────────────────────────────────────────── */
 .abt-stats {
-  background: var(--accent, #C8FF00);
+  background: var(--accent, #FF4D00);
   padding: 80px var(--gutter, 60px);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -416,7 +416,7 @@ const css = /* css */ `
   margin-bottom: 10px;
 }
 .abt-stat-label {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -504,7 +504,7 @@ const css = /* css */ `
 .abt-exp-section:hover .abt-exp-row { opacity: 0.35; }
 .abt-exp-section:hover .abt-exp-row:hover { opacity: 1; }
 .abt-exp-range {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 13px;
   color: rgba(240,240,240,0.4);
   padding-top: 4px;
@@ -526,7 +526,7 @@ const css = /* css */ `
   line-height: 1.6;
 }
 .abt-exp-company {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
   color: rgba(240,240,240,0.35);
   text-transform: uppercase;
@@ -564,8 +564,8 @@ const css = /* css */ `
   cursor: none;
 }
 .abt-tool-card:hover {
-  border-color: rgba(200,255,0,0.2);
-  background: rgba(200,255,0,0.02);
+  border-color: rgba(255,77,0,0.2);
+  background: rgba(255,77,0,0.02);
 }
 .abt-tool-icon {
   width: 44px; height: 44px;
@@ -579,7 +579,7 @@ const css = /* css */ `
   transition: border-color 0.3s;
 }
 .abt-tool-card:hover .abt-tool-icon {
-  border-color: rgba(200,255,0,0.3);
+  border-color: rgba(255,77,0,0.3);
 }
 .abt-tool-name {
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
@@ -588,7 +588,7 @@ const css = /* css */ `
   color: var(--color-fg, #f0f0f0);
 }
 .abt-tool-desc {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
   color: rgba(240,240,240,0.35);
   letter-spacing: 0.04em;
@@ -639,14 +639,14 @@ const css = /* css */ `
   transition: border-color 0.3s, background 0.3s;
 }
 .abt-found-card:hover {
-  border-color: rgba(200,255,0,0.2);
-  background: rgba(200,255,0,0.02);
+  border-color: rgba(255,77,0,0.2);
+  background: rgba(255,77,0,0.02);
 }
 .abt-found-num {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   text-transform: uppercase;
 }
 .abt-found-name {
@@ -710,15 +710,15 @@ const css = /* css */ `
   transition: border-color 0.3s, background 0.3s;
 }
 .abt-comp-item:hover {
-  border-color: rgba(200,255,0,0.2);
-  background: rgba(200,255,0,0.02);
+  border-color: rgba(255,77,0,0.2);
+  background: rgba(255,77,0,0.02);
 }
 .abt-comp-icon {
   color: rgba(240,240,240,0.3);
   transition: color 0.3s;
   width: 24px; height: 24px;
 }
-.abt-comp-item:hover .abt-comp-icon { color: var(--accent, #C8FF00); }
+.abt-comp-item:hover .abt-comp-icon { color: var(--accent, #FF4D00); }
 .abt-comp-label {
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
   font-size: clamp(0.95rem, 1.4vw, 1.15rem);
@@ -754,9 +754,9 @@ const css = /* css */ `
   right: -10px;
 }
 .abt-figma-tag {
-  background: #a78bfa;
+  background: #FF4D00;
   color: #000;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   font-weight: 700;
   padding: 2px 8px;
@@ -768,15 +768,15 @@ const css = /* css */ `
   position: absolute;
   z-index: 25;
   pointer-events: none;
-  border: 1.5px solid #a78bfa;
-  background: rgba(167,139,250,0.05);
+  border: 1.5px solid #FF4D00;
+  background: rgba(255,77,0,0.05);
   opacity: 0;
 }
 .abt-figma-sel-lbl {
   position: absolute;
   top: -22px; left: -1px;
-  background: #a78bfa; color: #000;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  background: #FF4D00; color: #000;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px; font-weight: 700;
   padding: 2px 6px; border-radius: 2px 2px 0 0;
   white-space: nowrap;
@@ -784,7 +784,7 @@ const css = /* css */ `
 .abt-figma-handle {
   position: absolute;
   width: 6px; height: 6px;
-  background: #a78bfa;
+  background: #FF4D00;
 }
 .abt-figma-handle.tl { top: -3px; left: -3px; }
 .abt-figma-handle.tr { top: -3px; right: -3px; }
@@ -896,7 +896,7 @@ export default function AboutPage({ bio1, bio2 }: { bio1?: string | null; bio2?:
           {/* Figma overlays */}
           <div ref={cursorRef} className="abt-figma-cursor" aria-hidden="true">
             <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
-              <path d="M1 1L1 18L5.5 13.5L8.5 21L10.5 20L7.5 12.5H14L1 1Z" fill="#a78bfa" />
+              <path d="M1 1L1 18L5.5 13.5L8.5 21L10.5 20L7.5 12.5H14L1 1Z" fill="#FF4D00" />
             </svg>
             <span className="abt-figma-tag">Anurag Adhikari</span>
           </div>

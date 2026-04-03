@@ -39,7 +39,7 @@ const css = /* css */ `
 }
 
 .at__cta {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -61,7 +61,7 @@ const css = /* css */ `
   opacity: 0.4;
   transition: opacity 0.25s ease;
 }
-.at__cta:hover { color: var(--accent, #C8FF00); }
+.at__cta:hover { color: var(--accent, #FF4D00); }
 .at__cta:hover::after { opacity: 1; }
 `
 

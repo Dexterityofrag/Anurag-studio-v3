@@ -26,7 +26,7 @@ const css = /* css */ `
 
 .sel-box {
   position: absolute;
-  border: 1.5px solid #a78bfa;
+  border: 1.5px solid #FF4D00;
   border-radius: 2px;
   opacity: 0;
   /* Start as a small centered square */
@@ -41,9 +41,9 @@ const css = /* css */ `
   position: absolute;
   top: -22px;
   left: 0;
-  background: #a78bfa;
+  background: #FF4D00;
   color: #000;
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -57,7 +57,7 @@ const css = /* css */ `
   position: absolute;
   width: 7px;
   height: 7px;
-  background: #a78bfa;
+  background: #FF4D00;
   border-radius: 1px;
 }
 .h-tl { top: -3px; left: -3px; }
@@ -70,9 +70,9 @@ const css = /* css */ `
   bottom: -20px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 9px;
-  color: #a78bfa;
+  color: #FF4D00;
   white-space: nowrap;
   letter-spacing: 0.04em;
 }
@@ -80,7 +80,7 @@ const css = /* css */ `
 .sel-flash {
   position: absolute;
   inset: 0;
-  background: #a78bfa;
+  background: #FF4D00;
   opacity: 0;
 }
 `

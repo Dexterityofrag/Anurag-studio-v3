@@ -48,7 +48,7 @@ const css = /* css */ `
   cursor: none;
   transition: color 0.3s ease;
 }
-.ft-cta:hover { color: var(--accent, #E4FE9A); }
+.ft-cta:hover { color: var(--accent, #FF4D00); }
 
 /* ─── RIGHT: LINKS ───────────────────────────────────────────── */
 .ft-links {
@@ -62,7 +62,7 @@ const css = /* css */ `
   gap: 24px;
 }
 .ft-social-link {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 13px;
   color: var(--color-muted, rgba(240,240,240,0.5));
   text-decoration: none;
@@ -73,12 +73,12 @@ const css = /* css */ `
 }
 .ft-social-link:hover {
   color: var(--color-fg, #f0f0f0);
-  border-color: var(--accent, #E4FE9A);
+  border-color: var(--accent, #FF4D00);
 }
 
 /* Email copy button */
 .ft-email-btn {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 13px;
   color: var(--color-muted, rgba(240,240,240,0.5));
   background: none;
@@ -90,8 +90,8 @@ const css = /* css */ `
   letter-spacing: 0.02em;
 }
 .ft-email-btn:hover {
-  color: var(--accent, #E4FE9A);
-  border-color: var(--accent, #E4FE9A);
+  color: var(--accent, #FF4D00);
+  border-color: var(--accent, #FF4D00);
 }
 
 /* ─── BOTTOM BAR ─────────────────────────────────────────────── */
@@ -102,7 +102,7 @@ const css = /* css */ `
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   color: var(--color-muted, rgba(240,240,240,0.5));
 }
@@ -114,8 +114,8 @@ const css = /* css */ `
   left: 50%;
   transform: translateX(-50%) translateY(12px);
   background: rgba(18, 18, 18, 0.95);
-  color: var(--accent, #E4FE9A);
-  font-family: var(--font-mono, "DM Mono", monospace);
+  color: var(--accent, #FF4D00);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   letter-spacing: 0.06em;
   padding: 8px 20px;

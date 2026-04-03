@@ -55,7 +55,7 @@ const css = /* css */ `
   border-radius: 32px;
   box-shadow:
     rgba(0,0,0,0.8) 0px 40px 100px,
-    rgba(166,139,249,0.6) 0px 0px 0px 2px;
+    rgba(255,77,0,0.6) 0px 0px 0px 2px;
   opacity: 0;
   pointer-events: none;
   z-index: 50;
@@ -74,16 +74,16 @@ const css = /* css */ `
   opacity: 0;
 }
 
-/* Blue vignette edges (like the reference) */
+/* Warm dark vignette edges */
 .hero-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 2;
   background:
-    radial-gradient(ellipse 120% 80% at 50% 50%, transparent 50%, rgba(10, 20, 60, 0.45) 100%),
-    radial-gradient(ellipse 40% 100% at 0% 50%, rgba(10, 30, 80, 0.3) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 100% at 100% 50%, rgba(10, 30, 80, 0.3) 0%, transparent 70%);
+    radial-gradient(ellipse 120% 80% at 50% 50%, transparent 50%, rgba(8, 4, 2, 0.55) 100%),
+    radial-gradient(ellipse 40% 100% at 0% 50%, rgba(20, 8, 2, 0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 100% at 100% 50%, rgba(20, 8, 2, 0.35) 0%, transparent 70%);
 }
 
 /* ─── HERO CENTER CONTENT ────────────────────────────────────── */
@@ -103,7 +103,7 @@ const css = /* css */ `
 /* ── Eyebrow (top tracking text) ─── */
 /* "NAVIGATING THE UNKNOWN, PIXEL BY PIXEL." */
 .hero-ic-eye {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.45);
@@ -187,9 +187,9 @@ body.hero-dragging, body.hero-dragging * {
   transform: translate3d(-200px, -200px, 0);
 }
 .ac-hero-tag {
-  background: #a78bfa;
+  background: #FF4D00;
   color: #000;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   font-weight: 600;
   padding: 4px 8px;
@@ -203,7 +203,7 @@ body.hero-dragging, body.hero-dragging * {
   position: absolute;
   top: 28px;
   left: 10px;
-  background: #a78bfa;
+  background: #FF4D00;
   color: #000;
   border-radius: 0 12px 12px 12px;
   padding: 6px 14px;
@@ -224,8 +224,8 @@ body.hero-dragging, body.hero-dragging * {
   position: absolute;
   z-index: 25;
   pointer-events: none;
-  border: 1.5px solid #a78bfa;
-  background: rgba(167, 139, 250, 0.05);
+  border: 1.5px solid #FF4D00;
+  background: rgba(255, 77, 0, 0.05);
   opacity: 0;
   top: 0; left: 0;
 }
@@ -233,9 +233,9 @@ body.hero-dragging, body.hero-dragging * {
   position: absolute;
   top: -25px;
   left: -2px;
-  background: #a78bfa;
+  background: #FF4D00;
   color: #000;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   font-weight: 700;
   padding: 2px 8px;
@@ -246,7 +246,7 @@ body.hero-dragging, body.hero-dragging * {
   position: absolute;
   width: 6px;
   height: 6px;
-  background: #a78bfa;
+  background: #FF4D00;
   border: 1px solid #050505;
 }
 .h-tl { top: -3px; left: -3px; }
@@ -273,7 +273,7 @@ body.hero-dragging, body.hero-dragging * {
   align-items: center;
   gap: 4px;
   padding: 8px 12px;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
 }
 .toast-hero-prop { color: var(--color-muted, rgba(240,240,240,0.5)); }
@@ -302,7 +302,7 @@ body.hero-dragging, body.hero-dragging * {
   transform: translateX(-50%);
   background: var(--color-fg, #f0f0f0);
   color: var(--color-bg, #050505);
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -332,7 +332,7 @@ body.hero-dragging, body.hero-dragging * {
   pointer-events: none;
   background: #FF3366;
   color: #fff;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   font-weight: 700;
   padding: 4px 8px;
@@ -543,10 +543,10 @@ export default function HeroSection({ subtitle, eyebrow }: HeroProps) {
     const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
 
     const SNAP_MESSAGES = [
-      "Let's keep this centered, please.",
-      'bruhhh .. stop breaking my layout.',
-      'Again? We just fixed this.',
-      "I'm locking this layer. (Just kidding)",
+      "Auto-layout says no.",
+      'Constraints exist for a reason.',
+      'Snapping back. Please stop.',
+      "Locked. I mean it this time.",
     ]
     let msgIdx = 0
 
@@ -737,9 +737,9 @@ export default function HeroSection({ subtitle, eyebrow }: HeroProps) {
 
         // ── Step 2: Select first name ──
         if (first) {
-          positionAsel(first, 'h1 / First Name')
+          positionAsel(first, 'Display / Name')
           gsap.to(asel, { opacity: 1, duration: 0.3 })
-          showToast('tracking', '-0.04em')
+          showToast('letter-spacing', '-0.04em')
         }
         await sleep(1200);  if (destroyed || draggingEl || snapActive) { gsap.to(asel, { opacity: 0, duration: 0.2 }); gsap.to(ac, { opacity: 0, duration: 0.3 }); continue }
         gsap.to(asel, { opacity: 0, duration: 0.3 })
@@ -754,9 +754,9 @@ export default function HeroSection({ subtitle, eyebrow }: HeroProps) {
 
         // ── Step 4: Select second name ──
         if (second) {
-          positionAsel(second, 'h1 / Last Name')
+          positionAsel(second, 'Display / Outlined')
           gsap.to(asel, { opacity: 1, duration: 0.3 })
-          showToast('font-weight', '700')
+          showToast('fill', 'transparent')
         }
         await sleep(1200);  if (destroyed || draggingEl || snapActive) { gsap.to(asel, { opacity: 0, duration: 0.2 }); gsap.to(ac, { opacity: 0, duration: 0.3 }); continue }
         gsap.to(asel, { opacity: 0, duration: 0.3 })
@@ -768,9 +768,9 @@ export default function HeroSection({ subtitle, eyebrow }: HeroProps) {
           moveCursor(r.left - ab.left + r.width * 0.6, r.top - ab.top + r.height / 2)
           await sleep(700);  if (destroyed || draggingEl || snapActive) { gsap.to(ac, { opacity: 0, duration: 0.3 }); continue }
 
-          positionAsel(sub, 'p / Subtitle')
+          positionAsel(sub, 'Text / Tagline')
           gsap.to(asel, { opacity: 1, duration: 0.3 })
-          showToast('opacity', '0.42')
+          showToast('font-style', 'italic')
           await sleep(1000);  if (destroyed || draggingEl || snapActive) { gsap.to(asel, { opacity: 0, duration: 0.2 }); gsap.to(ac, { opacity: 0, duration: 0.3 }); continue }
           gsap.to(asel, { opacity: 0, duration: 0.3 })
         }
@@ -810,8 +810,8 @@ export default function HeroSection({ subtitle, eyebrow }: HeroProps) {
   }, [])
 
   // Sub-text: use DB value or reference-matching default
-  const eyebrowText = eyebrow ?? 'NAVIGATING THE UNKNOWN, PIXEL BY PIXEL.'
-  const tagline     = subtitle ?? 'Precision structure, bold creative vision.'
+  const eyebrowText = eyebrow ?? 'PRODUCT DESIGNER & CREATIVE DEVELOPER'
+  const tagline     = subtitle ?? 'Strategy-first design, built for the real world.'
 
   return (
     <>
@@ -871,7 +871,7 @@ export default function HeroSection({ subtitle, eyebrow }: HeroProps) {
           {/* Andy cursor */}
           <div ref={acRef} className="ac-hero" aria-hidden="true">
             <svg width="16" height="20" viewBox="0 0 14 18" fill="none">
-              <path d="M0.5 0.5L13 10.5H5.5L2.5 17.5L0.5 0.5Z" fill="#a78bfa" />
+              <path d="M0.5 0.5L13 10.5H5.5L2.5 17.5L0.5 0.5Z" fill="#FF4D00" />
             </svg>
             <div className="ac-hero-tag">Anurag Adhikari</div>
             <div ref={commentRef} className="figma-comment" />

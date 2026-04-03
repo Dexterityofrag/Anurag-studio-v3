@@ -35,7 +35,7 @@ const css = /* css */ `
 
 /* ─── CENTER: CLOCK ───────────────────────────────────────────── */
 .hdr__clock {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 11px;
   color: var(--color-muted, rgba(240,240,240,0.5));
   letter-spacing: 0.04em;
@@ -87,7 +87,7 @@ const css = /* css */ `
   .hdr__burger { display: flex; }
 }
 .hdr__burger-text {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;

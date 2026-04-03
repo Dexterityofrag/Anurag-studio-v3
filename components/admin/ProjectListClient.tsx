@@ -58,7 +58,7 @@ const css = /* css */ `
   padding: 3px 10px;
   border-radius: 999px;
 }
-.pl__badge--pub { background: rgba(200,255,0,0.1); color: #C8FF00; }
+.pl__badge--pub { background: rgba(255,77,0,0.1); color: #FF4D00; }
 .pl__badge--draft { background: rgba(138,138,138,0.1); color: #8A8A8A; }
 
 .pl__actions {
@@ -93,7 +93,7 @@ const css = /* css */ `
   transition: color 0.2s ease;
   border-radius: 4px;
 }
-.pl__edit:hover { color: #C8FF00; background: #1A1A1A; }
+.pl__edit:hover { color: #FF4D00; background: #1A1A1A; }
 .pl__edit svg { width: 14px; height: 14px; }
 
 .pl__empty {

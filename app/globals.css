@@ -2,34 +2,27 @@
 
 /* ─── TAILWIND THEME ─────────────────────────────────────── */
 @theme inline {
-  --color-bg:        #050505;
-  --color-bg-alt:    #0a0a0a;
-  --color-fg:        #f0f0f0;
-  --color-muted:     rgba(240, 240, 240, 0.5);
-  --color-accent:    #E4FE9A;
+  --color-bg:        #080808;
+  --color-bg-alt:    #0d0c0b;
+  --color-fg:        #f2ede8;
+  --color-muted:     rgba(242, 237, 232, 0.45);
+  --color-accent:    #FF4D00;
   --color-border:    rgba(255, 255, 255, 0.06);
-  --color-lavender:  #BF96C9;
-  --color-peach:     #F9C4BB;
-  --color-andy:      #a78bfa;
 }
 
 /* ─── CSS VARIABLES ──────────────────────────────────────── */
 :root {
-  /* ── New design tokens ── */
-  --color-bg:        #050505;
-  --color-bg-alt:    #0a0a0a;
-  --color-fg:        #f0f0f0;
-  --color-muted:     rgba(240, 240, 240, 0.5);
-  --color-accent:    #E4FE9A;
+  --color-bg:        #080808;
+  --color-bg-alt:    #0d0c0b;
+  --color-fg:        #f2ede8;
+  --color-muted:     rgba(242, 237, 232, 0.45);
+  --color-accent:    #FF4D00;
   --color-border:    rgba(255, 255, 255, 0.06);
-  --color-lavender:  #BF96C9;
-  --color-peach:     #F9C4BB;
-  --color-andy:      #a78bfa;
 
-  /* ── Fonts — resolved by next/font CSS vars on <body> ── */
+  /* ── Fonts - resolved by next/font CSS vars on <body> ── */
   --font-display: "Space Grotesk", sans-serif;
   --font-body:    "DM Sans", sans-serif;
-  --font-mono:    "DM Mono", monospace;
+  --font-mono:    "JetBrains Mono", monospace;
 
   /* ── Layout ── */
   --max-width:   1440px;
@@ -58,16 +51,16 @@
   --z-grain:        8000;
   --z-cursor:       10100;
 
-  /* ── Backward-compat aliases (components use these — keep forever) ── */
+  /* ── Backward-compat aliases ── */
   --bg:          var(--color-bg);
   --surface:     var(--color-bg-alt);
-  --surface-2:   #111111;
+  --surface-2:   #141210;
   --border:      var(--color-border);
   --accent:      var(--color-accent);   /* runtime-overridden by admin DB */
-  --accent-dim:  rgba(228, 254, 154, 0.12);
+  --accent-dim:  rgba(255, 77, 0, 0.10);
   --text:        var(--color-fg);
   --muted:       var(--color-muted);
-  --muted-2:     rgba(240, 240, 240, 0.25);
+  --muted-2:     rgba(242, 237, 232, 0.22);
 }
 
 /* ── Responsive gutter ── */
@@ -82,7 +75,6 @@
   padding: 0;
 }
 
-/* html keeps the solid base colour for scrollbar gutters + fallback */
 html {
   background: var(--bg);
   color: var(--text);
@@ -105,16 +97,12 @@ body:not(.is-touch) .ww-row {
   cursor: none;
 }
 
-
-/* body is transparent — MeshGradientBg (position:fixed) is the backdrop */
 body {
   background: transparent;
   color: var(--text);
   font-family: var(--font-body);
   overflow-x: hidden;
 }
-
-
 
 /* ─── MARQUEE ────────────────────────────────────────────── */
 .marquee-track {
@@ -130,9 +118,9 @@ body {
 }
 
 /* ─── SCROLLBAR ──────────────────────────────────────────── */
-::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar       { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 2px; }
 
 /* ─── FOCUS ──────────────────────────────────────────────── */
 :focus-visible {
@@ -152,8 +140,8 @@ body {
 .available-glow { animation: available-pulse 2s ease-in-out infinite; }
 
 /* ─── SECTION TONES ─────────────────────────────────────── */
-.tone-a { background: #050505; }
-.tone-b { background: #0a0a0a; }
+.tone-a { background: #080808; }
+.tone-b { background: #0d0c0b; }
 
 /* ─── REVEAL UTILITY ─────────────────────────────────────── */
 .reveal {

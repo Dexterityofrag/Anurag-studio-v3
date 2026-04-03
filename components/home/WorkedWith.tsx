@@ -52,7 +52,7 @@ const css = `
   -webkit-text-stroke: 1.5px rgba(255,255,255,0.55);
 }
 .ww__meta {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   color: rgba(255,255,255,0.35);
   text-transform: uppercase;
@@ -64,7 +64,7 @@ const css = `
   display: grid;
   grid-template-columns: 1fr 260px;
   padding: 14px 0;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.25);
@@ -100,13 +100,13 @@ const css = `
     transform 0.35s cubic-bezier(0.22,1,0.36,1);
 }
 .ww-row:hover .ww-row__name {
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   -webkit-text-stroke: 1px transparent;
   transform: translateX(12px);
 }
 
 .ww-row__sector {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   color: rgba(255,255,255,0.35);
   text-transform: uppercase;
@@ -136,7 +136,7 @@ const css = `
 .ww-float__inner {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px; text-transform: uppercase;
   letter-spacing: 0.12em; color: rgba(255,255,255,0.2);
 }

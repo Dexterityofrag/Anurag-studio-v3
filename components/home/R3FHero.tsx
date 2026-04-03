@@ -84,11 +84,11 @@ function FloatingMesh() {
         <mesh ref={meshRef}>
             <icosahedronGeometry args={[1.8, 2]} />
             <meshStandardMaterial
-                color="#C8FF00"
+                color="#FF4D00"
                 wireframe
                 transparent
                 opacity={0.35}
-                emissive="#C8FF00"
+                emissive="#FF4D00"
                 emissiveIntensity={0.2}
             />
         </mesh>

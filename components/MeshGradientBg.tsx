@@ -43,82 +43,82 @@ const css = /* css */ `
   will-change: transform;
 }
 
-/* ── Orb definitions - all accent-family hues ─────────────────────
-   Base accent: #C8FF00 = rgb(200, 255, 0)
-   Orb 1: pure accent lime        rgb(200 255 0)   - core brand hue
-   Orb 2: chartreuse / warm lime  rgb(220 255 0)   - shift yellow
-   Orb 3: electric green          rgb(140 255 50)  - shift cooler / green
-   Orb 4: deep olive-lime         rgb(155 205 0)   - darker shade
-   Orb 5: pale / bleached lime    rgb(230 255 140) - lighter tint
-   Orb 6: golden lime             rgb(248 255 0)   - near-gold hue
+/* ── Orb definitions - orange/amber/deep-red family ───────────────
+   Base accent: #FF4D00 = rgb(255, 77, 0)
+   Orb 1: electric orange         rgb(255 77 0)    - core accent
+   Orb 2: deep amber              rgb(255 140 0)   - warm shift
+   Orb 3: burnt sienna            rgb(220 55 0)    - darker/cooler shift
+   Orb 4: deep ember              rgb(180 30 0)    - dark red-orange
+   Orb 5: pale fire tint          rgb(255 120 60)  - lighter tint, centre
+   Orb 6: crimson                 rgb(200 20 20)   - deep red accent
    ────────────────────────────────────────────────────────────────── */
 
 /* 1 - Core accent, largest, top-left anchor */
 .mesh-orb-1 {
   width: 900px; height: 900px;
   background: radial-gradient(circle,
-    rgba(200, 255, 0, 0.10) 0%,
-    rgba(200, 255, 0, 0.03) 45%,
+    rgba(255, 77, 0, 0.11) 0%,
+    rgba(255, 77, 0, 0.04) 45%,
     transparent 70%
   );
   top: -5%; left: -5%;
   animation: mesh-drift-1 26s ease-in-out infinite alternate;
 }
 
-/* 2 - Chartreuse / warm lime, right side */
+/* 2 - Warm amber, right side */
 .mesh-orb-2 {
   width: 720px; height: 720px;
   background: radial-gradient(circle,
-    rgba(220, 255, 0, 0.08) 0%,
-    rgba(220, 255, 0, 0.02) 50%,
+    rgba(255, 140, 0, 0.08) 0%,
+    rgba(255, 140, 0, 0.02) 50%,
     transparent 70%
   );
   top: 10%; right: -8%;
   animation: mesh-drift-2 34s ease-in-out infinite alternate;
 }
 
-/* 3 - Electric green, bottom-left */
+/* 3 - Burnt sienna, bottom-left */
 .mesh-orb-3 {
   width: 620px; height: 620px;
   background: radial-gradient(circle,
-    rgba(140, 255, 50, 0.07) 0%,
-    rgba(140, 255, 50, 0.02) 50%,
+    rgba(220, 55, 0, 0.07) 0%,
+    rgba(220, 55, 0, 0.02) 50%,
     transparent 70%
   );
   bottom: 5%; left: 10%;
   animation: mesh-drift-3 28s ease-in-out infinite alternate;
 }
 
-/* 4 - Deep olive-lime shade, bottom-right */
+/* 4 - Deep ember, bottom-right */
 .mesh-orb-4 {
   width: 560px; height: 560px;
   background: radial-gradient(circle,
-    rgba(155, 205, 0, 0.09) 0%,
-    rgba(155, 205, 0, 0.02) 50%,
+    rgba(180, 30, 0, 0.09) 0%,
+    rgba(180, 30, 0, 0.02) 50%,
     transparent 70%
   );
   bottom: -5%; right: 5%;
   animation: mesh-drift-4 22s ease-in-out infinite alternate;
 }
 
-/* 5 - Pale bleached lime tint, floating centre */
+/* 5 - Pale fire tint, floating centre */
 .mesh-orb-5 {
   width: 500px; height: 500px;
   background: radial-gradient(circle,
-    rgba(230, 255, 140, 0.06) 0%,
-    rgba(230, 255, 140, 0.01) 55%,
+    rgba(255, 120, 60, 0.06) 0%,
+    rgba(255, 120, 60, 0.01) 55%,
     transparent 70%
   );
   top: 45%; left: 35%;
   animation: mesh-drift-5 38s ease-in-out infinite alternate;
 }
 
-/* 6 - Golden lime, top-right accent */
+/* 6 - Deep crimson, top-right */
 .mesh-orb-6 {
   width: 480px; height: 480px;
   background: radial-gradient(circle,
-    rgba(248, 255, 0, 0.07) 0%,
-    rgba(248, 255, 0, 0.02) 50%,
+    rgba(200, 20, 20, 0.07) 0%,
+    rgba(200, 20, 20, 0.02) 50%,
     transparent 70%
   );
   top: -10%; right: 18%;

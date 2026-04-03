@@ -62,7 +62,7 @@ const css = /* css */ `
   -webkit-text-stroke: 1.5px rgba(255,255,255,0.55);
 }
 .fw-header__count {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   color: var(--color-muted, rgba(240,240,240,0.35));
   white-space: nowrap;
@@ -116,9 +116,9 @@ const css = /* css */ `
 }
 .fw-card__top { display: flex; flex-direction: column; gap: 16px; }
 .fw-card__company {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 11px;
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   display: inline-flex;
@@ -131,7 +131,7 @@ const css = /* css */ `
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent, #C8FF00);
+  background: var(--accent, #FF4D00);
   flex-shrink: 0;
 }
 .fw-card__title {
@@ -166,7 +166,7 @@ const css = /* css */ `
   line-height: 1;
 }
 .fw-metric__lbl {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 11px;
   color: var(--color-muted, rgba(240,240,240,0.5));
   letter-spacing: 0.06em;
@@ -175,7 +175,7 @@ const css = /* css */ `
 
 /* CTA */
 .fw-card__cta {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -188,7 +188,7 @@ const css = /* css */ `
   transition: color 0.3s ease, gap 0.3s ease;
 }
 .fw-card__cta:hover {
-  color: var(--accent, #E4FE9A);
+  color: var(--accent, #FF4D00);
   gap: 10px;
 }
 
@@ -254,7 +254,7 @@ const css = /* css */ `
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 11px;
   letter-spacing: 0.08em;
   color: rgba(255,255,255,0.1);
@@ -300,7 +300,7 @@ const css = /* css */ `
   transition: background 0.3s ease, height 0.3s ease;
 }
 .fw-pip--active {
-  background: var(--accent, #E4FE9A);
+  background: var(--accent, #FF4D00);
   height: 48px;
 }
 

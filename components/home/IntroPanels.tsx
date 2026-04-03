@@ -20,7 +20,7 @@ const PANELS: PanelDef[] = [
   {
     num: '01',
     layerChip: 'p / Statement 01',
-    propChips: ['span / Co...', 'color → #C8FF00'],
+    propChips: ['span / Co...', 'color → #FF4D00'],
     fullHtml: 'I design for those who crave experiences that are <em>unforgettable</em>',
     emWord: 'unforgettable',
   },
@@ -97,7 +97,7 @@ const css = /* css */ `
   border-radius: 18px;
   box-shadow:
     rgba(0,0,0,0.85) 0px 40px 100px,
-    rgba(166,139,249,0.55) 0px 0px 0px 1.5px;
+    rgba(255,77,0,0.55) 0px 0px 0px 1.5px;
   pointer-events: none;
   z-index: 50;
   will-change: opacity;
@@ -119,7 +119,7 @@ const css = /* css */ `
   position: absolute;
   width: 20px;
   height: 20px;
-  border-color: var(--accent, #C8FF00);
+  border-color: var(--accent, #FF4D00);
   border-style: solid;
 }
 .ip-corner.tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; border-radius: 3px 0 0 0; }
@@ -148,9 +148,9 @@ const css = /* css */ `
 
 /* ─── PANEL NUMBER ────────────────────────────────────────────── */
 .ip-num {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 13px;
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -165,10 +165,10 @@ const css = /* css */ `
   opacity: 0;
 }
 .ip-prop-chip {
-  background: rgba(167,139,250,0.15);
-  border: 1px solid rgba(167,139,250,0.3);
-  color: #a78bfa;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  background: rgba(255,77,0,0.15);
+  border: 1px solid rgba(255,77,0,0.3);
+  color: #FF4D00;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   padding: 2px 8px;
   border-radius: 3px;
@@ -177,7 +177,7 @@ const css = /* css */ `
 
 /* ─── SELECTION BOX ───────────────────────────────────────────── */
 .ip-sel {
-  border: 1.5px solid #a78bfa;
+  border: 1.5px solid #FF4D00;
   position: relative;
   padding: 20px 24px;
   opacity: 0;
@@ -188,9 +188,9 @@ const css = /* css */ `
   position: absolute;
   top: -24px;
   left: 0;
-  background: #a78bfa;
+  background: #FF4D00;
   color: #000;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
@@ -208,7 +208,7 @@ const css = /* css */ `
   line-height: 1.4;
 }
 .ip-text em {
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   font-style: italic;
 }
 
@@ -229,7 +229,7 @@ const css = /* css */ `
   position: absolute;
   bottom: -22px;
   right: 0;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   color: rgba(255,255,255,0.35);
   opacity: 0;
@@ -248,9 +248,9 @@ const css = /* css */ `
   pointer-events: none;
 }
 .ip-ac-tag {
-  background: #a78bfa;
+  background: #FF4D00;
   color: #000;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
@@ -264,9 +264,9 @@ const css = /* css */ `
   top: 50%;
   left: 50%;
   transform: translate(-50%, -200%);
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 13px;
-  color: var(--accent, #C8FF00);
+  color: var(--accent, #FF4D00);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   /* Always visible from the start */
@@ -300,8 +300,8 @@ const CursorSVG = () => (
   <svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0.5 0.5L0.5 18.5L4.5 14.5L7.5 21.5L9.5 20.5L6.5 13.5L12.5 13.5L0.5 0.5Z"
-      fill="#a78bfa"
-      stroke="#a78bfa"
+      fill="#FF4D00"
+      stroke="#FF4D00"
       strokeWidth="0.5"
     />
   </svg>

@@ -10,8 +10,8 @@ import BlogTeaser from '@/components/home/BlogTeaser'
 import WorkedWith from '@/components/home/WorkedWith'
 
 const HERO_DEFAULTS = {
-  eyebrow: 'NAVIGATING THE UNKNOWN, PIXEL BY PIXEL.',
-  subtitle: 'Precision structure, bold creative vision.',
+  eyebrow: 'PRODUCT DESIGNER & CREATIVE DEVELOPER',
+  subtitle: 'Strategy-first design, built for the real world.',
   badge: 'Available for work',
 }
 

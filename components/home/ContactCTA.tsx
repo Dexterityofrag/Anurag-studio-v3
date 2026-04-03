@@ -38,14 +38,14 @@ const css = /* css */ `
   gap: 12px;
 }
 .cta-footer__email {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 13px;
   color: rgba(255,255,255,0.6);
   text-decoration: none;
   letter-spacing: 0.04em;
   transition: color 0.2s ease;
 }
-.cta-footer__email:hover { color: var(--accent, #C8FF00); }
+.cta-footer__email:hover { color: var(--accent, #FF4D00); }
 
 .cta-footer__socials {
   display: flex;
@@ -53,7 +53,7 @@ const css = /* css */ `
   align-items: center;
 }
 .cta-footer__social {
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   color: rgba(255,255,255,0.35);
   text-decoration: none;

@@ -66,14 +66,14 @@ const css = /* css */ `
   font-size: 18px;
   color: #FAFAFA;
 }
-.as__brand-dot { color: #C8FF00; }
+.as__brand-dot { color: #FF4D00; }
 .as__badge {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.06em;
   padding: 2px 8px;
   border-radius: 999px;
-  background: #C8FF00;
+  background: #FF4D00;
   color: #0A0A0A;
   font-weight: 600;
 }
@@ -104,9 +104,9 @@ const css = /* css */ `
   color: #FAFAFA;
 }
 .as__link--active {
-  border-left-color: #C8FF00;
+  border-left-color: #FF4D00;
   background: #141414;
-  color: #C8FF00;
+  color: #FF4D00;
 }
 .as__link svg { width: 18px; height: 18px; flex-shrink: 0; }
 
@@ -163,7 +163,7 @@ const css = /* css */ `
   color: #FAFAFA;
   font-weight: 700;
 }
-.as-mobile-bar__title span { color: #C8FF00; }
+.as-mobile-bar__title span { color: #FF4D00; }
 
 /* ─── OVERLAY ────────────────────────────────────────────────── */
 .as-overlay {

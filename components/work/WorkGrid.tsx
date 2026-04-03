@@ -49,7 +49,7 @@ const css = /* css */ `
   will-change: transform;
 }
 .work-hero__sub {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 14px;
   color: var(--color-muted, rgba(240,240,240,0.5));
   text-transform: uppercase;
@@ -68,7 +68,7 @@ const css = /* css */ `
   margin-bottom: 48px;
 }
 .filter-chip {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -85,9 +85,9 @@ const css = /* css */ `
   color: var(--color-fg, #f0f0f0);
 }
 .filter-chip--active {
-  background: var(--accent, #E4FE9A);
+  background: var(--accent, #FF4D00);
   color: var(--color-bg, #050505);
-  border-color: var(--accent, #E4FE9A);
+  border-color: var(--accent, #FF4D00);
 }
 
 /* ─── CARD STACK ─────────────────────────────────────────────── */
@@ -138,7 +138,7 @@ const css = /* css */ `
 }
 .work-card__top { display: flex; flex-direction: column; gap: 14px; }
 .work-card__company {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   color: var(--color-muted, rgba(240,240,240,0.5));
   letter-spacing: 0.08em;
@@ -162,7 +162,7 @@ const css = /* css */ `
   display: flex; flex-wrap: wrap; gap: 6px;
 }
 .work-card__tag {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
   padding: 3px 8px; border-radius: 100px;
   border: 1px solid rgba(255,255,255,0.1);
@@ -177,19 +177,19 @@ const css = /* css */ `
   font-weight: 700; color: var(--color-fg, #f0f0f0); line-height: 1;
 }
 .wc-metric__lbl {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 10px; color: var(--color-muted, rgba(240,240,240,0.5));
   letter-spacing: 0.06em; text-transform: uppercase;
 }
 .work-card__cta {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--color-muted, rgba(240,240,240,0.5));
   text-decoration: none; display: inline-flex; align-items: center;
   gap: 6px; width: fit-content;
   transition: color 0.3s ease, gap 0.3s ease;
 }
-.work-card__cta:hover { color: var(--accent, #E4FE9A); gap: 10px; }
+.work-card__cta:hover { color: var(--accent, #FF4D00); gap: 10px; }
 
 /* Right visual panel */
 .work-card__visual {
@@ -222,7 +222,7 @@ const css = /* css */ `
 }
 .wc-placeholder {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono, "DM Mono", monospace); font-size: 11px;
+  font-family: var(--font-mono, "JetBrains Mono", monospace); font-size: 11px;
   letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.1);
 }
 .wc-corners { position: absolute; inset: 20px; z-index: 4; pointer-events: none; }
@@ -254,7 +254,7 @@ const css = /* css */ `
 /* ─── EMPTY ───────────────────────────────────────────────────── */
 .work-stack__empty {
   text-align: center; padding: 80px 0;
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--color-muted, rgba(240,240,240,0.5));
 }

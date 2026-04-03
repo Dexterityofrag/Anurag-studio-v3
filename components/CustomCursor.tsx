@@ -34,7 +34,7 @@ const css = /* css */ `
 
 /* ─── Contextual tag pill ─────────────────────────────────────── */
 .you-tag {
-  font-family: var(--font-mono, "DM Mono", monospace);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.04em;
