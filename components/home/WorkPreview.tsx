@@ -102,6 +102,21 @@ const css = /* css */ `
   position: relative;
   will-change: transform;
   cursor: none;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.fw-card:hover {
+  border-color: rgba(0, 255, 148, 0.18);
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.2),
+    0 24px 60px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(0,255,148,0.08),
+    0 0 60px rgba(0,255,148,0.04);
+}
+.fw-card:hover .fw-card__visual {
+  background: #080808;
+}
+.fw-card:hover .fw-card__company {
+  color: rgba(0,255,148,0.9);
 }
 
 /* ─── LEFT PANEL ────────────────────────────────────────────── */
@@ -118,7 +133,7 @@ const css = /* css */ `
 .fw-card__company {
   font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 11px;
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   display: inline-flex;
@@ -131,7 +146,7 @@ const css = /* css */ `
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   flex-shrink: 0;
 }
 .fw-card__title {
@@ -188,7 +203,7 @@ const css = /* css */ `
   transition: color 0.3s ease, gap 0.3s ease;
 }
 .fw-card__cta:hover {
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
   gap: 10px;
 }
 
@@ -300,7 +315,7 @@ const css = /* css */ `
   transition: background 0.3s ease, height 0.3s ease;
 }
 .fw-pip--active {
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   height: 48px;
 }
 

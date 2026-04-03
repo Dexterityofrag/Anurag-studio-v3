@@ -63,7 +63,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Read dynamic settings from DB (with fallback if DB unreachable)
-  let accentColor = '#FF4D00'
+  let accentColor = '#00FF94'
   try {
     const row = await db
       .select({ value: siteContent.value })
