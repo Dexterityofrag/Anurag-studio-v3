@@ -356,7 +356,26 @@ const css = /* css */ `
   inset: 0;
   will-change: transform;
   transform-style: preserve-3d;
+  /* Center the name block in the viewport, leaving room for the fixed nav */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 72px; /* nav height offset so optical center is below nav */
 }
+
+/* ── Particle canvas ── */
+.v3-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease 0.4s;
+}
+.v3-hero-canvas.in { opacity: 1; }
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
@@ -423,6 +442,7 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
   const tiltRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const snapCursorRef = useRef<HTMLDivElement>(null)
   const snapBubbleRef = useRef<HTMLDivElement>(null)
   const snapZoneRef = useRef<HTMLDivElement>(null)
@@ -467,6 +487,114 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     return () => {
       window.removeEventListener('scroll', onScroll)
       cancelAnimationFrame(rafId)
+    }
+  }, [])
+
+  /* ── Particle constellation loop ── */
+  useEffect(() => {
+    const cv = canvasRef.current
+    if (!cv) return
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const cx = cv.getContext('2d')!
+    if (!cx) return
+
+    // skip for reduced-motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const N = 58           // particle count
+    const LINK_DIST = 155  // max connection distance (px)
+    const SPEED = 0.28     // base drift speed
+
+    interface Particle {
+      x: number; y: number
+      vx: number; vy: number
+      r: number; alpha: number
+    }
+
+    let W = 0, H = 0
+    const particles: Particle[] = []
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const el = cv!
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const c = cx!
+
+    function resize() {
+      W = el.offsetWidth
+      H = el.offsetHeight
+      el.width  = W * devicePixelRatio
+      el.height = H * devicePixelRatio
+      c.scale(devicePixelRatio, devicePixelRatio)
+    }
+
+    function spawn(): Particle {
+      const angle = Math.random() * Math.PI * 2
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: Math.cos(angle) * SPEED * (0.4 + Math.random() * 0.6),
+        vy: Math.sin(angle) * SPEED * (0.4 + Math.random() * 0.6),
+        r: 1.2 + Math.random() * 1.2,
+        alpha: 0.25 + Math.random() * 0.45,
+      }
+    }
+
+    resize()
+    for (let i = 0; i < N; i++) particles.push(spawn())
+    el.classList.add('in')
+
+    let rafId: number
+
+    function draw() {
+      c.clearRect(0, 0, W, H)
+
+      // Move + wrap
+      for (const p of particles) {
+        p.x += p.vx
+        p.y += p.vy
+        if (p.x < -10) p.x = W + 10
+        if (p.x > W + 10) p.x = -10
+        if (p.y < -10) p.y = H + 10
+        if (p.y > H + 10) p.y = -10
+      }
+
+      // Connecting lines
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const dx = particles[i].x - particles[j].x
+          const dy = particles[i].y - particles[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < LINK_DIST) {
+            const t = 1 - dist / LINK_DIST
+            c.beginPath()
+            c.moveTo(particles[i].x, particles[i].y)
+            c.lineTo(particles[j].x, particles[j].y)
+            c.strokeStyle = `rgba(0,255,148,${t * 0.13})`
+            c.lineWidth = t * 0.8
+            c.stroke()
+          }
+        }
+      }
+
+      // Dots
+      for (const p of particles) {
+        c.beginPath()
+        c.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        c.fillStyle = `rgba(0,255,148,${p.alpha})`
+        c.fill()
+      }
+
+      rafId = requestAnimationFrame(draw)
+    }
+
+    draw()
+
+    const ro = new ResizeObserver(resize)
+    ro.observe(el)
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      ro.disconnect()
     }
   }, [])
 
@@ -595,14 +723,8 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
             {/* Ruler grid */}
             <div className="v3-hero-grid" aria-hidden="true" />
 
-            {/* Corner meta */}
-            <div className="v3-hero-meta" aria-hidden="true">
-              <span className="v3-hero-meta-label">anurag.studio</span>
-              <span className="v3-badge">
-                <span className="v3-badge-dot available-glow" />
-                {displayBadge}
-              </span>
-            </div>
+            {/* Particle constellation */}
+            <canvas ref={canvasRef} className="v3-hero-canvas" aria-hidden="true" />
 
             {/* Center kinetic name */}
             <div className="v3-name-wrap" aria-label="Anurag">
