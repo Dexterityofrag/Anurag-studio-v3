@@ -24,7 +24,7 @@ const css = `
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  background: #FF4D00;
+  background: #00FF94;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;

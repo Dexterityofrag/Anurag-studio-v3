@@ -21,7 +21,7 @@ const css = /* css */ `
 }
 .pd-prog__bar {
   height: 100%; width: 0%;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   transition: width 0.05s linear;
   transform-origin: left;
 }
@@ -85,7 +85,7 @@ const css = /* css */ `
 }
 .pd-hero__dot {
   width: 4px; height: 4px; border-radius: 50%;
-  background: var(--accent, #FF4D00); display: inline-block; flex-shrink: 0;
+  background: var(--accent, #00FF94); display: inline-block; flex-shrink: 0;
 }
 .pd-hero__title {
   font-family: var(--font-display); font-weight: 700;
@@ -137,7 +137,7 @@ const css = /* css */ `
 .pd-sidebar-cta {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 16px;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   color: #0a0a0a; text-decoration: none;
   font-family: var(--font-display); font-weight: 700;
   font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
@@ -212,7 +212,7 @@ const css = /* css */ `
 }
 .pd-nav__link::before {
   content: ''; position: absolute; inset: 0;
-  background: var(--accent, #FF4D00); opacity: 0; transition: opacity 0.3s ease;
+  background: var(--accent, #00FF94); opacity: 0; transition: opacity 0.3s ease;
 }
 .pd-nav__link:hover::before { opacity: 0.03; }
 .pd-nav__link--next { justify-content: flex-end; text-align: right; border-left: 1px solid rgba(255,255,255,0.06); }

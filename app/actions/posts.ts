@@ -4,28 +4,10 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { blogPosts } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
+import { slugify, readingTime } from '@/lib/utils'
 
 /* ────────────────────────────────────────────────────────────── */
-/*  Helpers                                                       */
-/* ────────────────────────────────────────────────────────────── */
-
-function slugify(str: string): string {
-    return str
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/[\s_]+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '')
-}
-
-function wordCount(html: string): number {
-    const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
-    return text ? text.split(' ').length : 0
-}
-
-/* ────────────────────────────────────────────────────────────── */
-/*  Save / Upsert                                                */
+/*  Types                                                         */
 /* ────────────────────────────────────────────────────────────── */
 
 export type PostFormState = {
@@ -33,6 +15,10 @@ export type PostFormState = {
     error?: string
     id?: string
 } | null
+
+/* ────────────────────────────────────────────────────────────── */
+/*  Save / Upsert                                                */
+/* ────────────────────────────────────────────────────────────── */
 
 export async function savePost(
     _prev: PostFormState,
@@ -59,13 +45,10 @@ export async function savePost(
 
         const tags = tagsRaw.split(',').map((t) => t.trim()).filter(Boolean)
         const content = contentRaw ? JSON.parse(contentRaw) : null
-
-        // Reading time: use override or auto-calculate from word count
         const readingTimeMinutes = readingOverride
             ? parseInt(readingOverride, 10) || 5
-            : Math.max(1, Math.ceil(wordCount(contentHtml) / 200))
+            : readingTime(contentHtml)
 
-        // Published date: if publishing and no date set, default to now
         let publishedAt: Date | null = null
         if (publishedAtRaw) {
             publishedAt = new Date(publishedAtRaw)
@@ -74,29 +57,15 @@ export async function savePost(
         }
 
         const data = {
-            title,
-            slug,
-            excerpt,
-            content,
-            contentHtml,
-            externalUrl,
-            coverUrl,
-            tags,
-            isPublished,
-            publishedAt,
-            readingTimeMinutes,
-            metaTitle,
-            metaDescription,
-            updatedAt: new Date(),
+            title, slug, excerpt, content, contentHtml, externalUrl,
+            coverUrl, tags, isPublished, publishedAt, readingTimeMinutes,
+            metaTitle, metaDescription, updatedAt: new Date(),
         }
 
         if (id) {
             await db.update(blogPosts).set(data).where(eq(blogPosts.id, id))
         } else {
-            const [row] = await db
-                .insert(blogPosts)
-                .values({ ...data })
-                .returning({ id: blogPosts.id })
+            const [row] = await db.insert(blogPosts).values({ ...data }).returning({ id: blogPosts.id })
             revalidatePath('/x/admin/posts')
             revalidatePath('/blog')
             revalidatePath('/')

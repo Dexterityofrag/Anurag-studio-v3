@@ -1,3 +1,5 @@
+export const revalidate = 60
+
 import type { Metadata } from 'next'
 import AboutPage from '@/components/about/AboutPage'
 import { fetchAboutSection } from '@/lib/data/about'

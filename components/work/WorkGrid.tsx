@@ -85,9 +85,9 @@ const css = /* css */ `
   color: var(--color-fg, #f0f0f0);
 }
 .filter-chip--active {
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   color: var(--color-bg, #050505);
-  border-color: var(--accent, #FF4D00);
+  border-color: var(--accent, #00FF94);
 }
 
 /* ─── CARD STACK ─────────────────────────────────────────────── */
@@ -189,7 +189,7 @@ const css = /* css */ `
   gap: 6px; width: fit-content;
   transition: color 0.3s ease, gap 0.3s ease;
 }
-.work-card__cta:hover { color: var(--accent, #FF4D00); gap: 10px; }
+.work-card__cta:hover { color: var(--accent, #00FF94); gap: 10px; }
 
 /* Right visual panel */
 .work-card__visual {

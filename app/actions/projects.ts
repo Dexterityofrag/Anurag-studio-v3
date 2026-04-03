@@ -4,23 +4,10 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { projects } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
+import { slugify } from '@/lib/utils'
 
 /* ────────────────────────────────────────────────────────────── */
-/*  Helpers                                                       */
-/* ────────────────────────────────────────────────────────────── */
-
-function slugify(str: string): string {
-    return str
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/[\s_]+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '')
-}
-
-/* ────────────────────────────────────────────────────────────── */
-/*  Save / Upsert                                                */
+/*  Types                                                         */
 /* ────────────────────────────────────────────────────────────── */
 
 export type ProjectFormState = {
@@ -28,6 +15,10 @@ export type ProjectFormState = {
     error?: string
     id?: string
 } | null
+
+/* ────────────────────────────────────────────────────────────── */
+/*  Save / Upsert                                                */
+/* ────────────────────────────────────────────────────────────── */
 
 export async function saveProject(
     _prev: ProjectFormState,
@@ -53,31 +44,15 @@ export async function saveProject(
         if (!title) return { error: 'Title is required.' }
         if (!slug) return { error: 'Slug is required.' }
 
-        const tags = tagsRaw
-            .split(',')
-            .map((t) => t.trim())
-            .filter(Boolean)
-
+        const tags = tagsRaw.split(',').map((t) => t.trim()).filter(Boolean)
         const description = descriptionRaw ? JSON.parse(descriptionRaw) : null
         const descriptionHtml = formData.get('descriptionHtml')?.toString() || ''
         const year = yearStr ? parseInt(yearStr, 10) || null : null
 
         const data = {
-            title,
-            slug,
-            tagline,
-            description,
-            descriptionHtml,
-            thumbnailUrl,
-            coverUrl,
-            tags,
-            client,
-            role,
-            year,
-            externalUrl,
-            isFeatured,
-            isPublished,
-            displayOrder,
+            title, slug, tagline, description, descriptionHtml,
+            thumbnailUrl, coverUrl, tags, client, role, year,
+            externalUrl, isFeatured, isPublished, displayOrder,
             updatedAt: new Date(),
         }
 
@@ -120,17 +95,11 @@ export async function deleteProject(id: string): Promise<{ error?: string }> {
 }
 
 /* ────────────────────────────────────────────────────────────── */
-/*  Reorder (move up / move down)                                 */
+/*  Reorder                                                       */
 /* ────────────────────────────────────────────────────────────── */
 
-export async function updateDisplayOrder(
-    id: string,
-    newOrder: number
-): Promise<void> {
-    await db
-        .update(projects)
-        .set({ displayOrder: newOrder, updatedAt: new Date() })
-        .where(eq(projects.id, id))
+export async function updateDisplayOrder(id: string, newOrder: number): Promise<void> {
+    await db.update(projects).set({ displayOrder: newOrder, updatedAt: new Date() }).where(eq(projects.id, id))
     revalidatePath('/x/admin/projects')
     revalidatePath('/work')
 }

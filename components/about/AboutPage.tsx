@@ -149,9 +149,10 @@ function useCountUp(target: number, ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    gsap.registerPlugin(ScrollTrigger)
     const st = ScrollTrigger.create({
       trigger: el,
-      start: 'top 80%',
+      start: 'top 82%',
       once: true,
       onEnter() {
         gsap.to({ n: 0 }, {
@@ -188,7 +189,7 @@ const css = /* css */ `
 .abt-section-label {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   padding-bottom: 14px;
@@ -202,7 +203,7 @@ const css = /* css */ `
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   flex-shrink: 0;
 }
 
@@ -237,12 +238,12 @@ const css = /* css */ `
 }
 .abt-cert-tab:first-child { border-radius: 0 0 0 6px; }
 .abt-cert-tab:last-child  { border-radius: 6px 6px 0 0; }
-.abt-cert-tab:hover { color: var(--accent, #FF4D00); background: rgba(30,30,30,0.95); }
+.abt-cert-tab:hover { color: var(--accent, #00FF94); background: rgba(30,30,30,0.95); }
 .abt-cert-tab-dot {
   display: inline-block;
   width: 5px; height: 5px;
   border-radius: 50%;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   margin-right: 6px;
   vertical-align: middle;
   opacity: 0.7;
@@ -271,7 +272,7 @@ const css = /* css */ `
 .abt-index {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 12px;
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-bottom: 28px;
@@ -283,7 +284,7 @@ const css = /* css */ `
   content: '';
   display: inline-block;
   width: 24px; height: 1px;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
 }
 .abt-h1 {
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
@@ -392,7 +393,7 @@ const css = /* css */ `
 
 /* ─── STATS BAND ──────────────────────────────────────────────── */
 .abt-stats {
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   padding: 80px var(--gutter, 60px);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -564,8 +565,8 @@ const css = /* css */ `
   cursor: none;
 }
 .abt-tool-card:hover {
-  border-color: rgba(255,77,0,0.2);
-  background: rgba(255,77,0,0.02);
+  border-color: rgba(0,255,148,0.2);
+  background: rgba(0,255,148,0.02);
 }
 .abt-tool-icon {
   width: 44px; height: 44px;
@@ -579,7 +580,7 @@ const css = /* css */ `
   transition: border-color 0.3s;
 }
 .abt-tool-card:hover .abt-tool-icon {
-  border-color: rgba(255,77,0,0.3);
+  border-color: rgba(0,255,148,0.3);
 }
 .abt-tool-name {
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
@@ -639,14 +640,14 @@ const css = /* css */ `
   transition: border-color 0.3s, background 0.3s;
 }
 .abt-found-card:hover {
-  border-color: rgba(255,77,0,0.2);
-  background: rgba(255,77,0,0.02);
+  border-color: rgba(0,255,148,0.2);
+  background: rgba(0,255,148,0.02);
 }
 .abt-found-num {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
   text-transform: uppercase;
 }
 .abt-found-name {
@@ -710,15 +711,15 @@ const css = /* css */ `
   transition: border-color 0.3s, background 0.3s;
 }
 .abt-comp-item:hover {
-  border-color: rgba(255,77,0,0.2);
-  background: rgba(255,77,0,0.02);
+  border-color: rgba(0,255,148,0.2);
+  background: rgba(0,255,148,0.02);
 }
 .abt-comp-icon {
   color: rgba(240,240,240,0.3);
   transition: color 0.3s;
   width: 24px; height: 24px;
 }
-.abt-comp-item:hover .abt-comp-icon { color: var(--accent, #FF4D00); }
+.abt-comp-item:hover .abt-comp-icon { color: var(--accent, #00FF94); }
 .abt-comp-label {
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
   font-size: clamp(0.95rem, 1.4vw, 1.15rem);
@@ -754,7 +755,7 @@ const css = /* css */ `
   right: -10px;
 }
 .abt-figma-tag {
-  background: #FF4D00;
+  background: #00FF94;
   color: #000;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
@@ -768,14 +769,14 @@ const css = /* css */ `
   position: absolute;
   z-index: 25;
   pointer-events: none;
-  border: 1.5px solid #FF4D00;
-  background: rgba(255,77,0,0.05);
+  border: 1.5px solid #00FF94;
+  background: rgba(0,255,148,0.05);
   opacity: 0;
 }
 .abt-figma-sel-lbl {
   position: absolute;
   top: -22px; left: -1px;
-  background: #FF4D00; color: #000;
+  background: #00FF94; color: #000;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px; font-weight: 700;
   padding: 2px 6px; border-radius: 2px 2px 0 0;
@@ -784,7 +785,7 @@ const css = /* css */ `
 .abt-figma-handle {
   position: absolute;
   width: 6px; height: 6px;
-  background: #FF4D00;
+  background: #00FF94;
 }
 .abt-figma-handle.tl { top: -3px; left: -3px; }
 .abt-figma-handle.tr { top: -3px; right: -3px; }
@@ -808,33 +809,51 @@ export default function AboutPage({ bio1, bio2 }: { bio1?: string | null; bio2?:
   const cursorRef  = useRef<HTMLDivElement>(null)
   const selRef     = useRef<HTMLDivElement>(null)
 
-  /* ── Heading mask reveal ─────────────────────────────────── */
+  /* ── Register GSAP plugins (must run before all other effects) ── */
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
+  }, [])
+
+  /* ── Heading mask reveal ─────────────────────────────────── */
+  useEffect(() => {
     const lines = [line1Ref.current, line2Ref.current].filter(Boolean) as HTMLSpanElement[]
+    if (lines.length === 0) return
     gsap.to(lines, {
       translateY: '0%',
       duration: 1.1,
       stagger: 0.1,
       ease: 'power4.out',
-      delay: 0.2,
+      delay: 0.3,
     })
   }, [])
 
   /* ── Scroll-reveal for .abt-fade-up elements ─────────────── */
   useEffect(() => {
-    const els = document.querySelectorAll<HTMLElement>('.abt-fade-up')
-    els.forEach(el => {
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 85%',
-        once: true,
-        onEnter() {
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
-        },
-      })
+    const els = Array.from(document.querySelectorAll<HTMLElement>('.abt-fade-up'))
+    if (els.length === 0) return
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement
+            el.style.transition = 'opacity 0.75s cubic-bezier(0.22,1,0.36,1), transform 0.75s cubic-bezier(0.22,1,0.36,1)'
+            el.style.opacity = '1'
+            el.style.transform = 'translateY(0)'
+            io.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    )
+
+    els.forEach((el, i) => {
+      // Stagger delay via transition-delay
+      el.style.transitionDelay = `${i * 0.04}s`
+      io.observe(el)
     })
-    return () => ScrollTrigger.getAll().forEach(st => st.kill())
+
+    return () => io.disconnect()
   }, [])
 
   /* ── Figma sim on heading ─────────────────────────────────── */
@@ -896,7 +915,7 @@ export default function AboutPage({ bio1, bio2 }: { bio1?: string | null; bio2?:
           {/* Figma overlays */}
           <div ref={cursorRef} className="abt-figma-cursor" aria-hidden="true">
             <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
-              <path d="M1 1L1 18L5.5 13.5L8.5 21L10.5 20L7.5 12.5H14L1 1Z" fill="#FF4D00" />
+              <path d="M1 1L1 18L5.5 13.5L8.5 21L10.5 20L7.5 12.5H14L1 1Z" fill="#00FF94" />
             </svg>
             <span className="abt-figma-tag">Anurag Adhikari</span>
           </div>

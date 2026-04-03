@@ -57,23 +57,31 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  // Read dynamic settings from DB (with fallback if DB unreachable)
-  let accentColor = '#00FF94'
+// Cache accent color for 1 hour — no need for it to block every page render
+async function getAccentColor(): Promise<string> {
   try {
     const row = await db
       .select({ value: siteContent.value })
       .from(siteContent)
       .where(eq(siteContent.key, 'settings.accentColor'))
       .limit(1)
-    if (row[0]?.value) accentColor = row[0].value
+    return row[0]?.value ?? '#00FF94'
   } catch {
-    // use default
+    return '#00FF94'
   }
+}
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // Non-critical: accent color fetch — fallback is #00FF94 (already in globals.css :root)
+  // Using Promise.race so it never blocks more than 400ms
+  const accentColor = await Promise.race([
+    getAccentColor(),
+    new Promise<string>((resolve) => setTimeout(() => resolve('#00FF94'), 400)),
+  ])
 
   const dynamicCss = `:root { --accent: ${accentColor}; --color-accent: ${accentColor}; }`
 

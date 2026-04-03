@@ -100,7 +100,7 @@ const css = `
     transform 0.35s cubic-bezier(0.22,1,0.36,1);
 }
 .ww-row:hover .ww-row__name {
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
   -webkit-text-stroke: 1px transparent;
   transform: translateX(12px);
 }

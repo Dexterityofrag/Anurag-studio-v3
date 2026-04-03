@@ -25,7 +25,7 @@ const css = /* css */ `
   width: 0.25em;
 }
 .anim-heading__accent-word .char {
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
 }
 `
 

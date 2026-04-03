@@ -76,7 +76,7 @@ export async function seedDefaultContent(): Promise<{ error?: string }> {
         { key: 'hero.eyebrow', value: 'NAVIGATING THE UNKNOWN, PIXEL BY PIXEL.', contentType: 'text', groupName: 'hero', description: 'Eyebrow text above main name (mono, wide-tracked)' },
         { key: 'hero.subtitle', value: 'Precision structure, bold creative vision.', contentType: 'text', groupName: 'hero', description: 'Tagline below main name' },
         { key: 'hero.badge', value: 'Available for work', contentType: 'text', groupName: 'hero', description: 'Status badge label' },
-        { key: 'settings.accentColor', value: '#FF4D00', contentType: 'text', groupName: 'settings', description: 'Brand accent color (hex, e.g. #FF4D00)' },
+        { key: 'settings.accentColor', value: '#00FF94', contentType: 'text', groupName: 'settings', description: 'Brand accent color (hex, e.g. #00FF94)' },
     ]
     try {
         await db

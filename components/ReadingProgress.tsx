@@ -8,7 +8,7 @@ const css = /* css */ `
   top: 0;
   left: 0;
   height: 2px;
-  background: #FF4D00;
+  background: #00FF94;
   z-index: 9999;
   will-change: width;
   transition: opacity 0.3s ease;

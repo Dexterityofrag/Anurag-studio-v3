@@ -49,7 +49,7 @@ const css = /* css */ `
   padding: 3px 10px;
   border-radius: 999px;
 }
-.ptl__badge--pub { background: rgba(255,77,0,0.1); color: #FF4D00; }
+.ptl__badge--pub { background: rgba(0,255,148,0.1); color: #00FF94; }
 .ptl__badge--draft { background: rgba(138,138,138,0.1); color: #8A8A8A; }
 
 .ptl__tags {
@@ -98,7 +98,7 @@ const css = /* css */ `
   transition: color 0.2s ease;
   border-radius: 4px;
 }
-.ptl__edit:hover { color: #FF4D00; background: #1A1A1A; }
+.ptl__edit:hover { color: #00FF94; background: #1A1A1A; }
 .ptl__edit svg { width: 14px; height: 14px; }
 
 .ptl__empty {

@@ -55,7 +55,7 @@ const css = /* css */ `
 }
 .ce__save-btn {
   padding: 6px 16px;
-  background: #FF4D00;
+  background: #00FF94;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;
@@ -69,7 +69,7 @@ const css = /* css */ `
 .ce__saved {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: #FF4D00;
+  color: #00FF94;
   margin-right: 8px;
 }
 
@@ -123,7 +123,7 @@ const css = /* css */ `
   transition: border-color 0.25s ease;
   border-radius: 0;
 }
-.ce__input:focus { border-color: #FF4D00; }
+.ce__input:focus { border-color: #00FF94; }
 .ce__textarea {
   resize: vertical;
   min-height: 80px;
@@ -132,7 +132,7 @@ const css = /* css */ `
 .ce__url-preview {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: #FF4D00;
+  color: #00FF94;
   text-decoration: underline;
   margin-top: 4px;
   display: block;

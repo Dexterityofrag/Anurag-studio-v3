@@ -160,7 +160,7 @@ const css = /* css */ `
   border-radius: 10px;
   background: radial-gradient(
     circle at var(--mx) var(--my),
-    rgba(255, 77, 0, 0.09) 0%,
+    rgba(0, 255, 148, 0.09) 0%,
     transparent 60%
   );
   opacity: var(--glow);
@@ -230,7 +230,7 @@ const css = /* css */ `
   left: 0;
   width: 0%;
   height: 1px;
-  background: var(--accent, #FF4D00);
+  background: var(--accent, #00FF94);
   transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .bpost:hover .bpost__title::after { width: 100%; }

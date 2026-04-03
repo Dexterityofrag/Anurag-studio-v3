@@ -1,3 +1,6 @@
+// Cache home page output for 60s — DB data rarely changes in real-time
+export const revalidate = 60
+
 import { fetchSiteContentGroup } from '@/lib/data/siteContent'
 import { fetchProjects } from '@/lib/data/projects'
 import { fetchAboutSection } from '@/lib/data/about'
@@ -8,6 +11,7 @@ import WorkPreview from '@/components/home/WorkPreview'
 import AboutTeaser from '@/components/home/AboutTeaser'
 import BlogTeaser from '@/components/home/BlogTeaser'
 import WorkedWith from '@/components/home/WorkedWith'
+import ContactCTA from '@/components/home/ContactCTA'
 
 const HERO_DEFAULTS = {
   eyebrow: 'PRODUCT DESIGNER & CREATIVE DEVELOPER',
@@ -36,7 +40,7 @@ export default async function HomePage() {
       <div className="tone-b"><WorkPreview projects={featuredProjects.slice(0, 4)} /></div>
       <div className="tone-a"><AboutTeaser bio={bioData[0] ?? null} /></div>
       <div className="tone-b"><BlogTeaser posts={recentPosts} /></div>
+      <div className="tone-a"><ContactCTA /></div>
     </main>
   )
 }
-

@@ -2,12 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "anurag-studio",
-      "runtimeExecutable": "/usr/local/bin/node",
-      "runtimeArgs": ["/Users/lucifer/anurag-studio/node_modules/.bin/next", "dev"],
-      "cwd": "/Users/lucifer/anurag-studio",
-      "port": 3000,
-      "autoPort": true
+      "name": "anurag-studio-v3",
+      "runtimeExecutable": "/Users/lucifer/anurag-studio-v3/.claude/start-dev.sh",
+      "runtimeArgs": [],
+      "port": 3001
     }
   ]
 }

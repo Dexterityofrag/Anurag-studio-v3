@@ -45,7 +45,7 @@ const css = /* css */ `
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #FF4D00;
+  background: #00FF94;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;
@@ -98,7 +98,7 @@ const css = /* css */ `
   transition: border-color 0.25s ease;
   border-radius: 0;
 }
-.sl__input:focus { border-color: #FF4D00; }
+.sl__input:focus { border-color: #00FF94; }
 .sl__input--small { max-width: 80px; }
 
 .sl__toggle {
@@ -111,7 +111,7 @@ const css = /* css */ `
   cursor: pointer;
   transition: background 0.2s ease;
 }
-.sl__toggle--on { background: #FF4D00; }
+.sl__toggle--on { background: #00FF94; }
 .sl__toggle__knob {
   position: absolute;
   top: 2px; left: 2px;
@@ -136,7 +136,7 @@ const css = /* css */ `
   transition: color 0.2s ease;
 }
 .sl__icon-btn:hover { color: #FAFAFA; background: #1A1A1A; }
-.sl__icon-btn--save:hover { color: #FF4D00; }
+.sl__icon-btn--save:hover { color: #00FF94; }
 .sl__icon-btn--del:hover { color: #FF4444; }
 .sl__icon-btn svg { width: 14px; height: 14px; }
 
@@ -258,7 +258,7 @@ export default function SocialLinksManager({ links }: Props) {
                         <span className="sl__toggle__knob" />
                     </button>
                 ) : (
-                    <span style={{ color: link?.isVisible ? '#FF4D00' : '#8A8A8A', fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+                    <span style={{ color: link?.isVisible ? '#00FF94' : '#8A8A8A', fontFamily: 'var(--font-mono)', fontSize: 11 }}>
                         {link?.isVisible ? 'Yes' : 'No'}
                     </span>
                 )}

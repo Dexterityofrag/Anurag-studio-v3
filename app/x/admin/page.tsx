@@ -32,7 +32,7 @@ const css = `
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 2rem;
-  color: #FF4D00;
+  color: #00FF94;
   line-height: 1;
   margin-bottom: 6px;
 }
@@ -66,7 +66,7 @@ const css = `
 .dash__section-link {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: #FF4D00;
+  color: #00FF94;
   text-decoration: none;
   letter-spacing: 0.04em;
   transition: opacity 0.2s ease;
@@ -107,8 +107,8 @@ const css = `
   border-radius: 999px;
 }
 .dash__badge--pub {
-  background: rgba(255, 77, 0, 0.1);
-  color: #FF4D00;
+  background: rgba(0, 255, 148, 0.1);
+  color: #00FF94;
 }
 .dash__badge--draft {
   background: rgba(138, 138, 138, 0.1);
@@ -121,7 +121,7 @@ const css = `
   text-decoration: none;
   transition: color 0.2s ease;
 }
-.dash__edit:hover { color: #FF4D00; }
+.dash__edit:hover { color: #00FF94; }
 
 .dash__empty {
   padding: 24px 20px;

@@ -48,7 +48,7 @@ const css = /* css */ `
   cursor: none;
   transition: color 0.3s ease;
 }
-.ft-cta:hover { color: var(--accent, #FF4D00); }
+.ft-cta:hover { color: var(--accent, #00FF94); }
 
 /* ─── RIGHT: LINKS ───────────────────────────────────────────── */
 .ft-links {
@@ -73,7 +73,7 @@ const css = /* css */ `
 }
 .ft-social-link:hover {
   color: var(--color-fg, #f0f0f0);
-  border-color: var(--accent, #FF4D00);
+  border-color: var(--accent, #00FF94);
 }
 
 /* Email copy button */
@@ -90,8 +90,8 @@ const css = /* css */ `
   letter-spacing: 0.02em;
 }
 .ft-email-btn:hover {
-  color: var(--accent, #FF4D00);
-  border-color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
+  border-color: var(--accent, #00FF94);
 }
 
 /* ─── BOTTOM BAR ─────────────────────────────────────────────── */
@@ -114,7 +114,7 @@ const css = /* css */ `
   left: 50%;
   transform: translateX(-50%) translateY(12px);
   background: rgba(18, 18, 18, 0.95);
-  color: var(--accent, #FF4D00);
+  color: var(--accent, #00FF94);
   font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
   letter-spacing: 0.06em;

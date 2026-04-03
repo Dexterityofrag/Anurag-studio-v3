@@ -57,8 +57,8 @@ const css = /* css */ `
   transition: border-color 0.3s ease, background 0.3s ease;
 }
 .ml__drop:hover, .ml__drop--active {
-  border-color: #FF4D00;
-  background: rgba(255, 77, 0, 0.03);
+  border-color: #00FF94;
+  background: rgba(0, 255, 148, 0.03);
 }
 .ml__drop-icon { color: #8A8A8A; margin-bottom: 8px; }
 .ml__drop-text {
@@ -66,7 +66,7 @@ const css = /* css */ `
   font-size: 14px;
   color: #8A8A8A;
 }
-.ml__drop-text strong { color: #FF4D00; }
+.ml__drop-text strong { color: #00FF94; }
 .ml__drop-hint {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -107,7 +107,7 @@ const css = /* css */ `
 }
 .ml__upload-fill {
   height: 100%;
-  background: #FF4D00;
+  background: #00FF94;
   border-radius: 2px;
   transition: width 0.2s ease;
 }
@@ -115,7 +115,7 @@ const css = /* css */ `
   font-family: var(--font-mono);
   font-size: 10px;
 }
-.ml__upload-status--done { color: #FF4D00; }
+.ml__upload-status--done { color: #00FF94; }
 .ml__upload-status--error { color: #FF4444; }
 .ml__upload-status--uploading { color: #8A8A8A; }
 
@@ -275,10 +275,10 @@ const css = /* css */ `
   border-radius: 0;
   transition: border-color 0.25s ease;
 }
-.ml__slide-input:focus { border-color: #FF4D00; }
+.ml__slide-input:focus { border-color: #00FF94; }
 .ml__slide-save {
   padding: 10px;
-  background: #FF4D00;
+  background: #00FF94;
   color: #0A0A0A;
   font-family: var(--font-display);
   font-weight: 700;
@@ -302,7 +302,7 @@ const css = /* css */ `
   bottom: 24px;
   right: 24px;
   padding: 10px 20px;
-  background: #FF4D00;
+  background: #00FF94;
   color: #0A0A0A;
   font-family: var(--font-mono);
   font-size: 12px;
