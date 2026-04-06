@@ -3,6 +3,8 @@ import { auth } from '@/auth'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import type { ReactNode } from 'react'
 
+export const dynamic = 'force-dynamic'
+
 const css = `
 .admin-shell {
   display: flex;
