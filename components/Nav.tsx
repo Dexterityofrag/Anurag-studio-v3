@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 
 /* ────────────────────────────────────────────────────────────── */
@@ -20,6 +20,18 @@ const css = /* css */ `
   mix-blend-mode: difference;
   transition: opacity 0.5s;
   color: var(--color-fg, #f0f0f0);
+}
+
+/* ─── SCROLL PROGRESS ────────────────────────────────────────── */
+.hdr__progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 1px;
+  width: 0%;
+  background: var(--color-accent, #00FF94);
+  opacity: 0.6;
+  transition: width 0.1s linear;
+  pointer-events: none;
 }
 
 /* ─── LEFT: NAME ─────────────────────────────────────────────── */
@@ -217,8 +229,9 @@ const LINKS = [
 export default function Nav() {
   const [time, setTime] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
+  const progressRef = useRef<HTMLDivElement>(null)
 
-  // Live clock - only rendered client-side to avoid hydration mismatch
+  // Live clock
   useEffect(() => {
     const fmt = () => {
       const d = new Date()
@@ -231,6 +244,19 @@ export default function Nav() {
     setTime(fmt())
     const id = setInterval(() => setTime(fmt()), 1000)
     return () => clearInterval(id)
+  }, [])
+
+  // Scroll progress bar
+  useEffect(() => {
+    const bar = progressRef.current
+    if (!bar) return
+    const onScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      if (total <= 0) return
+      bar.style.width = ((window.scrollY / total) * 100).toFixed(2) + '%'
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   // Lock body scroll while mobile menu is open
@@ -247,6 +273,7 @@ export default function Nav() {
 
       {/* ── Header bar ──────────────────────────────────────── */}
       <header className="hdr" role="banner">
+        <div ref={progressRef} className="hdr__progress" aria-hidden="true" />
         {/* LEFT */}
         <Link href="/" className="hdr__name" aria-label="Anurag, Home">
           ANURAG

@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useState, useEffect, useRef } from 'react'
 import {
   Copy,
   Check,
@@ -22,7 +22,7 @@ const EMAIL = 'hello@anurag.studio'
 const WHATSAPP_URL = 'https://wa.me/917980105391'
 
 const WhatsAppIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
 )
@@ -30,55 +30,104 @@ const WhatsAppIcon = () => (
 const SOCIALS = [
   { icon: WhatsAppIcon, href: WHATSAPP_URL, label: 'WhatsApp' },
   { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: Dribbble, href: 'https://dribbble.com', label: 'Dribbble' },
+  { icon: Linkedin, href: 'https://linkedin.com/in/anuragadhikari', label: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com/anuragadhikari', label: 'GitHub' },
+  { icon: Dribbble, href: 'https://dribbble.com/anuragadhikari', label: 'Dribbble' },
 ]
 
-const PROJECT_TYPES = [
-  'Web Design',
-  'Development',
-  'Brand Identity',
-  'Other',
-]
+const PROJECT_TYPES = ['Web Design', 'Development', 'Brand Identity', 'Other']
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Styles                                                        */
 /* ────────────────────────────────────────────────────────────── */
 
 const css = /* css */ `
+/* ─── ROOT ───────────────────────────────────────────────────── */
 .contact {
   min-height: 100dvh;
   display: grid;
   grid-template-columns: 2fr 3fr;
   padding-top: var(--nav-h, 72px);
+  overflow: hidden;
 }
 
-/* ── LEFT ─────────────────────────────────────────────────────── */
+/* ─── LEFT ───────────────────────────────────────────────────── */
 .contact__left {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(3rem, 6vw, 5rem) var(--page-px);
-  gap: 32px;
+  padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem) var(--page-px, clamp(1.5rem,5vw,6rem));
+  gap: 28px;
+  position: relative;
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
 }
+.contact__left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Vertical accent line */
+.contact__left::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to bottom, transparent, var(--accent, #00FF94), transparent);
+  transition: height 1.2s cubic-bezier(0.22,1,0.36,1) 0.4s;
+}
+.contact__left.is-visible::before {
+  height: 60%;
+}
+
+/* Status badge */
+.contact__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 7px 16px 7px 12px;
+  border-radius: 999px;
+  width: fit-content;
+}
+.contact__badge-dot {
+  width: 7px; height: 7px;
+  background: var(--accent, #00FF94);
+  border-radius: 50%;
+  animation: cs-pulse 2s ease infinite;
+  flex-shrink: 0;
+}
+@keyframes cs-pulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,148,0.5); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 5px rgba(0,255,148,0); }
+}
+
+/* Heading */
 .contact__heading {
-  font-family: var(--font-display);
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
   font-weight: 700;
-  font-size: clamp(4rem, 9vw, 7rem);
-  line-height: 0.95;
-  color: var(--text);
+  font-size: clamp(4rem, 9vw, 7.5rem);
+  line-height: 0.92;
+  color: var(--color-fg, #FAFAFA);
   letter-spacing: -0.03em;
+  margin: 0;
 }
-.typewriter-char {
-  display: inline-block;
-}
+
+/* Description */
 .contact__desc {
-  font-family: var(--font-body);
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
-  color: var(--muted);
-  line-height: 1.6;
-  max-width: 400px;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+  color: rgba(255,255,255,0.4);
+  line-height: 1.65;
+  max-width: 360px;
 }
 
 /* Email row */
@@ -88,83 +137,130 @@ const css = /* css */ `
   gap: 10px;
 }
 .contact__email {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--accent);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: clamp(12px, 1.2vw, 14px);
+  color: var(--accent, #00FF94);
   text-decoration: none;
   transition: opacity 0.2s ease;
+  letter-spacing: 0.03em;
 }
-.contact__email:hover { opacity: 0.8; }
+.contact__email:hover { opacity: 0.75; }
 .contact__copy-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
+  width: 30px; height: 30px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 6px;
   cursor: pointer;
-  color: var(--muted);
-  transition: color 0.2s ease, border-color 0.2s ease;
+  color: rgba(255,255,255,0.4);
+  transition: all 0.2s ease;
 }
 .contact__copy-btn:hover {
-  color: var(--text);
-  border-color: var(--muted-2, #555);
+  background: rgba(0,255,148,0.1);
+  border-color: rgba(0,255,148,0.3);
+  color: var(--accent, #00FF94);
 }
-.contact__copy-btn svg { width: 14px; height: 14px; }
+.contact__copy-btn svg { width: 13px; height: 13px; }
 
 /* Socials */
 .contact__socials {
   display: flex;
-  gap: 12px;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 .contact__social {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  color: var(--muted);
+  width: 38px; height: 38px;
+  color: rgba(255,255,255,0.3);
   text-decoration: none;
-  transition: color 0.3s ease, transform 0.3s ease;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 }
 .contact__social:hover {
-  color: var(--text);
-  transform: scale(1.15);
+  color: var(--accent, #00FF94);
+  border-color: rgba(0,255,148,0.25);
+  background: rgba(0,255,148,0.06);
+  transform: translateY(-2px);
 }
-.contact__social svg { width: 18px; height: 18px; }
+.contact__social svg { width: 16px; height: 16px; }
 
-/* ── RIGHT (form card) ───────────────────────────────────────── */
+/* ─── RIGHT ──────────────────────────────────────────────────── */
 .contact__right {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(3rem, 6vw, 5rem) var(--page-px);
+  padding: clamp(3rem, 6vw, 5rem) var(--page-px, clamp(1.5rem,5vw,6rem)) clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem);
+  opacity: 0;
+  transform: translateX(28px);
+  transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s, transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s;
 }
+.contact__right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Form card */
 .contact__card {
   width: 100%;
   max-width: 540px;
-  background: rgba(20, 20, 20, 0.8);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: clamp(28px, 3vw, 40px);
+  background: rgba(12,12,12,0.7);
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: clamp(28px, 3.5vw, 44px);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Form fields */
+/* Corner bracket decoration */
+.contact__card::before,
+.contact__card::after {
+  content: '';
+  position: absolute;
+  width: 16px; height: 16px;
+  border-color: var(--accent, #00FF94);
+  border-style: solid;
+  opacity: 0.4;
+}
+.contact__card::before {
+  top: 0; left: 0;
+  border-width: 1px 0 0 1px;
+}
+.contact__card::after {
+  bottom: 0; right: 0;
+  border-width: 0 1px 1px 0;
+}
+
+/* Form label */
+.cf-card-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 24px;
+  display: block;
+}
+
+/* ─── FORM FIELDS ─────────────────────────────────────────────── */
 .cf-group {
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 .cf-label {
   position: absolute;
   left: 0;
   top: 14px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.04em;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.08em;
   pointer-events: none;
   transition: transform 0.25s ease, font-size 0.25s ease, color 0.25s ease;
   transform-origin: left top;
@@ -175,11 +271,11 @@ const css = /* css */ `
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
   padding: 14px 0 10px;
-  font-family: var(--font-body);
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 15px;
-  color: var(--text);
+  color: var(--color-fg, #FAFAFA);
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   border-radius: 0;
@@ -189,8 +285,8 @@ const css = /* css */ `
   cursor: pointer;
 }
 .cf-select option {
-  background: var(--surface);
-  color: var(--text);
+  background: #111;
+  color: #FAFAFA;
 }
 .cf-textarea {
   resize: vertical;
@@ -199,11 +295,11 @@ const css = /* css */ `
 .cf-input:focus,
 .cf-select:focus,
 .cf-textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 2px 8px rgba(255, 77, 0, 0.08);
+  border-color: var(--accent, #00FF94);
+  box-shadow: 0 2px 0 rgba(0,255,148,0.35), 0 4px 20px rgba(0,255,148,0.06);
 }
 
-/* Float label on focus or filled */
+/* Float label */
 .cf-input:focus ~ .cf-label,
 .cf-input:not(:placeholder-shown) ~ .cf-label,
 .cf-select:focus ~ .cf-label,
@@ -211,79 +307,97 @@ const css = /* css */ `
 .cf-textarea:focus ~ .cf-label,
 .cf-textarea:not(:placeholder-shown) ~ .cf-label {
   transform: translateY(-22px);
-  font-size: 10px;
-  color: var(--accent);
+  font-size: 9px;
+  color: var(--accent, #00FF94);
+  letter-spacing: 0.12em;
 }
 
-/* Submit button */
+/* ─── SUBMIT BUTTON ──────────────────────────────────────────── */
+.cf-submit-wrap {
+  transform: translate(var(--mx, 0px), var(--my, 0px));
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
 .cf-submit {
   width: 100%;
   padding: 16px;
   margin-top: 8px;
-  background: var(--accent);
-  color: var(--bg);
-  font-family: var(--font-display);
+  background: var(--accent, #00FF94);
+  color: #000;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
   font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.04em;
+  font-size: 14px;
+  letter-spacing: 0.08em;
   border: none;
-  cursor: pointer;
+  cursor: none;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: transform 0.15s ease, opacity 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.2s ease, transform 0.15s ease;
 }
-.cf-submit:hover:not(:disabled) { opacity: 0.9; }
+.cf-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.15);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.cf-submit:hover:not(:disabled)::before {
+  transform: scaleX(1);
+}
 .cf-submit:active:not(:disabled) { transform: scale(0.98); }
 .cf-submit:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
-.cf-submit svg { width: 18px; height: 18px; }
+.cf-submit svg { width: 16px; height: 16px; }
 
-/* Magnetic wrapper - CSS variable spring (no framer-motion) */
-.cf-mag-wrap {
-  transform: translate(var(--mx, 0px), var(--my, 0px));
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Spinner */
 @keyframes cf-spin {
   to { transform: rotate(360deg); }
 }
-.cf-spinner {
-  animation: cf-spin 0.8s linear infinite;
-}
+.cf-spinner { animation: cf-spin 0.8s linear infinite; }
 
 /* Feedback */
 .cf-feedback {
-  margin-top: 16px;
-  padding: 12px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
+  margin-top: 14px;
+  padding: 11px 14px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.06em;
   text-align: center;
+  border-radius: 2px;
 }
 .cf-feedback--success {
-  background: rgba(255, 77, 0, 0.08);
-  color: var(--accent);
-  border: 1px solid rgba(255, 77, 0, 0.15);
+  background: rgba(0,255,148,0.07);
+  color: var(--accent, #00FF94);
+  border: 1px solid rgba(0,255,148,0.15);
 }
 .cf-feedback--error {
-  background: rgba(239, 68, 68, 0.08);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.15);
+  background: rgba(239,68,68,0.07);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.2);
 }
 
-/* ── RESPONSIVE ──────────────────────────────────────────────── */
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .contact {
-    grid-template-columns: 1fr;
-  }
+  .contact { grid-template-columns: 1fr; }
   .contact__left {
     padding-bottom: 0;
+    transform: translateY(24px);
   }
+  .contact__left.is-visible { transform: translateY(0); }
+  .contact__right {
+    transform: translateY(24px);
+  }
+  .contact__right.is-visible { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact__left, .contact__right { transition: opacity 0.3s ease; transform: none !important; }
+  .contact__badge-dot { animation: none; }
 }
 `
 
@@ -297,7 +411,25 @@ export default function ContactSection() {
     null
   )
   const [copied, setCopied] = useState(false)
-  const submitMag = useMagnetic()
+  const submitMag  = useMagnetic()
+  const leftRef    = useRef<HTMLDivElement>(null)
+  const rightRef   = useRef<HTMLDivElement>(null)
+
+  /* Entrance animation */
+  useEffect(() => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible')
+          io.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.1 })
+
+    if (leftRef.current)  io.observe(leftRef.current)
+    if (rightRef.current) io.observe(rightRef.current)
+    return () => io.disconnect()
+  }, [])
 
   const copyEmail = async () => {
     try {
@@ -320,13 +452,21 @@ export default function ContactSection() {
 
       <div className="contact">
         {/* ── Left ──────────────────────────────────────────── */}
-        <div className="contact__left">
+        <div className="contact__left" ref={leftRef}>
+
+          {/* Availability badge */}
+          <div className="contact__badge">
+            <span className="contact__badge-dot" aria-hidden="true" />
+            Available for new projects
+          </div>
+
           <h1 className="contact__heading">
             <Typewriter text="LET'S TALK." speed={60} startDelay={300} />
           </h1>
 
           <p className="contact__desc">
             Open for freelance, collaborations, and full-time roles.
+            Got a project in mind? Let&apos;s make it real.
           </p>
 
           <div className="contact__email-row">
@@ -360,8 +500,10 @@ export default function ContactSection() {
         </div>
 
         {/* ── Right (form) ─────────────────────────────────── */}
-        <div className="contact__right">
+        <div className="contact__right" ref={rightRef}>
           <form className="contact__card" action={formAction}>
+            <span className="cf-card-label">Send a message</span>
+
             {/* Name */}
             <div className="cf-group">
               <input
@@ -393,9 +535,7 @@ export default function ContactSection() {
               <select name="projectType" className="cf-select" required defaultValue="">
                 <option value="" disabled hidden />
                 {PROJECT_TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
+                  <option key={t} value={t}>{t}</option>
                 ))}
               </select>
               <label className="cf-label">Project Type</label>
@@ -414,21 +554,26 @@ export default function ContactSection() {
             </div>
 
             {/* Submit */}
-            <div ref={submitMag.ref as React.RefObject<HTMLDivElement>} className="cf-mag-wrap">
-              <button type="submit" className="cf-submit" disabled={isPending} data-magnetic>
+            <div
+              ref={submitMag.ref as React.RefObject<HTMLDivElement>}
+              className="cf-submit-wrap"
+            >
+              <button
+                type="submit"
+                className="cf-submit"
+                disabled={isPending}
+                data-magnetic
+              >
                 {isPending ? (
-                  <>
-                    <Loader2 className="cf-spinner" /> Sending…
-                  </>
+                  <><Loader2 className="cf-spinner" /> Sending…</>
                 ) : state?.success ? (
-                  <>
-                    <Check /> Sent!
-                  </>
+                  <><Check /> Sent!</>
                 ) : (
                   'Send Message'
                 )}
               </button>
             </div>
+
             {/* Feedback */}
             {state?.success && (
               <div className="cf-feedback cf-feedback--success">

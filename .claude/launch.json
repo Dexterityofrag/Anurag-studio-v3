@@ -3,8 +3,9 @@
   "configurations": [
     {
       "name": "anurag-studio-v3",
-      "runtimeExecutable": "/Users/lucifer/anurag-studio-v3/.claude/start-dev.sh",
-      "runtimeArgs": [],
+      "runtimeExecutable": "/usr/local/bin/npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/lucifer/anurag-studio-v3",
       "port": 3001
     }
   ]

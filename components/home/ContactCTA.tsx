@@ -40,6 +40,22 @@ const css = /* css */ `
   -webkit-text-stroke: 1.5px transparent;
 }
 
+/* Word clip + slide reveal */
+.cta-footer__word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.cta-footer__word-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.85s cubic-bezier(0.22,1,0.36,1);
+}
+.cta-footer__word.vis .cta-footer__word-inner { transform: translateY(0); }
+.cta-footer__word:nth-child(1) .cta-footer__word-inner { transition-delay: 0s; }
+.cta-footer__word:nth-child(2) .cta-footer__word-inner { transition-delay: 0.12s; }
+.cta-footer__word:nth-child(3) .cta-footer__word-inner { transition-delay: 0.22s; }
+
 .cta-footer__links {
   display: flex;
   flex-direction: column;
@@ -116,12 +132,13 @@ export default function ContactCTA() {
     const section = sectionRef.current
     if (!section) return
     const links = section.querySelector('.cta-footer__links')
-    if (!links) return
+    const words = section.querySelectorAll('.cta-footer__word')
 
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          links.classList.add('vis')
+          links?.classList.add('vis')
+          words.forEach(el => el.classList.add('vis'))
           io.disconnect()
         }
       },
@@ -137,7 +154,13 @@ export default function ContactCTA() {
 
       <section ref={sectionRef} className="cta-footer" id="contact-cta">
         <h2 className="cta-footer__heading">
-          Let&apos;s <em>Talk.</em>
+          <span className="cta-footer__word">
+            <span className="cta-footer__word-inner">Let&apos;s</span>
+          </span>
+          {' '}
+          <span className="cta-footer__word">
+            <span className="cta-footer__word-inner"><em>Talk.</em></span>
+          </span>
         </h2>
 
         <div className="cta-footer__links">
