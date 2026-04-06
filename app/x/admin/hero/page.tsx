@@ -2,7 +2,8 @@ import { db } from '@/lib/db'
 import { siteContent } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import HeroEditor from '@/components/admin/HeroEditor'
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 /* ─── Seed hero keys if not yet in DB ──────────────────────── */
 const HERO_KEYS = [
   {

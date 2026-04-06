@@ -8,12 +8,13 @@ import { upsertContentKeys } from '@/app/actions/admin'
 // Run as a top-level module-scope async (Next.js server component)
 // This is a one-time seed — upsertContentKeys is idempotent.
 const DEFAULTS = [
-    { key: 'hero.eyebrow',        value: 'NAVIGATING THE UNKNOWN, PIXEL BY PIXEL.', groupName: 'hero',     contentType: 'text', description: 'Eyebrow text above name' },
-    { key: 'hero.subtitle',       value: 'Precision structure, bold creative vision.', groupName: 'hero',  contentType: 'text', description: 'Tagline below name' },
-    { key: 'hero.badge',          value: 'Available for work',                       groupName: 'hero',    contentType: 'text', description: 'Availability badge label' },
-    { key: 'settings.accentColor', value: '#00FF94',                                 groupName: 'settings', contentType: 'text', description: 'Brand accent color hex' },
+    { key: 'hero.eyebrow', value: 'NAVIGATING THE UNKNOWN, PIXEL BY PIXEL.', groupName: 'hero', contentType: 'text', description: 'Eyebrow text above name' },
+    { key: 'hero.subtitle', value: 'Precision structure, bold creative vision.', groupName: 'hero', contentType: 'text', description: 'Tagline below name' },
+    { key: 'hero.badge', value: 'Available for work', groupName: 'hero', contentType: 'text', description: 'Availability badge label' },
+    { key: 'settings.accentColor', value: '#00FF94', groupName: 'settings', contentType: 'text', description: 'Brand accent color hex' },
 ]
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminSettingsPage() {
     // Seed defaults without revalidatePath (safe inside server component fetch flow)
     try {

@@ -35,25 +35,26 @@ const css = `
 }
 .abp__new-btn:hover { opacity: 0.9; }
 `
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminPostsPage() {
-    const allPosts = await db
-        .select()
-        .from(blogPosts)
-        .orderBy(desc(blogPosts.createdAt))
+  const allPosts = await db
+    .select()
+    .from(blogPosts)
+    .orderBy(desc(blogPosts.createdAt))
 
-    return (
-        <>
-            <style dangerouslySetInnerHTML={{ __html: css }} />
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: css }} />
 
-            <div className="abp__header">
-                <h1 className="abp__title">Blog Posts</h1>
-                <Link href="/x/admin/posts/new" className="abp__new-btn">
-                    + New Post
-                </Link>
-            </div>
+      <div className="abp__header">
+        <h1 className="abp__title">Blog Posts</h1>
+        <Link href="/x/admin/posts/new" className="abp__new-btn">
+          + New Post
+        </Link>
+      </div>
 
-            <PostListClient posts={allPosts} />
-        </>
-    )
+      <PostListClient posts={allPosts} />
+    </>
+  )
 }

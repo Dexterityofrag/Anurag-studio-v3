@@ -148,7 +148,8 @@ function fmtDate(d: Date | null | undefined): string {
 /* ────────────────────────────────────────────────────────────── */
 /*  Page (server component)                                       */
 /* ────────────────────────────────────────────────────────────── */
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminDashboard() {
     // ── Stats (parallel) ──────────────────────────────────────
     const [

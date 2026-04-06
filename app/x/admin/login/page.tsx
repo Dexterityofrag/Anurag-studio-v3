@@ -170,7 +170,8 @@ const css = /* css */ `
 /* ────────────────────────────────────────────────────────────── */
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default function AdminLoginPage() {
     const router = useRouter()
     const [email, setEmail] = useState('')

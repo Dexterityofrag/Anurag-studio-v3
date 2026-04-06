@@ -101,7 +101,8 @@ const css = `
   flex: 1;
 }
 `
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function PartnersAdminPage() {
   const rows = await getAllPartnersAdmin()
 
