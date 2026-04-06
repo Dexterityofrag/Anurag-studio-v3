@@ -270,85 +270,125 @@ const css = /* css */ `
   to   { transform: translateX(-50%); }
 }
 
-/* ── Snap drag zone ── */
-.v3-snap-zone {
-  position: absolute;
-  bottom: 80px;
-  right: 48px;
-  z-index: 25;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
-  pointer-events: none;
+/* ── Draggable artboard — only wraps the ANURAG text ── */
+.v3-drag-artboard {
+  position: relative;
+  cursor: grab;
+  display: inline-block;
+  padding: 10px 18px;
+  user-select: none;
 }
-.v3-snap-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(0, 255, 148, 0.4);
-  opacity: 0;
-  transition: opacity 0.6s ease 1.8s;
-}
-.v3-snap-label.in { opacity: 1; }
+.v3-drag-artboard.v3-dragging { cursor: grabbing; }
 
-/* ── Neon snap cursor ── */
-.v3-snap-cursor {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  pointer-events: none;
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.v3-snap-cursor.visible { opacity: 1; }
-.v3-snap-cursor-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-accent, #00FF94);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  box-shadow: 0 0 12px rgba(0,255,148,0.8);
-}
-.v3-snap-cursor-ring {
+/* Dashed artboard frame */
+.v3-ab-frame {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(0,255,148,0.4);
-  animation: snap-ring-pulse 1.4s ease-in-out infinite;
+  border: 1px dashed rgba(255,255,255,0);
+  border-radius: 2px;
+  pointer-events: none;
+  transition: border-color 0.25s ease;
 }
-@keyframes snap-ring-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.8); opacity: 0; }
-}
+.v3-drag-artboard:hover .v3-ab-frame,
+.v3-drag-artboard.v3-dragging .v3-ab-frame { border-color: rgba(255,255,255,0.2); }
 
-/* ── Snap message bubble ── */
-.v3-snap-bubble {
+/* Corner selection handles */
+.v3-ab-handle {
   position: absolute;
-  background: rgba(0,255,148,0.08);
-  border: 1px solid rgba(0,255,148,0.25);
-  border-radius: 8px;
-  padding: 8px 14px;
+  width: 7px;
+  height: 7px;
+  border-color: rgba(255,255,255,0.55);
+  border-style: solid;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.v3-drag-artboard:hover .v3-ab-handle,
+.v3-drag-artboard.v3-dragging .v3-ab-handle { opacity: 1; }
+.v3-ab-handle--tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.v3-ab-handle--tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+.v3-ab-handle--bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
+.v3-ab-handle--br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+/* Layer name tag (top-left, above the frame) */
+.v3-ab-tag {
+  position: absolute;
+  top: -22px;
+  left: 0;
   font-family: var(--font-mono);
-  font-size: 11px;
-  color: rgba(0,255,148,0.85);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.4);
   white-space: nowrap;
   pointer-events: none;
-  z-index: 1000;
   opacity: 0;
-  transform: translateY(6px) scale(0.96);
-  transition: opacity 0.22s ease, transform 0.22s ease;
-  backdrop-filter: blur(8px);
+  transition: opacity 0.25s ease;
 }
-.v3-snap-bubble.show {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.v3-drag-artboard:hover .v3-ab-tag,
+.v3-drag-artboard.v3-dragging .v3-ab-tag { opacity: 1; }
+
+/* "DRAG TO MOVE" hint pill (centered above, only on hover) */
+.v3-drag-hint {
+  position: absolute;
+  top: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240,237,232,0.45);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 5px 14px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
+.v3-drag-artboard:hover .v3-drag-hint { opacity: 1; }
+.v3-drag-artboard.v3-dragging .v3-drag-hint { opacity: 0; }
+
+/* dx / dy coordinate readout (bottom-right, only while dragging) */
+.v3-ab-coords {
+  position: absolute;
+  bottom: -26px;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.28);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.v3-drag-artboard.v3-dragging .v3-ab-coords { opacity: 1; }
+
+/* Figma-style snap toast ("property → value") */
+.v3-snap-toast {
+  position: absolute;
+  bottom: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  background: rgba(14,14,14,0.93);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 5px 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+}
+.v3-snap-toast-prop { color: rgba(255,255,255,0.35); }
+.v3-snap-toast-arrow { color: rgba(255,255,255,0.2); }
+.v3-snap-toast-val { color: var(--color-accent, #00FF94); }
 
 /* ── Scroll tilt target ── */
 .v3-tilt-target {
@@ -356,6 +396,7 @@ const css = /* css */ `
   inset: 0;
   will-change: transform;
   transform-style: preserve-3d;
+  transform-origin: 50% 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -438,18 +479,6 @@ function MarqueeContent() {
 }
 
 /* ────────────────────────────────────────────────────────────── */
-/*  Snap messages                                                 */
-/* ────────────────────────────────────────────────────────────── */
-
-const SNAP_MSGS = [
-  'Locked in.',
-  'Snapped.',
-  'Pixel perfect.',
-  'Grid aligned.',
-  'That\'s the one.',
-]
-
-/* ────────────────────────────────────────────────────────────── */
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
 
@@ -458,10 +487,11 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
   const heroRef = useRef<HTMLDivElement>(null)
   const tiltRef = useRef<HTMLDivElement>(null)
   const orbitsRef = useRef<SVGSVGElement>(null)
-  const snapCursorRef = useRef<HTMLDivElement>(null)
-  const snapBubbleRef = useRef<HTMLDivElement>(null)
-  const snapZoneRef = useRef<HTMLDivElement>(null)
-  const bubbleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const dragArtboardRef = useRef<HTMLDivElement>(null)
+  const coordsRef = useRef<HTMLSpanElement>(null)
+  const snapToastRef = useRef<HTMLDivElement>(null)
+  const toastPropRef = useRef<HTMLSpanElement>(null)
+  const toastValRef = useRef<HTMLSpanElement>(null)
 
   /* ── Char reveal + subtitle fade-in ── */
   useEffect(() => {
@@ -532,10 +562,11 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     })
 
     tl.to(tiltRef.current, {
-      rotateX: 40,
-      rotateZ: -8,
-      scale: 0.62,
-      y: -20,
+      rotateX: -12,
+      rotateZ: 0,
+      scale: 0.82,
+      y: 0,
+      borderRadius: '16px',
       ease: 'none',
     })
 
@@ -544,72 +575,84 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     }
   }, [])
 
-  /* ── Drag snap ── */
+  /* ── Draggable hero artboard (snaps back with Figma-style toast) ── */
   useEffect(() => {
-    if (!snapZoneRef.current) return
+    if (!dragArtboardRef.current) return
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     Draggable = (require('gsap/Draggable') as { Draggable: unknown }).Draggable
     gsap.registerPlugin(Draggable)
 
-    const zone = snapZoneRef.current
-    const cursor = snapCursorRef.current
-    const bubble = snapBubbleRef.current
+    const el = dragArtboardRef.current
+    const hero = heroRef.current
 
-    // Create invisible draggable dot
-    const dot = document.createElement('div')
-    dot.style.cssText = `
-      width: 24px; height: 24px; border-radius: 50%;
-      position: absolute; bottom: 0; right: 0;
-      cursor: none; pointer-events: all; z-index: 30;
-      background: transparent;
-    `
-    zone.appendChild(dot)
-
-    const snapPoints = [
-      { x: 0, y: 0 },
-      { x: -60, y: -40 },
-      { x: -120, y: -20 },
-      { x: -40, y: -80 },
+    const TOASTS: { prop: string; val: string }[] = [
+      { prop: 'alignment', val: 'centering...' },
+      { prop: 'escape.attempt', val: 'denied' },
+      { prop: 'position', val: 'reset ✓' },
+      { prop: 'gravity', val: 'winning' },
+      { prop: 'freedom', val: 'false' },
+      { prop: 'home', val: 'always here' },
+      { prop: 'resistance', val: 'futile' },
+      { prop: 'drift', val: 'rejected' },
+      { prop: 'return', val: 'mandatory' },
+      { prop: 'x', val: '0   dy: 0' },
     ]
+    let toastIndex = 0
+    let toastTween: gsap.core.Tween | null = null
 
-    let msgIndex = 0
-
-    const draggable = Draggable.create(dot, {
+    const draggable = Draggable.create(el, {
       type: 'x,y',
-      edgeResistance: 0.65,
-      bounds: { minX: -200, maxX: 0, minY: -140, maxY: 0 },
-      onDrag() {
-        if (cursor) {
-          cursor.style.left = (dot.getBoundingClientRect().left + 12) + 'px'
-          cursor.style.top = (dot.getBoundingClientRect().top + 12) + 'px'
-          cursor.classList.add('visible')
-        }
-      },
+      edgeResistance: 0.72,
       onDragStart() {
         sound.drag()
+        el.classList.add('v3-dragging')
+        // Allow overflow during drag so element isn't clipped
+        if (hero) hero.style.overflow = 'visible'
       },
-      snap: {
-        x: snapPoints.map(p => p.x),
-        y: snapPoints.map(p => p.y),
+      onDrag() {
+        if (coordsRef.current) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const d = this as any
+          coordsRef.current.textContent = `dx: ${Math.round(d.x)}   dy: ${Math.round(d.y)}`
+        }
       },
       onDragEnd() {
+        el.classList.remove('v3-dragging')
+        // Elastic snap back to origin
+        gsap.to(el, {
+          x: 0, y: 0,
+          ease: 'elastic.out(1, 0.4)',
+          duration: 1.3,
+          onComplete: () => {
+            if (hero) hero.style.overflow = ''
+          }
+        })
         sound.snap()
-        if (bubble) {
-          bubble.textContent = SNAP_MSGS[msgIndex % SNAP_MSGS.length]
-          msgIndex++
-          bubble.style.left = (dot.getBoundingClientRect().left - 10) + 'px'
-          bubble.style.top = (dot.getBoundingClientRect().top - 44) + 'px'
-          bubble.classList.add('show')
-          if (bubbleTimeout.current) clearTimeout(bubbleTimeout.current)
-          bubbleTimeout.current = setTimeout(() => bubble.classList.remove('show'), 1600)
+        // Show Figma-style toast
+        const t = TOASTS[toastIndex % TOASTS.length]
+        toastIndex++
+        if (toastPropRef.current) toastPropRef.current.textContent = t.prop
+        if (toastValRef.current) toastValRef.current.textContent = t.val
+        if (snapToastRef.current) {
+          toastTween?.kill()
+          toastTween = gsap.fromTo(
+            snapToastRef.current,
+            { opacity: 0, y: 6 },
+            {
+              opacity: 1, y: 0, duration: 0.28, ease: 'power2.out',
+              onComplete: () => {
+                gsap.to(snapToastRef.current!, { opacity: 0, delay: 1.4, duration: 0.4 })
+              }
+            }
+          )
         }
-        if (cursor) cursor.classList.remove('visible')
       },
     })[0]
 
     return () => {
       draggable?.kill()
-      dot.remove()
+      toastTween?.kill()
+      if (hero) hero.style.overflow = ''
     }
   }, [])
 
@@ -620,15 +663,6 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
-
-      {/* Neon snap cursor */}
-      <div ref={snapCursorRef} className="v3-snap-cursor" style={{ position: 'fixed' }}>
-        <div className="v3-snap-cursor-ring" />
-        <div className="v3-snap-cursor-dot" />
-      </div>
-
-      {/* Snap message bubble */}
-      <div ref={snapBubbleRef} className="v3-snap-bubble" style={{ position: 'fixed' }} />
 
       <section ref={trackRef} className="v3-hero-track">
         <div
@@ -733,9 +767,30 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
             {/* Center kinetic name */}
             <div className="v3-name-wrap" aria-label="Anurag">
               <p className="v3-eyebrow">{displayEyebrow}</p>
-              <div className="v3-name-line" aria-hidden="true">
-                {splitToChars('ANURAG', 0.05, 0.06)}
+
+              {/* Draggable artboard — just the ANURAG text */}
+              <div ref={dragArtboardRef} className="v3-drag-artboard" aria-hidden="true">
+                {/* Artboard chrome */}
+                <div className="v3-ab-frame" />
+                <span className="v3-ab-handle v3-ab-handle--tl" />
+                <span className="v3-ab-handle v3-ab-handle--tr" />
+                <span className="v3-ab-handle v3-ab-handle--bl" />
+                <span className="v3-ab-handle v3-ab-handle--br" />
+                <span className="v3-ab-tag">anurag.frame</span>
+                <span className="v3-drag-hint">Drag to move</span>
+                <span ref={coordsRef} className="v3-ab-coords">dx: 0   dy: 0</span>
+                {/* The name */}
+                <div className="v3-name-line">
+                  {splitToChars('ANURAG', 0.05, 0.06)}
+                </div>
+                {/* Snap toast */}
+                <div ref={snapToastRef} className="v3-snap-toast">
+                  <span ref={toastPropRef} className="v3-snap-toast-prop">alignment</span>
+                  <span className="v3-snap-toast-arrow">→</span>
+                  <span ref={toastValRef} className="v3-snap-toast-val">centering...</span>
+                </div>
               </div>
+
               <p className="v3-subtitle">{displaySubtitle}</p>
             </div>
 
@@ -743,11 +798,6 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
             <div className="v3-scroll-cue" aria-hidden="true">
               <div className="v3-scroll-cue-line" />
               <span className="v3-scroll-cue-label">Scroll</span>
-            </div>
-
-            {/* Snap drag zone */}
-            <div ref={snapZoneRef} className="v3-snap-zone" aria-hidden="true">
-              <span className="v3-snap-label">Drag to snap</span>
             </div>
 
             {/* Bottom marquee */}
@@ -758,6 +808,7 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
             </div>
 
           </div>
+
         </div>
       </section>
     </>

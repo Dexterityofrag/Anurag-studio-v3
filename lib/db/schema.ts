@@ -108,6 +108,21 @@ export const media = pgTable('media', {
   createdAt: timestamp('created_at').defaultNow(),
 })
 
+// ─── PARTNERS (Worked With section) ──────────────────────────
+export const partners = pgTable('partners', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  sector: text('sector').notNull(),
+  link: text('link').notNull(),
+  external: boolean('external').default(false),
+  comingSoon: boolean('coming_soon').default(false),
+  previewImageUrl: text('preview_image_url'),      // null = show coming soon card
+  displayOrder: integer('display_order').default(0),
+  isVisible: boolean('is_visible').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
 // ─── JSONB HELPER TYPES ───────────────────────────────────────
 export type ImageItem = {
   url: string
