@@ -7,20 +7,23 @@ import { useEffect, useRef, useState } from 'react'
 /* ────────────────────────────────────────────────────────────── */
 
 const css = /* css */ `
-/* ── Outer blend-mode ring (kookie-style) ── */
+/* ── Outer ring ── */
 .cc-outer {
   position: fixed;
   top: 0; left: 0;
-  width: 80px; height: 80px;
+  width: 36px; height: 36px;
   border-radius: 50%;
-  background: var(--color-fg, #f0ede8);
-  mix-blend-mode: difference;
+  background: transparent;
+  border: 1.5px solid rgba(240,237,232,0.7);
   pointer-events: none;
   z-index: var(--z-cursor, 10100);
   will-change: transform;
   transform: translate3d(-100px, -100px, 0) translate(-50%, -50%) scale(0);
   transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1),
-              opacity 0.3s ease;
+              opacity 0.3s ease,
+              width 0.3s ease,
+              height 0.3s ease,
+              border-color 0.3s ease;
   opacity: 0;
 }
 .cc-outer.on {
@@ -29,9 +32,11 @@ const css = /* css */ `
 /* Expand on hover */
 .cc-outer.hover {
   transform: translate3d(var(--cx,0), var(--cy,0), 0) translate(-50%, -50%) scale(1);
+  width: 52px; height: 52px;
+  border-color: var(--color-accent, #00FF94);
 }
 .cc-outer.idle {
-  transform: translate3d(var(--cx,0), var(--cy,0), 0) translate(-50%, -50%) scale(0.1);
+  transform: translate3d(var(--cx,0), var(--cy,0), 0) translate(-50%, -50%) scale(1);
 }
 
 /* ── Inner neon dot ── */

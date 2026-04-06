@@ -243,9 +243,9 @@ export default function IntroPanels() {
       /* Sub label fades in at 80% of typewriter */
       tl.to(r.sub, { opacity: 1, duration: 0.05 }, base + 0.65)
 
-      /* Fade out */
+      /* Fade out — ends exactly at base+1 so next panel starts with no black gap */
       tl.to([r.counter, r.sub], { opacity: 0, duration: 0.06 }, base + 0.88)
-      tl.to(r.panel, { opacity: 0, duration: 0.06 }, base + 0.92)
+      tl.to(r.panel, { opacity: 0, duration: 0.1 }, base + 0.90)
     })
 
     tl.to({}, { duration: 0.08 }, 2.92)

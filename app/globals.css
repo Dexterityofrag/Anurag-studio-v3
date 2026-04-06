@@ -133,8 +133,8 @@ body {
 .available-glow { animation: available-pulse 2s ease-in-out infinite; }
 
 /* ─── SECTION TONES ─────────────────────────────────────── */
-.tone-a { background: #060606; }
-.tone-b { background: #0e0e0e; }
+.tone-a { background: #060606; position: relative; z-index: 1; }
+.tone-b { background: #0e0e0e; position: relative; z-index: 1; }
 
 /* ─── REVEAL UTILITY ─────────────────────────────────────── */
 .reveal {

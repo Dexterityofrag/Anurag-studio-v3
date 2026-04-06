@@ -367,14 +367,15 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
     card.addEventListener('mouseleave', onLeave)
 
     // Card scale-in as it enters its sticky slot
+    // Cards always stay opacity:1 — sticky stacking handles visibility
     const cardST = ScrollTrigger.create({
       trigger: wrapper,
       start: 'top bottom',
       end: 'top top',
       scrub: true,
       animation: gsap.fromTo(card,
-        { scale: 0.95, opacity: 0 },
-        { scale: 1, opacity: 1, ease: 'none' }
+        { scale: 0.92, yPercent: 4 },
+        { scale: 1, yPercent: 0, ease: 'none' }
       ),
     })
 

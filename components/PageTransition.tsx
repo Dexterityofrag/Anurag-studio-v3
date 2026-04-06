@@ -20,8 +20,6 @@ const css = /* css */ `
 .sel-blur {
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(0px) brightness(1);
-  -webkit-backdrop-filter: blur(0px) brightness(1);
 }
 
 .sel-box {
