@@ -50,7 +50,7 @@ const css = /* css */ `
   border-right: 1px solid #262626;
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  z-index: 200;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
