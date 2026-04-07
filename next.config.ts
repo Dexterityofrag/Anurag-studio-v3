@@ -1,5 +1,11 @@
 import type { NextConfig } from "next";
 
+/* ── DO Spaces CDN hostnames (constructed from env or defaults) ── */
+const BUCKET = process.env.DO_SPACES_BUCKET ?? 'anurag-studio-media'
+const REGION = process.env.DO_SPACES_REGION ?? 'sgp1'
+const spacesCdnHost = `${BUCKET}.${REGION}.cdn.digitaloceanspaces.com`
+const spacesHost = `${BUCKET}.${REGION}.digitaloceanspaces.com`
+
 const nextConfig: NextConfig = {
   /* ── Hide "X-Powered-By: Next.js" header ────────────────────── */
   poweredByHeader: false,
@@ -11,6 +17,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: '*.digitaloceanspaces.com' },
       { protocol: 'https', hostname: '*.cdn.digitaloceanspaces.com' },
+      /* Explicit multi-level subdomain matches for DO Spaces CDN */
+      { protocol: 'https', hostname: spacesCdnHost },
+      { protocol: 'https', hostname: spacesHost },
       { protocol: 'https', hostname: 'miro.medium.com' },
       { protocol: 'https', hostname: 'cdn-images-1.medium.com' },
     ],
@@ -48,8 +57,8 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
-              "img-src 'self' data: blob: https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com https://miro.medium.com https://cdn-images-1.medium.com",
-              "connect-src 'self' https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com",
+              `img-src 'self' data: blob: https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com https://miro.medium.com https://cdn-images-1.medium.com`,
+              `connect-src 'self' https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com`,
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
