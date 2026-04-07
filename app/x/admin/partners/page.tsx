@@ -6,6 +6,7 @@ import {
   updatePartner,
   createPartner,
   deletePartner,
+  fixPartnerImageAcl,
 } from '@/app/actions/partners'
 
 /* ────────────────────────────────────────────────────────────── */
@@ -204,6 +205,20 @@ const css = /* css */ `
 .pw__remove-img:hover {
   background: rgba(255,50,50,0.2);
 }
+.pw__fix-img {
+  padding: 7px 16px;
+  background: rgba(255,200,50,0.1);
+  border: 1px solid rgba(255,200,50,0.25);
+  color: rgba(255,200,100,0.9);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pw__fix-img:hover {
+  background: rgba(255,200,50,0.2);
+}
 
 /* ─── Actions ──────────────────────────────────────────────── */
 .pw__actions {
@@ -307,6 +322,7 @@ function PartnerCard({
   const [previewUrl, setPreviewUrl] = useState(partner.previewImageUrl ?? '')
   const [isPending, startTransition] = useTransition()
   const [uploading, setUploading] = useState(false)
+  const [fixing, setFixing] = useState(false)
 
   const handleSave = () => {
     startTransition(async () => {
@@ -337,25 +353,17 @@ function PartnerCard({
     if (!file) return
     setUploading(true)
     try {
-      // Get presigned URL
+      // Upload via server-side FormData (guarantees ACL: public-read)
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('folder', 'partners')
+
       const res = await fetch('/api/upload', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          filename: file.name,
-          contentType: file.type,
-          folder: 'partners',
-        }),
+        body: formData,
       })
-      const { uploadUrl, publicUrl, error } = await res.json()
+      const { publicUrl, error } = await res.json()
       if (error) throw new Error(error)
-
-      // Upload directly to DO Spaces
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': file.type },
-        body: file,
-      })
 
       setPreviewUrl(publicUrl)
     } catch (err) {
@@ -446,14 +454,32 @@ function PartnerCard({
               style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
             />
           </label>
-          {previewUrl && (
+        {previewUrl && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <button
+              className="pw__fix-img"
+              disabled={fixing}
+              onClick={async () => {
+                setFixing(true)
+                const result = await fixPartnerImageAcl(previewUrl)
+                if (result.error) {
+                  alert(result.error)
+                } else {
+                  alert('Image ACL fixed! Refresh the page to see the image.')
+                }
+                setFixing(false)
+              }}
+            >
+              {fixing ? 'Fixing...' : '🔧 Fix Image'}
+            </button>
             <button
               className="pw__remove-img"
               onClick={() => setPreviewUrl('')}
             >
               Remove
             </button>
-          )}
+          </div>
+        )}
         </div>
         {previewUrl && (
           <input
