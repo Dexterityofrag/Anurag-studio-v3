@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { siteContent, socialLinks, aboutInfo } from '@/lib/db/schema'
 import { eq, asc } from 'drizzle-orm'
 import type { AboutMetadata } from '@/lib/db/schema'
+import { requireAdmin } from '@/lib/auth-guard'
 
 /* ═════════════════════════════════════════════════════════════ */
 /*  SITE CONTENT                                                  */
@@ -14,6 +15,7 @@ export async function saveContentGroup(
     entries: { id: string; value: string }[]
 ): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await Promise.all(
             entries.map((e) =>
                 db
@@ -42,6 +44,7 @@ export async function upsertContentKeys(
     }[]
 ): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await Promise.all(
             entries.map((e) =>
                 db
@@ -101,6 +104,7 @@ export async function saveSocialLink(
     formData: FormData
 ): Promise<SocialFormState> {
     try {
+        await requireAdmin()
         const id = formData.get('id')?.toString() || null
         const platform = formData.get('platform')?.toString().trim() ?? ''
         const url = formData.get('url')?.toString().trim() ?? ''
@@ -129,6 +133,7 @@ export async function saveSocialLink(
 
 export async function deleteSocialLink(id: string): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await db.delete(socialLinks).where(eq(socialLinks.id, id))
         revalidatePath('/x/admin/social')
         return {}
@@ -149,6 +154,7 @@ export async function saveAboutEntry(
     formData: FormData
 ): Promise<AboutFormState> {
     try {
+        await requireAdmin()
         const id = formData.get('id')?.toString() || null
         const section = formData.get('section')?.toString().trim() ?? ''
         const title = formData.get('title')?.toString().trim() || null
@@ -192,6 +198,7 @@ export async function saveAboutEntry(
 
 export async function deleteAboutEntry(id: string): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await db.delete(aboutInfo).where(eq(aboutInfo.id, id))
         revalidatePath('/x/admin/about')
         revalidatePath('/about')

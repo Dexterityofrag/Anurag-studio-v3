@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { media } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { deleteObject } from '@/lib/storage/spaces'
+import { requireAdmin } from '@/lib/auth-guard'
 
 export async function saveMediaRecord(data: {
     filename: string
@@ -16,6 +17,7 @@ export async function saveMediaRecord(data: {
     height?: number
 }): Promise<{ id: string } | { error: string }> {
     try {
+        await requireAdmin()
         const [row] = await db
             .insert(media)
             .values({
@@ -41,6 +43,7 @@ export async function updateMediaAlt(
     altText: string
 ): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await db.update(media).set({ altText }).where(eq(media.id, id))
         revalidatePath('/x/admin/media')
         return {}
@@ -52,6 +55,7 @@ export async function updateMediaAlt(
 
 export async function deleteMedia(id: string): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         // Get the storage path
         const [row] = await db
             .select({ storagePath: media.storagePath })

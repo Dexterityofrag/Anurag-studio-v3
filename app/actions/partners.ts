@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { partners } from '@/lib/db/schema'
 import { eq, asc } from 'drizzle-orm'
+import { requireAdmin } from '@/lib/auth-guard'
 
 /* ── Seed defaults if table is empty ─────────────────────────── */
 const DEFAULT_PARTNERS = [
@@ -38,6 +39,7 @@ export async function updatePartnerPreview(
   previewImageUrl: string | null
 ): Promise<{ error?: string }> {
   try {
+    await requireAdmin()
     await db
       .update(partners)
       .set({ previewImageUrl, updatedAt: new Date() })
@@ -64,6 +66,7 @@ export async function updatePartner(
   }>
 ): Promise<{ error?: string }> {
   try {
+    await requireAdmin()
     await db
       .update(partners)
       .set({ ...data, updatedAt: new Date() })
@@ -79,6 +82,7 @@ export async function updatePartner(
 
 export async function getAllPartnersAdmin() {
   try {
+    await requireAdmin()
     return await db
       .select()
       .from(partners)
@@ -97,6 +101,7 @@ export async function createPartner(data: {
   displayOrder: number
 }): Promise<{ error?: string }> {
   try {
+    await requireAdmin()
     await db.insert(partners).values({
       ...data,
       previewImageUrl: null,
@@ -113,6 +118,7 @@ export async function createPartner(data: {
 
 export async function deletePartner(id: string): Promise<{ error?: string }> {
   try {
+    await requireAdmin()
     await db.delete(partners).where(eq(partners.id, id))
     revalidatePath('/')
     revalidatePath('/x/admin/partners')

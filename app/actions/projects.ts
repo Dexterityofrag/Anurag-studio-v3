@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { projects } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { slugify } from '@/lib/utils'
+import { requireAdmin } from '@/lib/auth-guard'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Types                                                         */
@@ -25,6 +26,7 @@ export async function saveProject(
     formData: FormData
 ): Promise<ProjectFormState> {
     try {
+        await requireAdmin()
         const id = formData.get('id')?.toString() || null
         const title = formData.get('title')?.toString().trim() ?? ''
         const slug = formData.get('slug')?.toString().trim() || slugify(title)
@@ -83,6 +85,7 @@ export async function saveProject(
 
 export async function deleteProject(id: string): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await db.delete(projects).where(eq(projects.id, id))
         revalidatePath('/x/admin/projects')
         revalidatePath('/work')
@@ -99,6 +102,7 @@ export async function deleteProject(id: string): Promise<{ error?: string }> {
 /* ────────────────────────────────────────────────────────────── */
 
 export async function updateDisplayOrder(id: string, newOrder: number): Promise<void> {
+    await requireAdmin()
     await db.update(projects).set({ displayOrder: newOrder, updatedAt: new Date() }).where(eq(projects.id, id))
     revalidatePath('/x/admin/projects')
     revalidatePath('/work')
