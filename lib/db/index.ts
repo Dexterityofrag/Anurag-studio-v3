@@ -9,15 +9,16 @@ declare global {
 }
 
 const client =
-  global._pgClient ??
+  globalThis._pgClient ??
   postgres(process.env.DATABASE_URL!, {
     ssl: process.env.DATABASE_URL?.includes('sslmode=require') ? 'require' : false,
     max: 10,
   })
 
 if (process.env.NODE_ENV !== 'production') {
-  global._pgClient = client
+  globalThis._pgClient = client
 }
 
 export const db = drizzle(client, { schema })
 export type DB = typeof db
+

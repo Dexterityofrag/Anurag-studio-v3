@@ -2,7 +2,8 @@ import { db } from '@/lib/db'
 import { siteContent } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import SettingsEditor from '@/components/admin/SettingsEditor'
-import { upsertContentKeys } from '@/app/actions/admin'
+import CredentialsEditor from '@/components/admin/CredentialsEditor'
+import { upsertContentKeys, getAdminEmail } from '@/app/actions/admin'
 
 // ─── Default settings keys ────────────────────────────────────
 // Run as a top-level module-scope async (Next.js server component)
@@ -24,16 +25,26 @@ export default async function AdminSettingsPage() {
             .onConflictDoNothing()
     } catch { /* DB not connected in preview — graceful skip */ }
 
-    const rows = await db
-        .select()
-        .from(siteContent)
-        .where(eq(siteContent.groupName, 'settings'))
-        .catch(() => [])
+    const [rows, adminEmail] = await Promise.all([
+        db
+            .select()
+            .from(siteContent)
+            .where(eq(siteContent.groupName, 'settings'))
+            .catch(() => []),
+        getAdminEmail(),
+    ])
 
     const map: Record<string, string> = {}
     for (const r of rows) map[r.key] = r.value ?? ''
 
-    return <SettingsEditor settings={map} />
+    return (
+        <>
+            <SettingsEditor settings={map} />
+            <div style={{ marginTop: '32px' }}>
+                <CredentialsEditor currentEmail={adminEmail} />
+            </div>
+        </>
+    )
 }
 
 // Re-export for use in other server actions that need to seed on demand
