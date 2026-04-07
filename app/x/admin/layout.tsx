@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import type { ReactNode } from 'react'
@@ -28,7 +27,12 @@ export default async function AdminLayout({
     children: ReactNode
 }) {
     const session = await auth()
-    if (!session) redirect('/x/admin/login')
+
+    /* ── Not authenticated: render children bare (login page) ── */
+    /* Middleware already redirects non-login admin routes to login */
+    if (!session) {
+        return <>{children}</>
+    }
 
     return (
         <>
