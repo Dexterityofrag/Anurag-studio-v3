@@ -78,10 +78,10 @@ html {
   scroll-padding-top: 72px;
 }
 
-body:not(.is-touch),
-body:not(.is-touch) a,
-body:not(.is-touch) button,
-body:not(.is-touch) [role="button"],
+body:not(.is-touch):not(:has(.admin-shell)),
+body:not(.is-touch) a:not(.admin-shell *),
+body:not(.is-touch) button:not(.admin-shell *),
+body:not(.is-touch) [role="button"]:not(.admin-shell *),
 body:not(.is-touch) .pcard,
 body:not(.is-touch) .bcard,
 body:not(.is-touch) .bpost,
