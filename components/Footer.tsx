@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 
 /* ────────────────────────────────────────────────────────────── */
@@ -28,6 +28,8 @@ const STATEMENT_WORDS = [
   { text: 'SOMETHING',  outline: false, accent: false },
   { text: 'GREAT.',     outline: false, accent: true, link: '/contact' },
 ]
+
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Styles                                                        */
@@ -129,6 +131,15 @@ const css = /* css */ `
 .ft-statement-clip {
   overflow: hidden;
   display: block;
+}
+
+/* Flip chars */
+.ft-flip-char {
+  display: inline-block;
+  transition: color 0.08s ease;
+}
+.ft-flip-char--flipping {
+  color: rgba(0, 255, 148, 0.6);
 }
 
 /* ─── AVAILABILITY PILL ─────────────────────────────────────── */
@@ -416,6 +427,63 @@ const css = /* css */ `
 `
 
 /* ────────────────────────────────────────────────────────────── */
+/*  A-Z flip helper                                               */
+/* ────────────────────────────────────────────────────────────── */
+
+function flipCharsInElement(
+  el: HTMLElement,
+  text: string,
+  totalDuration = 1200,
+  staggerPerChar = 35,
+) {
+  const chars = text.split('')
+  // Build char spans
+  el.innerHTML = ''
+  const charEls: HTMLSpanElement[] = []
+  chars.forEach((ch) => {
+    const span = document.createElement('span')
+    span.className = 'ft-flip-char ft-flip-char--flipping'
+    span.style.display = 'inline-block'
+    if (ch === ' ' || ch === '\u00A0') {
+      span.innerHTML = '&nbsp;'
+      span.classList.remove('ft-flip-char--flipping')
+      el.appendChild(span)
+      charEls.push(span)
+      return
+    }
+    span.textContent = ALPHABET[Math.floor(Math.random() * 26)]
+    el.appendChild(span)
+    charEls.push(span)
+  })
+
+  // Animate
+  chars.forEach((finalChar, i) => {
+    if (finalChar === ' ' || finalChar === '\u00A0') return
+    // Special chars (', ., ↗) should just appear
+    if (!ALPHABET.includes(finalChar.toUpperCase())) {
+      charEls[i].textContent = finalChar
+      charEls[i].classList.remove('ft-flip-char--flipping')
+      return
+    }
+    const charDuration = totalDuration - i * staggerPerChar
+    const flipInterval = 45
+    const flipCount = Math.max(Math.floor(charDuration / flipInterval), 3)
+    let tick = 0
+
+    const interval = setInterval(() => {
+      tick++
+      if (tick >= flipCount) {
+        clearInterval(interval)
+        charEls[i].textContent = finalChar
+        charEls[i].classList.remove('ft-flip-char--flipping')
+        return
+      }
+      charEls[i].textContent = ALPHABET[Math.floor(Math.random() * 26)]
+    }, flipInterval)
+  })
+}
+
+/* ────────────────────────────────────────────────────────────── */
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
 
@@ -425,6 +493,24 @@ export default function Footer() {
   const dividerRef    = useRef<HTMLDivElement>(null)
   const availRef      = useRef<HTMLDivElement>(null)
   const wordRefs      = useRef<(HTMLElement | null)[]>([])
+  const hasFlipped    = useRef(false)
+
+  const triggerFlip = useCallback(() => {
+    if (hasFlipped.current) return
+    hasFlipped.current = true
+
+    // Only flip the "BUILD" word (index 1)
+    const buildIndex = 1
+    const el = wordRefs.current[buildIndex]
+    if (!el) return
+
+    const w = STATEMENT_WORDS[buildIndex]
+    const displayText = w.link ? w.text + '\u00A0↗' : w.text
+
+    setTimeout(() => {
+      flipCharsInElement(el, displayText, 1200, 35)
+    }, buildIndex * 180 + 400)
+  }, [])
 
   /* Intersection-triggered entrance */
   useEffect(() => {
@@ -440,6 +526,7 @@ export default function Footer() {
             w.classList.add('ft-statement-word--visible')
           })
           availRef.current?.classList.add('ft-avail--visible')
+          triggerFlip()
         }
         if (el === dividerRef.current) {
           dividerRef.current.classList.add('ft-divider--visible')
@@ -452,7 +539,7 @@ export default function Footer() {
     if (dividerRef.current)   io.observe(dividerRef.current)
 
     return () => io.disconnect()
-  }, [])
+  }, [triggerFlip])
 
   const copyEmail = async () => {
     try {

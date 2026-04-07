@@ -54,6 +54,11 @@ const FIELD_META: Record<string, {
 /* ────────────────────────────────────────────────────────────── */
 
 const css = /* css */ `
+.he__wrap {
+  width: 100%;
+  max-width: 960px;
+  box-sizing: border-box;
+}
 .he__title {
   font-family: var(--font-display);
   font-weight: 700;
@@ -84,6 +89,8 @@ const css = /* css */ `
   align-items: center;
   justify-content: center;
   gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
   /* Dot grid */
   background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
   background-size: 24px 24px;
@@ -141,6 +148,8 @@ const css = /* css */ `
   background: #141414;
   border: 1px solid #262626;
   margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .he__card-header {
   padding: 14px 20px;
@@ -268,6 +277,7 @@ export default function HeroEditor({ rows }: HeroEditorProps) {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
+      <div className="he__wrap">
       <h1 className="he__title">Hero Section</h1>
       <p className="he__subtitle">LIVE PREVIEW · CHANGES REFLECT ON HOME PAGE AFTER SAVE</p>
 
@@ -311,6 +321,7 @@ export default function HeroEditor({ rows }: HeroEditorProps) {
         </button>
         {saved && <span className="he__saved">✓ Saved. Home page updated.</span>}
         {err   && <span className="he__err">{err}</span>}
+      </div>
       </div>
     </>
   )

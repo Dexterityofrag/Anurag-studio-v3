@@ -15,9 +15,18 @@ const css = `
   margin-left: 240px;
   padding: clamp(1.5rem, 3vw, 2.5rem);
   overflow-y: auto;
+  overflow-x: hidden;
+  max-width: calc(100vw - 240px);
+  width: 100%;
+  box-sizing: border-box;
+}
+.admin-main > * {
+  max-width: 960px;
+  width: 100%;
+  box-sizing: border-box;
 }
 @media (max-width: 768px) {
-  .admin-main { margin-left: 0; }
+  .admin-main { margin-left: 0; max-width: 100vw; }
 }
 `
 
