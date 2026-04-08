@@ -306,7 +306,9 @@ export default function ProjectEditor({ project }: ProjectEditorProps) {
 
     const [title, setTitle] = useState(project?.title ?? '')
     const [slug, setSlug] = useState(project?.slug ?? '')
-    const [slugTouched, setSlugTouched] = useState(false)
+    // When editing an existing project, treat slug as already-touched so the
+    // auto-slug effect never overwrites a slug the user (or system) has already set.
+    const [slugTouched, setSlugTouched] = useState(!isNew)
     const [tagline, setTagline] = useState(project?.tagline ?? '')
     const [thumbnailUrl, setThumbnailUrl] = useState(project?.thumbnailUrl ?? '')
     const [coverUrl, setCoverUrl] = useState(project?.coverUrl ?? '')
