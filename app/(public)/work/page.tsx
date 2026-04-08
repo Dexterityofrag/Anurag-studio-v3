@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import { fetchProjects } from '@/lib/data/projects'
 import WorkGrid from '@/components/work/WorkGrid'
 
+// Re-validate cached pages every 60s so admin updates appear quickly
+export const revalidate = 60
+
 export const metadata: Metadata = {
     title: 'Work',
     description:

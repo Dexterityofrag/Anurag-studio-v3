@@ -8,6 +8,11 @@ import {
 import ProjectDetail from '@/components/work/ProjectDetail'
 import ReadingProgress from '@/components/ReadingProgress'
 
+// Re-validate cached pages every 60s so admin-uploaded images appear quickly
+export const revalidate = 60
+// Allow slugs not pre-built at deploy time to be rendered on-demand
+export const dynamicParams = true
+
 /* ────────────────────────────────────────────────────────────── */
 /*  Static params (all published slugs)                           */
 /* ────────────────────────────────────────────────────────────── */
