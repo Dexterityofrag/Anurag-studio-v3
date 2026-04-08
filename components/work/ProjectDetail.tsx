@@ -63,7 +63,7 @@ const css = /* css */ `
   );
 }
 .pd-hero__back {
-  position: absolute; top: clamp(1.5rem,3vw,2.5rem); left: var(--page-px, 40px);
+  position: absolute; top: clamp(5.5rem,10vh,7rem); left: var(--page-px, 40px);
   z-index: 5;
   display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--font-mono); font-size: 11px;
