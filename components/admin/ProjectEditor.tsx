@@ -8,7 +8,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import ImageExt from '@tiptap/extension-image'
 import LinkExt from '@tiptap/extension-link'
-import { saveProject, type ProjectFormState } from '@/app/actions/projects'
+import { saveProject, fixProjectImageAcl, type ProjectFormState } from '@/app/actions/projects'
 import type { Project } from '@/lib/types'
 import type { JSONContent } from '@tiptap/core'
 
@@ -220,8 +220,79 @@ const css = /* css */ `
 .pe__feedback--ok { color: #00FF94; }
 .pe__feedback--err { color: #FF4444; }
 
+/* Preview image widgets */
+.pe__preview-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+.pe__preview-img {
+  width: 160px;
+  height: 90px;
+  object-fit: cover;
+  border: 1px solid #262626;
+  flex-shrink: 0;
+}
+.pe__preview-empty {
+  width: 160px;
+  height: 90px;
+  background: #1A1A1A;
+  border: 1px dashed #262626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #555;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.pe__upload-btn {
+  padding: 7px 16px;
+  background: #1A1A1A;
+  border: 1px solid #262626;
+  color: #8A8A8A;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.pe__upload-btn:hover {
+  background: #262626;
+  border-color: #00FF94;
+}
+.pe__fix-img {
+  padding: 7px 16px;
+  background: rgba(255,200,50,0.1);
+  border: 1px solid rgba(255,200,50,0.25);
+  color: rgba(255,200,100,0.9);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pe__fix-img:hover {
+  background: rgba(255,200,50,0.2);
+}
+.pe__remove-img {
+  padding: 7px 16px;
+  background: rgba(255,50,50,0.1);
+  border: 1px solid rgba(255,50,50,0.2);
+  color: rgba(255,100,100,0.8);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pe__remove-img:hover {
+  background: rgba(255,50,50,0.2);
+}
+
 @media (max-width: 640px) {
   .pe__row, .pe__row3 { grid-template-columns: 1fr; }
+  .pe__preview-row { flex-wrap: wrap; }
 }
 `
 
@@ -247,6 +318,50 @@ export default function ProjectEditor({ project }: ProjectEditorProps) {
     const [isFeatured, setIsFeatured] = useState(project?.isFeatured ?? false)
     const [isPublished, setIsPublished] = useState(project?.isPublished ?? false)
     const [displayOrder, setDisplayOrder] = useState(project?.displayOrder?.toString() ?? '0')
+    const [coverUploading, setCoverUploading] = useState(false)
+    const [coverFixing, setCoverFixing] = useState(false)
+    const [thumbUploading, setThumbUploading] = useState(false)
+    const [thumbFixing, setThumbFixing] = useState(false)
+
+    const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+        setCoverUploading(true)
+        try {
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('folder', 'projects')
+            const res = await fetch('/api/upload', { method: 'POST', body: formData })
+            const { publicUrl, error } = await res.json()
+            if (error) throw new Error(error)
+            setCoverUrl(publicUrl)
+        } catch (err) {
+            console.error('Cover upload failed:', err)
+            alert('Cover image upload failed. Check console.')
+        } finally {
+            setCoverUploading(false)
+        }
+    }
+
+    const handleThumbUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+        setThumbUploading(true)
+        try {
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('folder', 'projects')
+            const res = await fetch('/api/upload', { method: 'POST', body: formData })
+            const { publicUrl, error } = await res.json()
+            if (error) throw new Error(error)
+            setThumbnailUrl(publicUrl)
+        } catch (err) {
+            console.error('Thumbnail upload failed:', err)
+            alert('Thumbnail upload failed. Check console.')
+        } finally {
+            setThumbUploading(false)
+        }
+    }
 
     // Auto-slug from title
     useEffect(() => {
@@ -383,24 +498,119 @@ export default function ProjectEditor({ project }: ProjectEditorProps) {
 
                     {/* Images */}
                     <div className="pe__row">
+                        {/* Cover Image */}
                         <div className="pe__group">
-                            <label className="pe__label">Cover Image URL</label>
+                            <label className="pe__label">Cover Image</label>
+                            <div className="pe__preview-row">
+                                {coverUrl ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={coverUrl} alt="Cover" className="pe__preview-img" />
+                                ) : (
+                                    <div className="pe__preview-empty">No cover</div>
+                                )}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    <label className="pe__upload-btn" style={{ position: 'relative' }}>
+                                        {coverUploading ? 'Uploading...' : 'Upload Image'}
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleCoverUpload}
+                                            disabled={coverUploading}
+                                            style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                                        />
+                                    </label>
+                                    {coverUrl && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                className="pe__fix-img"
+                                                disabled={coverFixing}
+                                                onClick={async () => {
+                                                    setCoverFixing(true)
+                                                    const result = await fixProjectImageAcl(coverUrl)
+                                                    if (result.error) alert(result.error)
+                                                    else alert('Cover image ACL fixed!')
+                                                    setCoverFixing(false)
+                                                }}
+                                            >
+                                                {coverFixing ? 'Fixing...' : 'Fix Image'}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="pe__remove-img"
+                                                onClick={() => setCoverUrl('')}
+                                            >
+                                                Remove
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
                             <input
                                 name="coverUrl"
                                 className="pe__input"
                                 value={coverUrl}
                                 onChange={(e) => setCoverUrl(e.target.value)}
                                 placeholder="https://..."
+                                style={{ marginTop: 8 }}
                             />
                         </div>
+
+                        {/* Thumbnail */}
                         <div className="pe__group">
-                            <label className="pe__label">Thumbnail URL</label>
+                            <label className="pe__label">Thumbnail</label>
+                            <div className="pe__preview-row">
+                                {thumbnailUrl ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={thumbnailUrl} alt="Thumbnail" className="pe__preview-img" />
+                                ) : (
+                                    <div className="pe__preview-empty">No thumbnail</div>
+                                )}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    <label className="pe__upload-btn" style={{ position: 'relative' }}>
+                                        {thumbUploading ? 'Uploading...' : 'Upload Image'}
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleThumbUpload}
+                                            disabled={thumbUploading}
+                                            style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                                        />
+                                    </label>
+                                    {thumbnailUrl && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                className="pe__fix-img"
+                                                disabled={thumbFixing}
+                                                onClick={async () => {
+                                                    setThumbFixing(true)
+                                                    const result = await fixProjectImageAcl(thumbnailUrl)
+                                                    if (result.error) alert(result.error)
+                                                    else alert('Thumbnail ACL fixed!')
+                                                    setThumbFixing(false)
+                                                }}
+                                            >
+                                                {thumbFixing ? 'Fixing...' : 'Fix Image'}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="pe__remove-img"
+                                                onClick={() => setThumbnailUrl('')}
+                                            >
+                                                Remove
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
                             <input
                                 name="thumbnailUrl"
                                 className="pe__input"
                                 value={thumbnailUrl}
                                 onChange={(e) => setThumbnailUrl(e.target.value)}
                                 placeholder="https://..."
+                                style={{ marginTop: 8 }}
                             />
                         </div>
                     </div>

@@ -2,7 +2,8 @@ import { db } from '@/lib/db'
 import { socialLinks } from '@/lib/db/schema'
 import { asc } from 'drizzle-orm'
 import SocialLinksManager from '@/components/admin/SocialLinksManager'
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminSocialPage() {
     const links = await db
         .select()

@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { blogPosts } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { slugify, readingTime } from '@/lib/utils'
+import { requireAdmin } from '@/lib/auth-guard'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Types                                                         */
@@ -25,6 +26,7 @@ export async function savePost(
     formData: FormData
 ): Promise<PostFormState> {
     try {
+        await requireAdmin()
         const id = formData.get('id')?.toString() || null
         const title = formData.get('title')?.toString().trim() ?? ''
         const slug = formData.get('slug')?.toString().trim() || slugify(title)
@@ -89,6 +91,7 @@ export async function savePost(
 
 export async function deletePost(id: string): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await db.delete(blogPosts).where(eq(blogPosts.id, id))
         revalidatePath('/x/admin/posts')
         revalidatePath('/blog')

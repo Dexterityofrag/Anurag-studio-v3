@@ -5,7 +5,8 @@ import { eq } from 'drizzle-orm'
 import PostEditor from '@/components/admin/PostEditor'
 
 type PageArgs = { params: Promise<{ id: string }> }
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminPostEditorPage({ params }: PageArgs) {
     const { id } = await params
 

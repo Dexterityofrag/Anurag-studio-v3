@@ -27,6 +27,11 @@ interface ContentEditorProps {
 /* ────────────────────────────────────────────────────────────── */
 
 const css = /* css */ `
+.ce__wrap {
+  width: 100%;
+  max-width: 960px;
+  box-sizing: border-box;
+}
 .ce__title {
   font-family: var(--font-display);
   font-weight: 700;
@@ -38,6 +43,8 @@ const css = /* css */ `
   background: #141414;
   border: 1px solid #262626;
   margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .ce__group-header {
   display: flex;
@@ -164,8 +171,10 @@ export default function ContentEditor({ groups }: ContentEditorProps) {
         return (
             <>
                 <style dangerouslySetInnerHTML={{ __html: css }} />
+                <div className="ce__wrap">
                 <h1 className="ce__title">Site Content</h1>
                 <div className="ce__empty">No content entries found.</div>
+                </div>
             </>
         )
     }
@@ -173,10 +182,12 @@ export default function ContentEditor({ groups }: ContentEditorProps) {
     return (
         <>
             <style dangerouslySetInnerHTML={{ __html: css }} />
+            <div className="ce__wrap">
             <h1 className="ce__title">Site Content</h1>
             {groupNames.map((g) => (
                 <GroupSection key={g} name={g} rows={groups[g]} onSaved={() => router.refresh()} />
             ))}
+            </div>
         </>
     )
 }

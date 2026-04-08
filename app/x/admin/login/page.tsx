@@ -170,7 +170,6 @@ const css = /* css */ `
 /* ────────────────────────────────────────────────────────────── */
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
-
 export default function AdminLoginPage() {
     const router = useRouter()
     const [email, setEmail] = useState('')

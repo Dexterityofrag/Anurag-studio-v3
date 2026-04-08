@@ -35,7 +35,8 @@ const css = `
 }
 .ap__new-btn:hover { opacity: 0.9; }
 `
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminProjectsPage() {
     const allProjects = await db
         .select()

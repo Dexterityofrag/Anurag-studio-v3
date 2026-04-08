@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Data                                                          */
@@ -12,6 +12,8 @@ const STATS = [
   { value: 100, suffix: '%', label: 'On-Time Delivery',   prefix: '' },
   { value: 8,   suffix: '+', label: 'Happy Clients',      prefix: '' },
 ]
+
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Styles                                                        */
@@ -39,6 +41,7 @@ const css = /* css */ `
   transition:
     opacity 0.7s cubic-bezier(0.22,1,0.36,1),
     transform 0.7s cubic-bezier(0.22,1,0.36,1);
+  cursor: default;
 }
 .ss__item + .ss__item::before {
   content: '';
@@ -80,7 +83,19 @@ const css = /* css */ `
   align-items: baseline;
   gap: 2px;
 }
-.ss__num-val { display: inline-block; }
+.ss__num-val {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+}
+.ss__num-char {
+  display: inline-block;
+  min-width: 0.6em;
+  text-align: center;
+  transition: color 0.08s ease;
+}
+.ss__num-char--flipping {
+  color: rgba(0, 255, 148, 0.7);
+}
 .ss__num-suffix {
   font-size: 0.55em;
   color: var(--accent, #00FF94);
@@ -125,20 +140,46 @@ const css = /* css */ `
 `
 
 /* ────────────────────────────────────────────────────────────── */
-/*  Count-up hook                                                 */
+/*  A-Z Flip animation                                            */
 /* ────────────────────────────────────────────────────────────── */
 
-function countUp(el: HTMLElement, target: number, duration = 1200) {
-  const start = performance.now()
-  const update = (now: number) => {
-    const elapsed = Math.min((now - start) / duration, 1)
-    // ease-out cubic
-    const eased = 1 - Math.pow(1 - elapsed, 3)
-    el.textContent = Math.floor(eased * target).toString()
-    if (elapsed < 1) requestAnimationFrame(update)
-    else el.textContent = target.toString()
-  }
-  requestAnimationFrame(update)
+function flipReveal(
+  container: HTMLElement,
+  targetStr: string,
+  totalDuration = 1400,
+  staggerPerChar = 120,
+) {
+  const digits = targetStr.split('')
+  const charEls: HTMLSpanElement[] = []
+
+  // Create char spans
+  container.innerHTML = ''
+  digits.forEach(() => {
+    const span = document.createElement('span')
+    span.className = 'ss__num-char ss__num-char--flipping'
+    span.textContent = ALPHABET[Math.floor(Math.random() * 26)]
+    container.appendChild(span)
+    charEls.push(span)
+  })
+
+  // Animate each character
+  digits.forEach((finalChar, i) => {
+    const charDuration = totalDuration - i * staggerPerChar
+    const flipInterval = 50 // ms between letter flips
+    const flipCount = Math.max(Math.floor(charDuration / flipInterval), 4)
+    let tick = 0
+
+    const interval = setInterval(() => {
+      tick++
+      if (tick >= flipCount) {
+        clearInterval(interval)
+        charEls[i].textContent = finalChar
+        charEls[i].classList.remove('ss__num-char--flipping')
+        return
+      }
+      charEls[i].textContent = ALPHABET[Math.floor(Math.random() * 26)]
+    }, flipInterval)
+  })
 }
 
 /* ────────────────────────────────────────────────────────────── */
@@ -148,6 +189,24 @@ function countUp(el: HTMLElement, target: number, duration = 1200) {
 export default function StatsStrip() {
   const sectionRef = useRef<HTMLElement>(null)
   const numRefs = useRef<(HTMLSpanElement | null)[]>([])
+  const hasAnimated = useRef(false)
+
+  /** Flip a single stat by index */
+  const flipStat = useCallback((i: number) => {
+    const el = numRefs.current[i]
+    if (!el) return
+    flipReveal(el, STATS[i].value.toString(), 1400, 120)
+  }, [])
+
+  /** Initial scroll-triggered animation (once) */
+  const triggerAnimation = useCallback(() => {
+    if (hasAnimated.current) return
+    hasAnimated.current = true
+
+    STATS.forEach((_, i) => {
+      setTimeout(() => flipStat(i), i * 100 + 200)
+    })
+  }, [flipStat])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -155,24 +214,34 @@ export default function StatsStrip() {
 
     const items = Array.from(section.querySelectorAll<HTMLElement>('.ss__item'))
 
+    /* ── Scroll reveal ── */
     const io = new IntersectionObserver((entries) => {
       if (!entries[0].isIntersecting) return
-
-      items.forEach((item, i) => {
-        item.classList.add('ss--in')
-        // Fire count-up on each number after reveal delay
-        setTimeout(() => {
-          const numEl = numRefs.current[i]
-          if (numEl) countUp(numEl, STATS[i].value, 1400)
-        }, i * 80 + 200)
-      })
-
+      items.forEach((item) => item.classList.add('ss--in'))
+      triggerAnimation()
       io.disconnect()
     }, { threshold: 0.25 })
-
     io.observe(section)
-    return () => io.disconnect()
-  }, [])
+
+    /* ── Hover re-flip ── */
+    const hoverHandlers: Array<() => void> = []
+    items.forEach((item, i) => {
+      const handler = () => {
+        // Only allow hover flip after initial animation has run
+        if (!hasAnimated.current) return
+        flipStat(i)
+      }
+      item.addEventListener('mouseenter', handler)
+      hoverHandlers.push(handler)
+    })
+
+    return () => {
+      io.disconnect()
+      items.forEach((item, i) => {
+        item.removeEventListener('mouseenter', hoverHandlers[i])
+      })
+    }
+  }, [triggerAnimation, flipStat])
 
   return (
     <>
@@ -187,7 +256,9 @@ export default function StatsStrip() {
                   className="ss__num-val"
                   ref={el => { numRefs.current[i] = el }}
                 >
-                  0
+                  {stat.value.toString().split('').map((_, j) => (
+                    <span key={j} className="ss__num-char">0</span>
+                  ))}
                 </span>
                 <span className="ss__num-suffix">{stat.suffix}</span>
               </div>

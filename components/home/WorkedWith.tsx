@@ -162,14 +162,11 @@ const css = `
   position: absolute;
   inset: 0;
   z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 clamp(16px, 3vw, 32px);
+  padding: 6px 8px;
   background: linear-gradient(
     90deg,
-    rgba(0,255,148,0.04) 0%,
-    rgba(0,255,148,0.02) 60%,
+    rgba(0,255,148,0.05) 0%,
+    rgba(0,255,148,0.02) 40%,
     transparent 100%
   );
   opacity: 0;
@@ -186,9 +183,12 @@ const css = `
 }
 
 .ww-cs-text {
+  position: absolute;
+  top: 6px;
+  left: 8px;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: clamp(11px, 1.2vw, 13px);
-  letter-spacing: 0.2em;
+  font-size: 9px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent, #00FF94);
   animation: ww-glitch 4s ease infinite;
@@ -201,13 +201,16 @@ const css = `
 }
 
 .ww-cs-badge {
+  position: absolute;
+  top: 6px;
+  right: 8px;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 8px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(0,255,148,0.5);
   border: 1px solid rgba(0,255,148,0.2);
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: 999px;
 }
 

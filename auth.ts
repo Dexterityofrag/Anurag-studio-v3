@@ -15,7 +15,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 const email = credentials.email as string
                 const password = credentials.password as string
 
-                // Verify against env vars
+                // ── 1) Check DB credentials first (dynamic import to avoid client-side bundling) ──
+                try {
+                    const { db } = await import('@/lib/db')
+                    const { adminCredentials } = await import('@/lib/db/schema')
+
+                    const [dbCred] = await db
+                        .select()
+                        .from(adminCredentials)
+                        .limit(1)
+
+                    if (dbCred) {
+                        if (email !== dbCred.email) return null
+                        const isValid = await bcrypt.compare(password, dbCred.passwordHash)
+                        if (!isValid) return null
+                        return {
+                            id: '1',
+                            name: 'Admin',
+                            email: dbCred.email,
+                            role: 'admin',
+                        }
+                    }
+                } catch {
+                    // DB not available or table doesn't exist yet — fall through to env vars
+                }
+
+                // ── 2) Fallback to env vars ───────────────────────
                 if (email !== process.env.ADMIN_EMAIL) return null
 
                 const isValid = await bcrypt.compare(

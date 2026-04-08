@@ -1,6 +1,7 @@
 import {
   S3Client,
   PutObjectCommand,
+  PutObjectAclCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
@@ -19,7 +20,7 @@ const REGION = process.env.DO_SPACES_REGION ?? 'nyc3'
 
 /**
  * Generate a presigned URL for direct client-side upload to DO Spaces.
- * Expires in 60 seconds.
+ * Expires in 120 seconds. The ACL is baked into the signed URL.
  */
 export async function getUploadUrl(key: string, contentType: string) {
   const command = new PutObjectCommand({
@@ -28,7 +29,40 @@ export async function getUploadUrl(key: string, contentType: string) {
     ContentType: contentType,
     ACL: 'public-read',
   })
-  return getSignedUrl(spacesClient, command, { expiresIn: 60 })
+  return getSignedUrl(spacesClient, command, { expiresIn: 120 })
+}
+
+/**
+ * Force-set an object to public-read ACL.
+ * Call this after a presigned upload completes to guarantee public access.
+ */
+export async function makeObjectPublic(key: string) {
+  const command = new PutObjectAclCommand({
+    Bucket: BUCKET,
+    Key: key,
+    ACL: 'public-read',
+  })
+  return spacesClient.send(command)
+}
+
+/**
+ * Upload a file buffer directly from the server (bypasses presigned URLs).
+ * This always applies ACL correctly.
+ */
+export async function uploadFromServer(
+  key: string,
+  body: Buffer | Uint8Array,
+  contentType: string,
+) {
+  const command = new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    Body: body,
+    ContentType: contentType,
+    ACL: 'public-read',
+  })
+  await spacesClient.send(command)
+  return getPublicUrl(key)
 }
 
 /**

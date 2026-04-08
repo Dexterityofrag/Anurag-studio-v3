@@ -2,9 +2,11 @@
 
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
-import { siteContent, socialLinks, aboutInfo } from '@/lib/db/schema'
+import { siteContent, socialLinks, aboutInfo, adminCredentials } from '@/lib/db/schema'
 import { eq, asc } from 'drizzle-orm'
 import type { AboutMetadata } from '@/lib/db/schema'
+import { requireAdmin } from '@/lib/auth-guard'
+import bcrypt from 'bcryptjs'
 
 /* ═════════════════════════════════════════════════════════════ */
 /*  SITE CONTENT                                                  */
@@ -14,6 +16,7 @@ export async function saveContentGroup(
     entries: { id: string; value: string }[]
 ): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await Promise.all(
             entries.map((e) =>
                 db
@@ -42,6 +45,7 @@ export async function upsertContentKeys(
     }[]
 ): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await Promise.all(
             entries.map((e) =>
                 db
@@ -101,6 +105,7 @@ export async function saveSocialLink(
     formData: FormData
 ): Promise<SocialFormState> {
     try {
+        await requireAdmin()
         const id = formData.get('id')?.toString() || null
         const platform = formData.get('platform')?.toString().trim() ?? ''
         const url = formData.get('url')?.toString().trim() ?? ''
@@ -129,6 +134,7 @@ export async function saveSocialLink(
 
 export async function deleteSocialLink(id: string): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await db.delete(socialLinks).where(eq(socialLinks.id, id))
         revalidatePath('/x/admin/social')
         return {}
@@ -149,6 +155,7 @@ export async function saveAboutEntry(
     formData: FormData
 ): Promise<AboutFormState> {
     try {
+        await requireAdmin()
         const id = formData.get('id')?.toString() || null
         const section = formData.get('section')?.toString().trim() ?? ''
         const title = formData.get('title')?.toString().trim() || null
@@ -192,6 +199,7 @@ export async function saveAboutEntry(
 
 export async function deleteAboutEntry(id: string): Promise<{ error?: string }> {
     try {
+        await requireAdmin()
         await db.delete(aboutInfo).where(eq(aboutInfo.id, id))
         revalidatePath('/x/admin/about')
         revalidatePath('/about')
@@ -200,4 +208,85 @@ export async function deleteAboutEntry(id: string): Promise<{ error?: string }> 
         console.error('deleteAboutEntry error:', err)
         return { error: 'Failed to delete.' }
     }
+}
+
+/* ═════════════════════════════════════════════════════════════ */
+/*  ADMIN CREDENTIALS                                             */
+/* ═════════════════════════════════════════════════════════════ */
+
+export async function updateAdminCredentials(data: {
+    currentPassword: string
+    newEmail: string
+    newPassword?: string // optional — only update if provided
+}): Promise<{ error?: string; success?: boolean }> {
+    try {
+        await requireAdmin()
+
+        const { currentPassword, newEmail, newPassword } = data
+
+        if (!currentPassword || !newEmail?.trim()) {
+            return { error: 'Current password and new email are required.' }
+        }
+
+        // ── Verify current password against DB first, then env ──
+        let verified = false
+
+        const [dbCred] = await db
+            .select()
+            .from(adminCredentials)
+            .limit(1)
+            .catch(() => [] as any[])
+
+        if (dbCred) {
+            verified = await bcrypt.compare(currentPassword, dbCred.passwordHash)
+        } else {
+            // Fallback: verify against env vars
+            const envHash = process.env.ADMIN_PASSWORD_HASH
+            if (envHash) {
+                verified = await bcrypt.compare(currentPassword, envHash)
+            }
+        }
+
+        if (!verified) {
+            return { error: 'Current password is incorrect.' }
+        }
+
+        // ── Build update / insert payload ────────────────────────
+        const passwordHash = newPassword?.trim()
+            ? await bcrypt.hash(newPassword.trim(), 12)
+            : dbCred?.passwordHash ?? (await bcrypt.hash(currentPassword, 12))
+
+        if (dbCred) {
+            await db
+                .update(adminCredentials)
+                .set({
+                    email: newEmail.trim(),
+                    passwordHash,
+                    updatedAt: new Date(),
+                })
+                .where(eq(adminCredentials.id, dbCred.id))
+        } else {
+            await db.insert(adminCredentials).values({
+                email: newEmail.trim(),
+                passwordHash,
+            })
+        }
+
+        return { success: true }
+    } catch (err) {
+        console.error('updateAdminCredentials error:', err)
+        return { error: 'Failed to update credentials.' }
+    }
+}
+
+/** Fetch the current admin email (for pre-filling the form) */
+export async function getAdminEmail(): Promise<string> {
+    try {
+        const [dbCred] = await db
+            .select({ email: adminCredentials.email })
+            .from(adminCredentials)
+            .limit(1)
+        if (dbCred) return dbCred.email
+    } catch { /* fallback */ }
+    return process.env.ADMIN_EMAIL ?? ''
 }

@@ -5,7 +5,8 @@ import { eq } from 'drizzle-orm'
 import ProjectEditor from '@/components/admin/ProjectEditor'
 
 type PageArgs = { params: Promise<{ id: string }> }
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminProjectEditorPage({ params }: PageArgs) {
     const { id } = await params
 

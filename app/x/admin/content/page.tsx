@@ -3,7 +3,8 @@ import { siteContent } from '@/lib/db/schema'
 import { asc } from 'drizzle-orm'
 import ContentEditor from '@/components/admin/ContentEditor'
 import { seedDefaultContent } from '@/app/actions/admin'
-
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default async function AdminContentPage() {
     let rows = await db
         .select()

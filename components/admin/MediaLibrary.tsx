@@ -362,30 +362,23 @@ export default function MediaLibrary({ files }: Props) {
         for (let i = 0; i < arr.length; i++) {
             const file = arr[i]
             try {
-                // 1. Get presigned URL
-                const res = await fetch('/api/upload', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        filename: file.name,
-                        contentType: file.type,
-                        folder: 'media',
-                    }),
-                })
-                const { uploadUrl, key, publicUrl } = await res.json()
+                // 1. Upload via server-side FormData (guarantees ACL: public-read)
+                const formData = new FormData()
+                formData.append('file', file)
+                formData.append('folder', 'media')
 
-                // 2. Upload directly to DO Spaces
                 setUploads((prev) =>
                     prev.map((u) =>
                         u.file === file ? { ...u, progress: 30 } : u
                     )
                 )
 
-                await fetch(uploadUrl, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': file.type },
-                    body: file,
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
                 })
+                const { key, publicUrl, error } = await res.json()
+                if (error) throw new Error(error)
 
                 setUploads((prev) =>
                     prev.map((u) =>

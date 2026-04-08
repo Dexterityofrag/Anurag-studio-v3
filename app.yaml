@@ -11,7 +11,7 @@ services:
     run_command: npm start
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-1gb
-    http_port: 3000
+    http_port: 8080
     envs:
       - key: DATABASE_URL
         scope: RUN_AND_BUILD_TIME
@@ -43,9 +43,12 @@ services:
       - key: REVALIDATE_SECRET
         scope: RUN_TIME
         type: SECRET
-      - key: NEXTAUTH_URL
-        scope: RUN_AND_BUILD_TIME
-        value: https://anurag.studio
+      - key: AUTH_URL
+        scope: RUN_TIME
+        value: https://anurag-studio-jrv8i.ondigitalocean.app
+      - key: AUTH_TRUST_HOST
+        scope: RUN_TIME
+        value: "true"
       - key: NODE_ENV
         scope: RUN_AND_BUILD_TIME
         value: production

@@ -123,6 +123,14 @@ export const partners = pgTable('partners', {
   updatedAt: timestamp('updated_at').defaultNow(),
 })
 
+// ─── ADMIN CREDENTIALS ───────────────────────────────────────
+export const adminCredentials = pgTable('admin_credentials', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  email: text('email').unique().notNull(),
+  passwordHash: text('password_hash').notNull(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
 // ─── JSONB HELPER TYPES ───────────────────────────────────────
 export type ImageItem = {
   url: string

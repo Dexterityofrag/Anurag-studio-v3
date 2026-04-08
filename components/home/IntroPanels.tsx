@@ -36,6 +36,8 @@ const PANELS: PanelDef[] = [
   },
 ]
 
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
 /* ─────────────────────────────────────────────────────────────── */
 /*  CSS                                                             */
 /* ─────────────────────────────────────────────────────────────── */
@@ -117,6 +119,15 @@ const css = /* css */ `
   font-style: normal;
 }
 
+/* ─── FLIP CHARS ─────────────────────────────────────────────── */
+.ip-flip-char {
+  display: inline;
+  transition: color 0.06s ease;
+}
+.ip-flip-char--scramble {
+  color: rgba(0, 255, 148, 0.4);
+}
+
 /* ─── BLINKING CARET ─────────────────────────────────────────── */
 .ip-cursor {
   display: inline-block;
@@ -177,6 +188,59 @@ interface PanelRefs {
 }
 
 /* ─────────────────────────────────────────────────────────────── */
+/*  A-Z flip typewriter builder                                    */
+/* ─────────────────────────────────────────────────────────────── */
+
+/**
+ * Given a plain text string and a count of how many chars to reveal,
+ * produce HTML where:
+ *   - chars 0..(count-3) are fully revealed (stable)
+ *   - chars (count-2)..(count-1) are "scrambling" (random A-Z, with class)
+ *   - chars count..end are not shown
+ *   - emWord gets wrapped in <em> when fully contained in the revealed range
+ */
+function buildFlipHtml(
+  plain: string,
+  count: number,
+  emWord: string,
+  prevCount: number,
+): string {
+  if (count <= 0) return '<span class="ip-cursor"></span>'
+
+  let result = ''
+  const safeCount = Math.min(count, plain.length)
+  const scrambleStart = Math.max(0, safeCount - 2)
+
+  for (let i = 0; i < safeCount; i++) {
+    const ch = plain[i]
+    if (ch === ' ') {
+      result += ' '
+      continue
+    }
+    if (i >= scrambleStart && i >= prevCount) {
+      // This char is newly revealed — show random letter
+      const randomChar = ALPHABET[Math.floor(Math.random() * 26)]
+      result += `<span class="ip-flip-char ip-flip-char--scramble">${randomChar}</span>`
+    } else {
+      result += ch
+    }
+  }
+
+  // Replace emWord in the stable portion only
+  const stablePortion = plain.slice(0, scrambleStart)
+  if (stablePortion.includes(emWord)) {
+    // Rebuild with em tag in stable portion
+    const beforeScramble = plain.slice(0, scrambleStart)
+    const scramblePart = result.slice(beforeScramble.length)
+    const stableHtml = beforeScramble.replace(emWord, `<em>${emWord}</em>`)
+    result = stableHtml + scramblePart
+  }
+
+  result += '<span class="ip-cursor"></span>'
+  return result
+}
+
+/* ─────────────────────────────────────────────────────────────── */
 /*  Component                                                      */
 /* ─────────────────────────────────────────────────────────────── */
 
@@ -195,6 +259,9 @@ export default function IntroPanels() {
     if (!wrap) return
 
     const refs = panelRefs.current
+
+    /* Track previous char count per panel for scramble detection */
+    const prevCounts = PANELS.map(() => 0)
 
     /* Each panel gets 1 unit in a 3-unit timeline */
     const tl = gsap.timeline({
@@ -224,7 +291,7 @@ export default function IntroPanels() {
       tl.to(r.panel,   { opacity: 1, duration: 0.06 }, base)
       tl.to(r.counter, { opacity: 1, duration: 0.04 }, base + 0.04)
 
-      /* Scroll-driven typewriter */
+      /* Scroll-driven typewriter with A-Z flip */
       const charObj = { n: 0 }
       tl.to(charObj, {
         n: plain.length,
@@ -232,20 +299,18 @@ export default function IntroPanels() {
         ease: 'none',
         onUpdate() {
           const count = Math.round(charObj.n)
-          const typed = plain.slice(0, count)
-          const html = typed.includes(panel.emWord)
-            ? typed.replace(panel.emWord, `<em>${panel.emWord}</em>`)
-            : typed
-          r.text!.innerHTML = html + '<span class="ip-cursor"></span>'
+          const prev = prevCounts[i]
+          r.text!.innerHTML = buildFlipHtml(plain, count, panel.emWord, prev)
+          prevCounts[i] = count
         },
       }, base + 0.08)
 
       /* Sub label fades in at 80% of typewriter */
       tl.to(r.sub, { opacity: 1, duration: 0.05 }, base + 0.65)
 
-      /* Fade out */
+      /* Fade out — ends exactly at base+1 so next panel starts with no black gap */
       tl.to([r.counter, r.sub], { opacity: 0, duration: 0.06 }, base + 0.88)
-      tl.to(r.panel, { opacity: 0, duration: 0.06 }, base + 0.92)
+      tl.to(r.panel, { opacity: 0, duration: 0.1 }, base + 0.90)
     })
 
     tl.to({}, { duration: 0.08 }, 2.92)
