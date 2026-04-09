@@ -741,7 +741,7 @@ const css = /* css */ `
 .abt-certs {
   max-width: var(--max-width, 1440px);
   margin: 0 auto;
-  padding: 120px var(--gutter, 60px) 0;
+  padding: 120px var(--gutter, 60px) 120px;
 }
 .abt-certs-header {
   display: flex;

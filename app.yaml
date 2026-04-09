@@ -45,7 +45,7 @@ services:
         type: SECRET
       - key: AUTH_URL
         scope: RUN_TIME
-        value: https://anurag-studio-jrv8i.ondigitalocean.app
+        value: https://anurag.studio
       - key: AUTH_TRUST_HOST
         scope: RUN_TIME
         value: "true"
