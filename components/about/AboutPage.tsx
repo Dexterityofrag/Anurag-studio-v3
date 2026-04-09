@@ -134,11 +134,13 @@ const TOOLKIT = [
   { logo: '/toolkit/photoshop.png',   name: 'Photoshop',   desc: 'Photo Editing' },
 ]
 
-const CERTIFICATIONS = [
-  { short: 'Google', full: 'Google UX Design Certificate' },
-  { short: 'Adobe AI', full: 'Adobe Certified Professional in Illustrator' },
-  { short: 'Adobe PP', full: 'Adobe Certified Professional in Premiere Pro' },
-]
+type CertificationData = {
+  id: string
+  name: string
+  issuer: string
+  logoUrl: string | null
+  verifyUrl: string | null
+}
 
 /* ─────────────────────────────────────────────────────────────── */
 /*  Count-up hook                                                  */
@@ -735,6 +737,242 @@ const css = /* css */ `
   line-height: 1.65;
 }
 
+/* ─── CERTIFICATIONS SECTION ─────────────────────────────────── */
+.abt-certs {
+  max-width: var(--max-width, 1440px);
+  margin: 0 auto;
+  padding: 120px var(--gutter, 60px) 0;
+}
+.abt-certs-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.abt-certs-title {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--color-fg, #f0f0f0);
+  line-height: 1;
+}
+.abt-certs-title .outline-word {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--color-fg, #f0f0f0);
+}
+.abt-certs-grid {
+  display: flex;
+  gap: 2px;
+}
+@media (max-width: 900px) { .abt-certs-grid { flex-direction: column; } }
+
+.abt-cert-card {
+  flex: 1;
+  position: relative;
+  min-height: 280px;
+  perspective: 800px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+/* Inner flip container */
+.abt-cert-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+}
+.abt-cert-card:hover .abt-cert-inner {
+  transform: rotateY(180deg);
+}
+
+/* Shared face styles */
+.abt-cert-front,
+.abt-cert-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  padding: 40px 32px;
+}
+
+/* Front face */
+.abt-cert-front {
+  background: rgba(255,255,255,0.02);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.abt-cert-card:hover .abt-cert-front {
+  border-color: rgba(0,255,148,0.2);
+}
+.abt-cert-issuer-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+.abt-cert-card:hover .abt-cert-issuer-logo { opacity: 1; }
+.abt-cert-issuer-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent, #00FF94);
+  background: rgba(0,255,148,0.05);
+}
+.abt-cert-front-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.abt-cert-name {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  font-weight: 600;
+  color: var(--color-fg, #f0f0f0);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.abt-cert-issuer-name {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.abt-cert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--accent, #00FF94);
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid rgba(0,255,148,0.2);
+  border-radius: 999px;
+  width: fit-content;
+}
+.abt-cert-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent, #00FF94);
+  animation: abt-cert-pulse 2s ease-in-out infinite;
+}
+@keyframes abt-cert-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* Back face */
+.abt-cert-back {
+  background: rgba(0,255,148,0.06);
+  border-color: rgba(0,255,148,0.25);
+  transform: rotateY(180deg);
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+.abt-cert-back-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0,255,148,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.abt-cert-back-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent, #00FF94);
+}
+.abt-cert-back-label {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-fg, #f0f0f0);
+  text-transform: uppercase;
+}
+.abt-cert-back-hint {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.abt-cert-back-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: var(--accent, #00FF94);
+  color: #000;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.abt-cert-back-cta:hover { opacity: 0.85; }
+.abt-cert-back-cta svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* No-link state */
+.abt-cert-card--no-link {
+  cursor: default;
+}
+.abt-cert-card--no-link .abt-cert-inner {
+  transform: none !important;
+}
+.abt-cert-card--no-link .abt-cert-back-cta {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Glow effect on hover */
+.abt-cert-front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(0,255,148,0.04) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.abt-cert-card:hover .abt-cert-front::after { opacity: 1; }
+
+@media (max-width: 900px) {
+  .abt-cert-card { min-height: 240px; }
+  .abt-cert-inner { min-height: 240px; }
+}
+
 /* ─── SCROLL-REVEAL utility ──────────────────────────────────── */
 .abt-fade-up {
   opacity: 0;
@@ -801,7 +1039,7 @@ const css = /* css */ `
 /*  Component                                                      */
 /* ─────────────────────────────────────────────────────────────── */
 
-export default function AboutPage({ bio1, bio2 }: { bio1?: string | null; bio2?: string | null }) {
+export default function AboutPage({ bio1, bio2, certifications = [] }: { bio1?: string | null; bio2?: string | null; certifications?: CertificationData[] }) {
   /* Refs */
   const line1Ref   = useRef<HTMLSpanElement>(null)
   const line2Ref   = useRef<HTMLSpanElement>(null)
@@ -898,10 +1136,10 @@ export default function AboutPage({ bio1, bio2 }: { bio1?: string | null; bio2?:
 
       {/* ══ CERTIFICATIONS RAIL (right sticky edge) ══════════════ */}
       <div className="abt-cert-rail" aria-label="Certifications">
-        {CERTIFICATIONS.map((c, i) => (
-          <div key={i} className="abt-cert-tab">
+        {certifications.map((c) => (
+          <div key={c.id} className="abt-cert-tab">
             <span className="abt-cert-tab-dot" />
-            {c.short}
+            {c.issuer}
           </div>
         ))}
       </div>
@@ -1078,6 +1316,78 @@ export default function AboutPage({ bio1, bio2 }: { bio1?: string | null; bio2?:
           ))}
         </div>
       </section>
+
+      {/* ══ CERTIFICATIONS ═════════════════════════════════ */}
+      {certifications.length > 0 && (
+        <section className="abt-certs" id="about-certifications">
+          <div className="abt-certs-header abt-fade-up">
+            <h2 className="abt-certs-title">
+              Verified <span className="outline-word">Credentials</span>
+            </h2>
+            <p className="abt-section-label">Certifications</p>
+          </div>
+          <div className="abt-certs-grid">
+            {certifications.map((cert) => {
+              const hasLink = !!cert.verifyUrl
+              const Wrapper = hasLink ? 'a' : 'div'
+              const wrapperProps = hasLink
+                ? { href: cert.verifyUrl!, target: '_blank', rel: 'noopener noreferrer' }
+                : {}
+              return (
+                <Wrapper
+                  key={cert.id}
+                  className={`abt-cert-card abt-fade-up${!hasLink ? ' abt-cert-card--no-link' : ''}`}
+                  {...wrapperProps}
+                >
+                  <div className="abt-cert-inner">
+                    {/* Front */}
+                    <div className="abt-cert-front">
+                      {cert.logoUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={cert.logoUrl} alt={cert.issuer} className="abt-cert-issuer-logo" />
+                      ) : (
+                        <div className="abt-cert-issuer-placeholder">
+                          {cert.issuer.charAt(0)}
+                        </div>
+                      )}
+                      <div className="abt-cert-front-content">
+                        <p className="abt-cert-name">{cert.name}</p>
+                        <p className="abt-cert-issuer-name">{cert.issuer}</p>
+                        <div className="abt-cert-badge">
+                          <span className="abt-cert-badge-dot" />
+                          Certified
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Back */}
+                    <div className="abt-cert-back">
+                      <div className="abt-cert-back-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                          <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                      </div>
+                      <p className="abt-cert-back-label">{cert.name}</p>
+                      <p className="abt-cert-back-hint">
+                        {hasLink ? 'Click to verify credential' : 'Verification link coming soon'}
+                      </p>
+                      {hasLink && (
+                        <span className="abt-cert-back-cta">
+                          Verify
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
+                          </svg>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </Wrapper>
+              )
+            })}
+          </div>
+        </section>
+      )}
 
       {/* ══ TOOLKIT ══════════════════════════════════════════ */}
       <section className="abt-toolkit" id="about-toolkit">

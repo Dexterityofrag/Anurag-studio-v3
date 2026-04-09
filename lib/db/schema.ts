@@ -123,6 +123,19 @@ export const partners = pgTable('partners', {
   updatedAt: timestamp('updated_at').defaultNow(),
 })
 
+// ─── CERTIFICATIONS ─────────────────────────────────────────
+export const certifications = pgTable('certifications', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  issuer: text('issuer').notNull(),
+  logoUrl: text('logo_url'),
+  verifyUrl: text('verify_url'),
+  displayOrder: integer('display_order').default(0),
+  isVisible: boolean('is_visible').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
 // ─── ADMIN CREDENTIALS ───────────────────────────────────────
 export const adminCredentials = pgTable('admin_credentials', {
   id: uuid('id').defaultRandom().primaryKey(),

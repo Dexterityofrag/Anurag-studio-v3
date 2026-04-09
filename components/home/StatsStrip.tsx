@@ -7,10 +7,10 @@ import { useEffect, useRef, useCallback } from 'react'
 /* ────────────────────────────────────────────────────────────── */
 
 const STATS = [
-  { value: 3,   suffix: '+', label: 'Years Experience',   prefix: '' },
-  { value: 15,  suffix: '+', label: 'Projects Shipped',   prefix: '' },
+  { value: 1.5, suffix: '+', label: 'Years Experience',   prefix: '' },
+  { value: 5,   suffix: '+', label: 'Projects Shipped',   prefix: '' },
   { value: 100, suffix: '%', label: 'On-Time Delivery',   prefix: '' },
-  { value: 8,   suffix: '+', label: 'Happy Clients',      prefix: '' },
+  { value: 5,   suffix: '+', label: 'Happy Clients',      prefix: '' },
 ]
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

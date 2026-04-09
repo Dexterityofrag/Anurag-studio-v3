@@ -16,6 +16,7 @@ import {
     X,
     Home,
     Users,
+    Award,
 } from 'lucide-react'
 
 /* ────────────────────────────────────────────────────────────── */
@@ -31,6 +32,7 @@ const NAV = [
     { href: '/x/admin/settings', icon: Settings, label: 'Settings' },
     { href: '/x/admin/media', icon: ImageIcon, label: 'Media' },
     { href: '/x/admin/partners', icon: Users, label: 'Partners' },
+    { href: '/x/admin/certifications', icon: Award, label: 'Certifications' },
     { href: '/x/admin/social', icon: LinkIcon, label: 'Social Links' },
 ]
 
