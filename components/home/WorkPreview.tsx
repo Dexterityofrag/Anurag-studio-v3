@@ -104,6 +104,8 @@ const css = /* css */ `
   cursor: none;
   transform-style: preserve-3d;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  text-decoration: none;
+  color: inherit;
 }
 .fw-card:hover {
   border-color: rgba(0, 255, 148, 0.18);
@@ -338,7 +340,7 @@ const css = /* css */ `
 
 function WorkCard({ project, index }: { project: Project; index: number }) {
   const wrapperRef  = useRef<HTMLDivElement>(null)
-  const cardRef     = useRef<HTMLDivElement>(null)
+  const cardRef     = useRef<HTMLAnchorElement>(null)
   const imgRef      = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
@@ -409,7 +411,7 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
 
   return (
     <div ref={wrapperRef} className="fw-card-wrapper">
-      <div ref={cardRef} className="fw-card" data-cursor="View">
+      <Link href={`/work/${project.slug}`} ref={cardRef} className="fw-card" data-cursor="View">
 
         {/* ── Left: content ──────────────────────────────── */}
         <div className="fw-card__content">
@@ -431,13 +433,9 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
               ))}
             </dl>
 
-            <Link
-              href={`/work/${project.slug}`}
-              className="fw-card__cta"
-              aria-label={`View case study for ${project.title}`}
-            >
+            <span className="fw-card__cta">
               VIEW CASE STUDY →
-            </Link>
+            </span>
           </div>
         </div>
 
@@ -470,7 +468,7 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
           </div>
         </div>
 
-      </div>
+      </Link>
     </div>
   )
 }
