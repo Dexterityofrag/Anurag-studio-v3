@@ -6,12 +6,16 @@ import { useRouter } from 'next/navigation'
 import { useScrambleText } from '@/hooks/useScrambleText'
 import {
   X,
-  Twitter,
   Instagram,
   Linkedin,
   Github,
-  Dribbble,
 } from 'lucide-react'
+
+const BehanceIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M7.799 5.698c.589 0 1.12.051 1.606.156.484.103.9.27 1.25.507.347.236.617.546.81.928.19.38.285.853.285 1.411 0 .602-.138 1.104-.41 1.507-.274.4-.674.728-1.207.984.72.211 1.26.576 1.605 1.1.348.524.52 1.158.52 1.897 0 .6-.113 1.12-.343 1.552-.23.436-.544.794-.941 1.07a4.03 4.03 0 01-1.362.616 6.067 6.067 0 01-1.57.198H2V5.698h5.799zm-.352 4.43c.48 0 .878-.114 1.192-.345.312-.23.463-.609.463-1.133 0-.291-.053-.528-.156-.717a1.172 1.172 0 00-.427-.45 1.733 1.733 0 00-.614-.231 3.818 3.818 0 00-.72-.066H4.65v2.942h2.797zm.155 4.646c.267 0 .521-.026.764-.078.24-.052.45-.143.634-.273.182-.13.329-.305.44-.528.108-.22.164-.501.164-.842 0-.663-.188-1.137-.562-1.42-.374-.287-.87-.43-1.487-.43H4.65v3.571h2.952zm8.562-.387c.36.35.88.525 1.555.525.484 0 .9-.121 1.25-.367.347-.243.56-.5.638-.771h2.272c-.363 1.127-.92 1.934-1.67 2.42-.75.485-1.657.73-2.725.73-.741 0-1.41-.12-2.005-.358a4.27 4.27 0 01-1.512-1.023 4.584 4.584 0 01-.957-1.585 5.813 5.813 0 01-.335-2.01c0-.698.115-1.35.345-1.951a4.66 4.66 0 012.5-2.637 4.89 4.89 0 011.964-.384c.803 0 1.5.156 2.09.467.588.311 1.072.725 1.456 1.244.383.519.66 1.108.827 1.77.168.664.23 1.355.187 2.07h-6.777c0 .697.227 1.36.587 1.71zM18.443 9.18c-.289-.316-.786-.489-1.379-.489-.387 0-.71.066-.967.197a1.981 1.981 0 00-.613.483 1.7 1.7 0 00-.325.59 2.63 2.63 0 00-.117.52h4.199c-.06-.648-.289-1.095-.578-1.3h-.22zm-3.648-5.12h5.258v1.275h-5.258V4.061z"/>
+  </svg>
+)
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Data                                                          */
@@ -25,11 +29,10 @@ const LINKS = [
 ]
 
 const SOCIALS = [
-  { icon: Twitter, href: 'https://x.com', label: 'Twitter' },
-  { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: Dribbble, href: 'https://dribbble.com', label: 'Dribbble' },
+  { icon: Instagram, href: 'https://instagram.com/lightlyricist', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/dexterityofrag', label: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com/Dexterityofrag', label: 'GitHub' },
+  { icon: BehanceIcon, href: 'https://www.behance.net/anuragadhikari5', label: 'Behance' },
 ]
 
 /* ────────────────────────────────────────────────────────────── */

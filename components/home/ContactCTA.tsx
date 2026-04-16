@@ -168,9 +168,10 @@ export default function ContactCTA() {
             hello@anurag.studio
           </a>
           <div className="cta-footer__socials">
-            <a href="https://www.linkedin.com/in/anuragp21/" target="_blank" rel="noopener noreferrer" className="cta-footer__social">LinkedIn</a>
-            <a href="https://www.instagram.com/anurag.design/" target="_blank" rel="noopener noreferrer" className="cta-footer__social">Instagram</a>
-            <a href="https://twitter.com/anuragdesign" target="_blank" rel="noopener noreferrer" className="cta-footer__social">Twitter</a>
+            <a href="https://www.linkedin.com/in/dexterityofrag" target="_blank" rel="noopener noreferrer" className="cta-footer__social">LinkedIn</a>
+            <a href="https://instagram.com/lightlyricist" target="_blank" rel="noopener noreferrer" className="cta-footer__social">Instagram</a>
+            <a href="https://github.com/Dexterityofrag" target="_blank" rel="noopener noreferrer" className="cta-footer__social">GitHub</a>
+            <a href="https://www.behance.net/anuragadhikari5" target="_blank" rel="noopener noreferrer" className="cta-footer__social">Behance</a>
           </div>
         </div>
       </section>

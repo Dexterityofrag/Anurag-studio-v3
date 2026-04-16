@@ -10,9 +10,10 @@ import Link from 'next/link'
 const EMAIL = 'hello@anurag.studio'
 
 const SOCIALS = [
-  { label: 'LinkedIn',  href: 'https://linkedin.com/in/anuragadhikari' },
-  { label: 'GitHub',    href: 'https://github.com/anuragadhikari' },
-  { label: 'Dribbble',  href: 'https://dribbble.com/anuragadhikari' },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/dexterityofrag' },
+  { label: 'Instagram', href: 'https://instagram.com/lightlyricist' },
+  { label: 'GitHub',    href: 'https://github.com/Dexterityofrag' },
+  { label: 'Behance',   href: 'https://www.behance.net/anuragadhikari5' },
   { label: 'WhatsApp',  href: 'https://wa.me/917980105391' },
 ]
 
