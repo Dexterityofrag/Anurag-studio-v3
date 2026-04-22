@@ -67,8 +67,18 @@ export default auth(async (req) => {
     // Protect admin routes (except login)
     if (isAdminRoute && !isLoginRoute) {
         if (!req.auth) {
-            // Return 404 instead of 401 to hide admin panel existence
-            return NextResponse.redirect(new URL('/x/admin/login', req.url))
+            // Build redirect URL from forwarded headers so DO App Platform's
+            // internal hostname doesn't leak into the Location header
+            const host =
+                req.headers.get('x-forwarded-host') ??
+                req.headers.get('host') ??
+                req.nextUrl.host
+            const proto =
+                req.headers.get('x-forwarded-proto') ??
+                req.nextUrl.protocol.replace(':', '')
+            return NextResponse.redirect(
+                new URL('/x/admin/login', `${proto}://${host}`)
+            )
         }
     }
 
