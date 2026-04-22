@@ -229,7 +229,11 @@ export default function AdminSidebar() {
             <div className="as__bottom">
                 <button
                     className="as__signout"
-                    onClick={() => signOut({ callbackUrl: '/x/admin/login' })}
+                    onClick={() =>
+                        signOut({
+                            callbackUrl: `${window.location.origin}/x/admin/login`,
+                        })
+                    }
                 >
                     <LogOut />
                     Sign Out
