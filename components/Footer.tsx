@@ -44,7 +44,7 @@ const css = /* css */ `
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-/* ─── GHOST WATERMARK ────────────────────────────────────────── */
+/* ─── GHOST WATERMARK (neon, flickering) ─────────────────────── */
 .ft-ghost {
   position: absolute;
   bottom: -0.08em;
@@ -54,13 +54,101 @@ const css = /* css */ `
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.04);
   pointer-events: none;
   user-select: none;
   white-space: nowrap;
   z-index: 0;
+  display: flex;
 }
+.ft-ghost-letter {
+  display: inline-block;
+  color: transparent;
+  -webkit-text-stroke: 1.4px rgba(0, 255, 148, 0.315);
+  text-shadow:
+    0 0 4px rgba(0, 255, 148, 0.26),
+    0 0 14px rgba(0, 255, 148, 0.165),
+    0 0 34px rgba(0, 255, 148, 0.105);
+  will-change: opacity, text-shadow, -webkit-text-stroke-color;
+  transform: translateZ(0);
+  /* steps(1) => every transition between keyframes snaps, no interpolation */
+  animation-timing-function: steps(1, end);
+}
+/* Snap-only flicker: bracket each "dead" dip with "on" keyframes at +/-0.01% */
+@keyframes ft-ghost-flicker-a {
+  0%,   39.79%, 40.01%, 40.39%, 40.61%, 82.29%, 82.71%, 100% {
+    opacity: 1;
+    -webkit-text-stroke-color: rgba(0,255,148,0.315);
+    text-shadow: 0 0 4px rgba(0,255,148,0.26), 0 0 14px rgba(0,255,148,0.165), 0 0 34px rgba(0,255,148,0.105);
+  }
+  39.8%, 40% {
+    opacity: 0.18;
+    -webkit-text-stroke-color: rgba(0,255,148,0.06);
+    text-shadow: none;
+  }
+  40.4%, 40.6% {
+    opacity: 0.25;
+    -webkit-text-stroke-color: rgba(0,255,148,0.06);
+    text-shadow: none;
+  }
+  82.3%, 82.7% {
+    opacity: 0.12;
+    -webkit-text-stroke-color: rgba(0,255,148,0.045);
+    text-shadow: none;
+  }
+}
+@keyframes ft-ghost-flicker-b {
+  0%,   18.29%, 18.71%, 19.09%, 19.51%, 63.29%, 63.91%, 100% {
+    opacity: 1;
+    -webkit-text-stroke-color: rgba(0,255,148,0.315);
+    text-shadow: 0 0 4px rgba(0,255,148,0.26), 0 0 14px rgba(0,255,148,0.165), 0 0 34px rgba(0,255,148,0.105);
+  }
+  18.3%, 18.7% {
+    opacity: 0.2;
+    -webkit-text-stroke-color: rgba(0,255,148,0.06);
+    text-shadow: none;
+  }
+  19.1%, 19.5% {
+    opacity: 0.3;
+    text-shadow: none;
+  }
+  63.3%, 63.9% {
+    opacity: 0.1;
+    -webkit-text-stroke-color: rgba(0,255,148,0.04);
+    text-shadow: none;
+  }
+}
+@keyframes ft-ghost-flicker-c {
+  0%,   8.19%, 8.51%, 49.39%, 49.71%, 49.99%, 50.31%, 90.99%, 91.41%, 100% {
+    opacity: 1;
+    -webkit-text-stroke-color: rgba(0,255,148,0.315);
+    text-shadow: 0 0 4px rgba(0,255,148,0.26), 0 0 14px rgba(0,255,148,0.165), 0 0 34px rgba(0,255,148,0.105);
+  }
+  8.2%, 8.5% {
+    opacity: 0.15;
+    -webkit-text-stroke-color: rgba(0,255,148,0.05);
+    text-shadow: none;
+  }
+  49.4%, 49.7% {
+    opacity: 0.22;
+    text-shadow: none;
+  }
+  50%, 50.3% {
+    opacity: 0.15;
+    text-shadow: none;
+  }
+  91%, 91.4% {
+    opacity: 0.3;
+    text-shadow: none;
+  }
+}
+/* A–N–U–R–A–G : each letter gets its own rhythm via duration + negative delay.
+   steps(1, end) keeps every transition snap-instant (no fade). */
+.ft-ghost-letter:nth-child(1) { animation: ft-ghost-flicker-a 7.1s steps(1, end) infinite;  animation-delay: 0s;    }
+.ft-ghost-letter:nth-child(2) { animation: ft-ghost-flicker-b 5.3s steps(1, end) infinite;  animation-delay: -2.1s; }
+.ft-ghost-letter:nth-child(3) { animation: ft-ghost-flicker-c 6.7s steps(1, end) infinite;  animation-delay: -0.8s; }
+.ft-ghost-letter:nth-child(4) { animation: ft-ghost-flicker-b 5.9s steps(1, end) infinite;  animation-delay: -3.4s; }
+.ft-ghost-letter:nth-child(5) { animation: ft-ghost-flicker-a 8.3s steps(1, end) infinite;  animation-delay: -1.2s; }
+.ft-ghost-letter:nth-child(6) { animation: ft-ghost-flicker-c 4.9s steps(1, end) infinite;  animation-delay: -4.5s; }
 
 /* ─── TOP SECTION ─────────────────────────────────────────────── */
 .ft-top {
@@ -424,6 +512,7 @@ const css = /* css */ `
   .ft-statement-word { transition: none; }
   .ft-marquee-track { animation: none; }
   .ft-avail-dot { animation: none; }
+  .ft-ghost-letter { animation: none; }
 }
 `
 
@@ -567,7 +656,11 @@ export default function Footer() {
       <footer className="site-footer" role="contentinfo">
 
         {/* Ghost watermark */}
-        <div className="ft-ghost" aria-hidden="true">ANURAG</div>
+        <div className="ft-ghost" aria-hidden="true">
+          {'ANURAG'.split('').map((ch, i) => (
+            <span key={i} className="ft-ghost-letter">{ch}</span>
+          ))}
+        </div>
 
         {/* ── Statement CTA ────────────────────────────────────── */}
         <div className="ft-top">
