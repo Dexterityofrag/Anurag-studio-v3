@@ -682,7 +682,7 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     const TOAST_STATES: { prop: string; val: string }[] = [
       { prop: 'role',   val: 'designer + dev' },
       { prop: 'stack',  val: 'next.js · gsap' },
-      { prop: 'based',  val: 'kathmandu 🇳🇵' },
+      { prop: 'based',  val: 'Mumbai, India 🇮🇳' },
     ]
 
     const tl = gsap.timeline({
