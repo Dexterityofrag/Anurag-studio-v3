@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { CV_URL } from '@/lib/constants'
 
 /* ────────────────────────────────────────────────────────────── */
@@ -347,7 +348,7 @@ const css = /* css */ `
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.55);
   text-transform: uppercase;
 }
 .ft-email-row {
@@ -403,7 +404,7 @@ const css = /* css */ `
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.55);
   text-transform: uppercase;
 }
 .ft-socials-row {
@@ -418,7 +419,7 @@ const css = /* css */ `
   font-size: clamp(11px, 1.1vw, 13px);
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.75);
   text-decoration: none;
   padding: clamp(8px, 1.2vw, 10px) clamp(12px, 2vw, 20px);
   border-right: 1px solid rgba(255,255,255,0.08);
@@ -456,7 +457,7 @@ const css = /* css */ `
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.6);
 }
 .ft-cv-cta {
   display: inline-flex;
@@ -513,7 +514,7 @@ const css = /* css */ `
   align-items: center;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
-  color: rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.5);
   letter-spacing: 0.05em;
 }
 .ft-bar-right {
@@ -639,6 +640,7 @@ function flipCharsInElement(
 /* ────────────────────────────────────────────────────────────── */
 
 export default function Footer() {
+  const pathname = usePathname()
   const [copied, setCopied] = useState(false)
   const statementRef  = useRef<HTMLDivElement>(null)
   const dividerRef    = useRef<HTMLDivElement>(null)
@@ -709,6 +711,8 @@ export default function Footer() {
 
   /* Duplicate marquee for seamless loop */
   const marqueeItems = [...MARQUEE_WORDS, ...MARQUEE_WORDS]
+
+  if (pathname === '/contact') return null
 
   return (
     <>
