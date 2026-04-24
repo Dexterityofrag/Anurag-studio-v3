@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { CV_URL } from '@/lib/constants'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Data                                                          */
@@ -439,6 +440,66 @@ const css = /* css */ `
 .ft-social-btn:hover::before { transform: translateY(0); }
 .ft-social-btn span { position: relative; z-index: 1; }
 
+/* ─── CV CTA ROW (standalone) ────────────────────────────────── */
+.ft-cv-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 3vw, 32px);
+  padding: clamp(18px, 3vw, 28px) var(--ft-px, clamp(1.5rem, 5vw, 6rem));
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+.ft-cv-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.ft-cv-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent, #00FF94);
+  text-decoration: none;
+  padding: 10px 22px;
+  border: 1px solid rgba(0,255,148,0.35);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.ft-cv-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent, #00FF94);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+}
+.ft-cv-cta:hover { color: #000; border-color: var(--accent, #00FF94); }
+.ft-cv-cta:hover::before { transform: translateY(0); }
+.ft-cv-cta-text, .ft-cv-cta-arrow { position: relative; z-index: 1; }
+.ft-cv-cta-arrow {
+  display: inline-block;
+  font-size: 1.1em;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ft-cv-cta:hover .ft-cv-cta-arrow {
+  transform: translate(3px, -3px);
+}
+@media (max-width: 640px) {
+  .ft-cv-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
 /* ─── BOTTOM BAR ─────────────────────────────────────────────── */
 .ft-bar {
   position: relative;
@@ -707,6 +768,21 @@ export default function Footer() {
               </span>
             ))}
           </div>
+        </div>
+
+        {/* ── CV CTA row (standalone) ──────────────────────────── */}
+        <div className="ft-cv-row">
+          <span className="ft-cv-label">The One-Pager</span>
+          <a
+            href={CV_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            className="ft-cv-cta"
+          >
+            <span className="ft-cv-cta-text">Grab the CV</span>
+            <span className="ft-cv-cta-arrow" aria-hidden="true">↗</span>
+          </a>
         </div>
 
         {/* ── Bottom row ───────────────────────────────────────── */}

@@ -390,6 +390,125 @@ const css = /* css */ `
 .v3-snap-toast-arrow { color: rgba(255,255,255,0.2); }
 .v3-snap-toast-val { color: var(--color-accent, #00FF94); }
 
+/* ── Hero intro cards (floating Figma-style overlays) ── */
+.v3-hero-cards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  overflow: hidden;
+}
+.v3-hc {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Cursor + name tag */
+.v3-hc--cursor {
+  top: 22%;
+  left: 12%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.v3-hc-cursor-svg {
+  width: 14px;
+  height: 18px;
+  filter: drop-shadow(0 2px 6px rgba(0, 255, 148, 0.35));
+}
+.v3-hc-cursor-tag {
+  background: var(--color-accent, #00FF94);
+  color: #060606;
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* Selection box (layer) */
+.v3-hc--selection {
+  top: 16%;
+  right: 13%;
+  width: 220px;
+  height: 84px;
+  border: 1px solid rgba(0, 255, 148, 0.55);
+  border-radius: 2px;
+}
+.v3-hc-sel-handle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--color-accent, #00FF94);
+  border: 1px solid #060606;
+  border-radius: 1px;
+}
+.v3-hc-sel-handle.tl { top: -4px; left: -4px; }
+.v3-hc-sel-handle.tr { top: -4px; right: -4px; }
+.v3-hc-sel-handle.bl { bottom: -4px; left: -4px; }
+.v3-hc-sel-handle.br { bottom: -4px; right: -4px; }
+.v3-hc-sel-label {
+  position: absolute;
+  top: -22px;
+  left: -1px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--color-accent, #00FF94);
+  white-space: nowrap;
+}
+
+/* Toast pill (property → value) */
+.v3-hc--toast {
+  bottom: 24%;
+  right: 14%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(14, 14, 14, 0.93);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+.v3-hc-toast-prop { color: rgba(255, 255, 255, 0.4); }
+.v3-hc-toast-arrow { color: rgba(255, 255, 255, 0.22); }
+.v3-hc-toast-val { color: var(--color-accent, #00FF94); }
+
+/* Chip (availability) */
+.v3-hc--chip {
+  bottom: 18%;
+  left: 16%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14, 14, 14, 0.93);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: rgba(240, 237, 232, 0.72);
+  text-transform: uppercase;
+}
+.v3-hc-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: available-pulse 2s ease-in-out infinite;
+}
+@keyframes available-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.15); }
+}
+
+@media (max-width: 900px) {
+  .v3-hc { display: none; }
+}
+
 /* ── Scroll tilt target ── */
 .v3-tilt-target {
   position: absolute;
@@ -446,6 +565,8 @@ const css = /* css */ `
     transform: none;
     transition: none;
   }
+  .v3-hc { opacity: 1; transform: none !important; }
+  .v3-hc-chip-dot { animation: none; }
   .v3-marquee-track { animation: none; }
   .v3-scroll-cue-line { animation: none; }
 }
@@ -492,6 +613,12 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
   const snapToastRef = useRef<HTMLDivElement>(null)
   const toastPropRef = useRef<HTMLSpanElement>(null)
   const toastValRef = useRef<HTMLSpanElement>(null)
+  const cursorCardRef = useRef<HTMLDivElement>(null)
+  const selectionCardRef = useRef<HTMLDivElement>(null)
+  const toastCardRef = useRef<HTMLDivElement>(null)
+  const toastCardValRef = useRef<HTMLSpanElement>(null)
+  const toastCardPropRef = useRef<HTMLSpanElement>(null)
+  const chipCardRef = useRef<HTMLDivElement>(null)
 
   /* ── Char reveal + subtitle fade-in ── */
   useEffect(() => {
@@ -552,26 +679,57 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     if (!trackRef.current || !tiltRef.current) return
     gsap.registerPlugin(ScrollTrigger)
 
+    const TOAST_STATES: { prop: string; val: string }[] = [
+      { prop: 'role',   val: 'designer + dev' },
+      { prop: 'stack',  val: 'next.js · gsap' },
+      { prop: 'based',  val: 'kathmandu 🇳🇵' },
+    ]
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: trackRef.current,
         start: 'top top',
         end: 'bottom bottom',
         scrub: 1.2,
+        onUpdate(self) {
+          const p = self.progress
+          const idx = p < 0.33 ? 0 : p < 0.66 ? 1 : 2
+          const s = TOAST_STATES[idx]
+          if (toastCardPropRef.current && toastCardPropRef.current.textContent !== s.prop) {
+            toastCardPropRef.current.textContent = s.prop
+          }
+          if (toastCardValRef.current && toastCardValRef.current.textContent !== s.val) {
+            toastCardValRef.current.textContent = s.val
+          }
+        },
       },
     })
 
     tl.to(tiltRef.current, {
-      rotateX: -12,
-      rotateZ: 0,
-      scale: 0.82,
-      y: 0,
-      borderRadius: '16px',
+      rotateX: 45,
+      rotateZ: -10,
+      scale: 0.60,
+      yPercent: -15,
+      borderRadius: '32px',
+      boxShadow: 'rgba(0,0,0,0.80) 0 40px 100px, rgba(166,138,249,0.60) 0 0 0 2px',
       ease: 'none',
-    })
+    }, 0)
+      .fromTo(cursorCardRef.current,
+        { x: -260, y: -40, opacity: 0 },
+        { x: 0, y: 0, opacity: 1, ease: 'none', duration: 0.6 }, 0.05)
+      .fromTo(selectionCardRef.current,
+        { y: -180, opacity: 0 },
+        { y: 0, opacity: 1, ease: 'none', duration: 0.6 }, 0.15)
+      .fromTo(toastCardRef.current,
+        { x: 260, y: 40, opacity: 0 },
+        { x: 0, y: 0, opacity: 1, ease: 'none', duration: 0.6 }, 0.25)
+      .fromTo(chipCardRef.current,
+        { y: 140, opacity: 0 },
+        { y: 0, opacity: 1, ease: 'none', duration: 0.6 }, 0.35)
 
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill())
+      tl.scrollTrigger?.kill()
+      tl.kill()
     }
   }, [])
 
@@ -807,6 +965,39 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
               </div>
             </div>
 
+          </div>
+
+          {/* ── Floating intro cards (flat, not tilted) ── */}
+          <div className="v3-hero-cards" aria-hidden="true">
+            {/* Cursor + name tag */}
+            <div ref={cursorCardRef} className="v3-hc v3-hc--cursor">
+              <svg className="v3-hc-cursor-svg" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.5 0.5L13 10.5H5.5L2.5 17.5L0.5 0.5Z" fill="#00FF94" />
+              </svg>
+              <span className="v3-hc-cursor-tag">Anurag</span>
+            </div>
+
+            {/* Selection box on the hero name */}
+            <div ref={selectionCardRef} className="v3-hc v3-hc--selection">
+              <span className="v3-hc-sel-label">anurag.hero / h1</span>
+              <span className="v3-hc-sel-handle tl" />
+              <span className="v3-hc-sel-handle tr" />
+              <span className="v3-hc-sel-handle bl" />
+              <span className="v3-hc-sel-handle br" />
+            </div>
+
+            {/* Toast — cycles role/stack/based */}
+            <div ref={toastCardRef} className="v3-hc v3-hc--toast">
+              <span ref={toastCardPropRef} className="v3-hc-toast-prop">role</span>
+              <span className="v3-hc-toast-arrow">→</span>
+              <span ref={toastCardValRef} className="v3-hc-toast-val">designer + dev</span>
+            </div>
+
+            {/* Availability chip */}
+            <div ref={chipCardRef} className="v3-hc v3-hc--chip">
+              <span className="v3-hc-chip-dot" />
+              Open to freelance
+            </div>
           </div>
 
         </div>

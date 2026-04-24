@@ -8,7 +8,9 @@ import {
   Instagram,
   Linkedin,
   Github,
+  ArrowUpRight,
 } from 'lucide-react'
+import { CV_URL } from '@/lib/constants'
 
 const BehanceIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -193,6 +195,54 @@ const css = /* css */ `
   transform: translateY(-2px);
 }
 .contact__social svg { width: 16px; height: 16px; }
+
+/* CV CTA (standalone) */
+.contact__cv-wrap {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contact__cv-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.contact__cv {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  align-self: flex-start;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent, #00FF94);
+  text-decoration: none;
+  padding: 12px 22px;
+  border: 1px solid rgba(0,255,148,0.35);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.contact__cv::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent, #00FF94);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+}
+.contact__cv > * { position: relative; z-index: 1; }
+.contact__cv:hover { color: #000; border-color: var(--accent, #00FF94); transform: translateY(-1px); }
+.contact__cv:hover::before { transform: translateY(0); }
+.contact__cv svg { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+.contact__cv:hover svg { transform: translate(3px, -3px); }
 
 /* ─── RIGHT ──────────────────────────────────────────────────── */
 .contact__right {
@@ -501,6 +551,21 @@ export default function ContactSection() {
                 <s.icon />
               </a>
             ))}
+          </div>
+
+          {/* ── CV CTA (standalone) ─────────────────────────── */}
+          <div className="contact__cv-wrap">
+            <span className="contact__cv-label">The One-Pager</span>
+            <a
+              href={CV_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="contact__cv"
+            >
+              <span>Grab the CV</span>
+              <ArrowUpRight size={16} />
+            </a>
           </div>
         </div>
 
