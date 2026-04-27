@@ -6,7 +6,7 @@ import { fetchAboutSection } from '@/lib/data/about'
 import { getCertifications } from '@/app/actions/certifications'
 
 export const metadata: Metadata = {
-    title: 'About | Anurag',
+    title: 'About',
     description:
         'Product designer crafting thoughtful digital experiences through strategy, systems, and storytelling. Based in India.',
     openGraph: {

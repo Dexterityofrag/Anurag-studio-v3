@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: MetaArgs): Promise<Metadata> 
     if (!project) return { title: 'Project Not Found' }
 
     return {
-        title: `${project.title} | Anurag`,
+        title: project.title,
         description:
             project.tagline ??
             `${project.title}, a project by Anurag. ${project.tags?.join(', ') ?? ''}`,

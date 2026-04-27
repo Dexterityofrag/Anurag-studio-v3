@@ -36,8 +36,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                             role: 'admin',
                         }
                     }
-                } catch {
-                    // DB not available or table doesn't exist yet — fall through to env vars
+                } catch (err) {
+                    console.error('[auth] DB credential lookup failed, falling back to env vars:', err)
                 }
 
                 // ── 2) Fallback to env vars ───────────────────────

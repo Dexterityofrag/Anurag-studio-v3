@@ -19,16 +19,39 @@ export const metadata: Metadata = {
 export default async function WorkPage() {
     const projects = await fetchProjects().catch(() => [])
 
-    // Extract unique tags from all projects
-    const tagSet = new Set<string>()
-    for (const p of projects) {
-        if (p.tags) {
-            for (const t of p.tags) {
-                if (t) tagSet.add(t)
-            }
-        }
-    }
-    const tags = Array.from(tagSet).sort()
+    // ── Canonical-case + trailing-S collapse ──────────────────────
+    // Merges variants like "DESIGN SYSTEM" / "Design Systems" / "design system"
+    // into a single filter chip using the first-seen casing as canonical.
+    const canonicalDisplay = new Map<string, string>()    // canonicalKey → display text
+    const aliasToCanonical = new Map<string, string>()    // anyLower → canonicalKey
 
-    return <WorkGrid projects={projects} tags={tags} />
+    const canonicalize = (raw: string): string => {
+        const trimmed = raw.trim()
+        if (!trimmed) return ''
+        const lower = trimmed.toLowerCase()
+        const cached = aliasToCanonical.get(lower)
+        if (cached) return canonicalDisplay.get(cached)!
+        // Singular form (drop trailing 's') → match plural to existing singular
+        const singular = lower.endsWith('s') ? lower.slice(0, -1) : lower
+        const existing = canonicalDisplay.get(singular)
+        if (existing) {
+            aliasToCanonical.set(lower, singular)
+            return existing
+        }
+        // First time seeing this concept — register and return as-is
+        canonicalDisplay.set(singular, trimmed)
+        aliasToCanonical.set(lower, singular)
+        return trimmed
+    }
+
+    const normalizedProjects = projects.map(p => ({
+        ...p,
+        tags: (p.tags ?? []).map(canonicalize).filter(Boolean),
+    }))
+
+    const tags = Array.from(
+        new Set(normalizedProjects.flatMap(p => p.tags ?? []))
+    ).sort()
+
+    return <WorkGrid projects={normalizedProjects} tags={tags} />
 }

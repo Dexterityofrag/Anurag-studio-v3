@@ -712,7 +712,7 @@ export default function Footer() {
   /* Duplicate marquee for seamless loop */
   const marqueeItems = [...MARQUEE_WORDS, ...MARQUEE_WORDS]
 
-  if (pathname === '/contact') return null
+  if (pathname?.startsWith('/contact')) return null
 
   return (
     <>
