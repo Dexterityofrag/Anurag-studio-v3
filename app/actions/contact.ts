@@ -50,7 +50,7 @@ export async function submitContact(
     try {
         const resend = new Resend(apiKey)
         await resend.emails.send({
-            from: 'Portfolio Contact <onboarding@resend.dev>',
+            from: 'Portfolio Contact <noreply@anurag.studio>',
             to: [TO_EMAIL],
             replyTo: email,
             subject: `New inquiry from ${name}: ${projectType}`,
