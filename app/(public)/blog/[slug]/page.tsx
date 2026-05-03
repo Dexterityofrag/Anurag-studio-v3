@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { fetchPostBySlug, fetchPosts } from '@/lib/data/posts'
 import PostDetail from '@/components/blog/PostDetail'
-import ReadingProgress from '@/components/ReadingProgress'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Static params                                                 */
@@ -72,12 +71,9 @@ export default async function BlogPostPage({ params }: PageArgs) {
     const next = currentIdx > 0 ? allPosts[currentIdx - 1] : null
 
     return (
-        <>
-            <ReadingProgress />
-            <PostDetail
-                post={post}
-                adjacent={{ prev, next }}
-            />
-        </>
+        <PostDetail
+            post={post}
+            adjacent={{ prev, next }}
+        />
     )
 }

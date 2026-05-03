@@ -6,7 +6,6 @@ import {
     fetchProjects,
 } from '@/lib/data/projects'
 import ProjectDetail from '@/components/work/ProjectDetail'
-import ReadingProgress from '@/components/ReadingProgress'
 
 // Re-validate cached pages every 60s so admin-uploaded images appear quickly
 export const revalidate = 60
@@ -68,10 +67,6 @@ export default async function ProjectPage({ params }: PageArgs) {
 
     if (!project) notFound()
 
-    return (
-        <>
-            <ReadingProgress />
-            <ProjectDetail project={project} adjacent={adjacent} />
-        </>
-    )
+    return <ProjectDetail project={project} adjacent={adjacent} />
+
 }

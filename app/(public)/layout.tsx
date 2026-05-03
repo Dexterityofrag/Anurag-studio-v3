@@ -2,6 +2,7 @@ import LenisProvider from "@/components/providers/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
 import Preloader from "@/components/Preloader";
 import Nav from "@/components/Nav";
+import ReadingProgress from "@/components/ReadingProgress";
 import Footer from "@/components/Footer";
 import MeshGradientBg from "@/components/MeshGradientBg";
 import GrainCanvas from "@/components/GrainCanvas";
@@ -53,6 +54,7 @@ export default async function PublicLayout({
         <Preloader />
         <PageTransition />
         <Nav />
+        <ReadingProgress />
         <LenisProvider>
           {children}
           <Footer />
