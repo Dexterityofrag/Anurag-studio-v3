@@ -7,6 +7,7 @@ import {
     useRef,
     type ReactNode,
 } from 'react'
+import { usePathname } from 'next/navigation'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -23,8 +24,15 @@ export function useLenis() {
 // ─── PROVIDER ────────────────────────────────────────────────────
 export default function LenisProvider({ children }: { children: ReactNode }) {
     const lenisRef = useRef<Lenis | null>(null)
+    const pathname = usePathname()
 
     useEffect(() => {
+        // Take over from the browser's automatic scroll restoration so
+        // client-side route changes don't land on the previous page's offset.
+        if ('scrollRestoration' in window.history) {
+            window.history.scrollRestoration = 'manual'
+        }
+
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -56,6 +64,13 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
             lenisRef.current = null
         }
     }, [])
+
+    // On every route change, snap to top. Lenis owns the scroll, but we also
+    // call window.scrollTo as a fallback for the brief window before Lenis re-syncs.
+    useEffect(() => {
+        lenisRef.current?.scrollTo(0, { immediate: true, force: true })
+        window.scrollTo(0, 0)
+    }, [pathname])
 
     return (
         <LenisContext.Provider value={lenisRef.current}>
