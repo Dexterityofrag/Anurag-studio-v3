@@ -1,3 +1,6 @@
+// Re-validate cached page every 60s so admin updates appear quickly
+export const revalidate = 60
+
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { fetchPostBySlug, fetchPosts } from '@/lib/data/posts'
