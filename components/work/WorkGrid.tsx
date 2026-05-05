@@ -57,37 +57,135 @@ const css = /* css */ `
   margin-top: 24px;
 }
 
-/* ─── TAG FILTER ──────────────────────────────────────────────── */
+/* ─── FILTER DROPDOWN ─────────────────────────────────────────── */
 .work-filter-wrap {
   max-width: var(--max-width, 1440px);
-  margin: 0 auto;
+  margin: 0 auto 40px;
   padding: 0 var(--gutter, 40px);
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 48px;
+  align-items: center;
+  gap: 12px;
+  position: relative;
 }
-.filter-chip {
+.filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px 10px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(20,20,20,0.6);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: var(--color-fg, #f0f0f0);
   font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 6px 16px;
-  border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.06);
-  background: transparent;
-  color: var(--color-muted, rgba(240,240,240,0.5));
-  cursor: none;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
-.filter-chip:hover:not(.filter-chip--active) {
-  border-color: var(--color-fg, #f0f0f0);
+.filter-trigger:hover { border-color: rgba(255,255,255,0.22); }
+.filter-trigger__label { color: var(--color-muted, rgba(240,240,240,0.5)); }
+.filter-trigger__value {
   color: var(--color-fg, #f0f0f0);
+  font-weight: 600;
 }
-.filter-chip--active {
+.filter-trigger__value.is-set { color: var(--accent, #00FF94); }
+.filter-trigger__chev {
+  width: 10px; height: 10px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-1px);
+  transition: transform 0.25s ease;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+.filter-trigger.is-open .filter-trigger__chev {
+  transform: rotate(225deg) translateY(-1px);
+}
+.filter-clear {
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  color: var(--color-muted, rgba(240,240,240,0.5));
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.filter-clear:hover { color: var(--color-fg, #f0f0f0); }
+
+.filter-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: var(--gutter, 40px);
+  z-index: 50;
+  min-width: 240px;
+  max-width: min(360px, calc(100vw - var(--gutter, 40px) * 2));
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(14,14,14,0.85);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+  box-shadow:
+    0 16px 48px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.filter-popover.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(240,240,240,0.75);
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.filter-option:hover { background: rgba(255,255,255,0.05); color: var(--color-fg, #f0f0f0); }
+.filter-option__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  flex-shrink: 0;
+}
+.filter-option.is-active { color: var(--accent, #00FF94); }
+.filter-option.is-active .filter-option__dot {
   background: var(--accent, #00FF94);
-  color: var(--color-bg, #050505);
-  border-color: var(--accent, #00FF94);
+  box-shadow: 0 0 8px rgba(0,255,148,0.6);
+}
+.filter-option__count {
+  margin-left: auto;
+  color: rgba(255,255,255,0.3);
+  font-size: 10px;
+}
+
+@media (max-width: 600px) {
+  .filter-popover { left: 20px; right: 20px; max-width: none; }
 }
 
 /* ─── CARD STACK ─────────────────────────────────────────────── */
@@ -108,6 +206,11 @@ const css = /* css */ `
 }
 
 /* ─── CINEMA CARD (matches fw-card from WorkPreview) ────────── */
+.work-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
 .work-card {
   width: 100%;
   height: clamp(480px, 70vh, 680px);
@@ -120,11 +223,12 @@ const css = /* css */ `
   overflow: hidden;
   position: relative;
   cursor: none;
-  transition: box-shadow 0.4s ease;
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
 }
-.work-card:hover {
+.work-card-link:hover .work-card {
   box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 40px 80px rgba(0,0,0,0.5);
 }
+.work-card-link:active .work-card { transform: scale(0.995); }
 
 /* Left content panel */
 .work-card__content {
@@ -185,11 +289,11 @@ const css = /* css */ `
   font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--color-muted, rgba(240,240,240,0.5));
-  text-decoration: none; display: inline-flex; align-items: center;
+  display: inline-flex; align-items: center;
   gap: 6px; width: fit-content;
   transition: color 0.3s ease, gap 0.3s ease;
 }
-.work-card__cta:hover { color: var(--accent, #00FF94); gap: 10px; }
+.work-card-link:hover .work-card__cta { color: var(--accent, #00FF94); gap: 10px; }
 
 /* Right visual panel */
 .work-card__visual {
@@ -287,18 +391,28 @@ function WorkCard({ project }: { project: Project }) {
   useEffect(() => {
     const el = wrapRef.current
     if (!el) return
+
+    const reveal = () => gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+    })
+
+    // If the card is already in view at mount time (e.g. after a filter
+    // change shortened the list), reveal immediately instead of waiting
+    // for a ScrollTrigger that may never fire.
+    const rect = el.getBoundingClientRect()
+    if (rect.top < window.innerHeight * 0.95) {
+      reveal()
+      return
+    }
+
     const st = ScrollTrigger.create({
       trigger: el,
       start: 'top 85%',
       once: true,
-      onEnter() {
-        gsap.to(el, {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: 'power3.out',
-        })
-      },
+      onEnter: reveal,
     })
     return () => st.kill()
   }, [])
@@ -308,57 +422,57 @@ function WorkCard({ project }: { project: Project }) {
 
   return (
     <div ref={wrapRef} className="work-card-wrap">
-      <div className="work-card" data-cursor="View">
-        {/* Left */}
-        <div className="work-card__content">
-          <div className="work-card__top">
-            {company && <p className="work-card__company">{company}</p>}
-            <h2 className="work-card__title">{project.title}</h2>
-            <p className="work-card__vision">
-              {project.tagline ?? 'A carefully crafted digital experience built for impact.'}
-            </p>
-            {(project.tags ?? []).length > 0 && (
-              <div className="work-card__tags">
-                {(project.tags ?? []).slice(0, 4).map(tag => (
-                  <span key={tag} className="work-card__tag">{tag}</span>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="work-card__bottom">
-            <dl className="work-card__metrics">
-              {DEFAULT_METRICS.map((m, i) => (
-                <div key={i} className="wc-metric">
-                  <dt className="wc-metric__val">{m.val}</dt>
-                  <dd className="wc-metric__lbl">{m.lbl}</dd>
+      <Link href={`/work/${project.slug}`} className="work-card-link" aria-label={`View case study: ${project.title}`}>
+        <div className="work-card" data-cursor="View">
+          {/* Left */}
+          <div className="work-card__content">
+            <div className="work-card__top">
+              {company && <p className="work-card__company">{company}</p>}
+              <h2 className="work-card__title">{project.title}</h2>
+              <p className="work-card__vision">
+                {project.tagline ?? 'A carefully crafted digital experience built for impact.'}
+              </p>
+              {(project.tags ?? []).length > 0 && (
+                <div className="work-card__tags">
+                  {(project.tags ?? []).slice(0, 4).map(tag => (
+                    <span key={tag} className="work-card__tag">{tag}</span>
+                  ))}
                 </div>
-              ))}
-            </dl>
-            <Link href={`/work/${project.slug}`} className="work-card__cta">
-              VIEW CASE STUDY →
-            </Link>
+              )}
+            </div>
+            <div className="work-card__bottom">
+              <dl className="work-card__metrics">
+                {DEFAULT_METRICS.map((m, i) => (
+                  <div key={i} className="wc-metric">
+                    <dt className="wc-metric__val">{m.val}</dt>
+                    <dd className="wc-metric__lbl">{m.lbl}</dd>
+                  </div>
+                ))}
+              </dl>
+              <span className="work-card__cta">VIEW CASE STUDY →</span>
+            </div>
           </div>
-        </div>
 
-        {/* Right */}
-        <div className="work-card__visual">
-          <div className="wc-cinema-frame">
-            {coverSrc ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={coverSrc} alt={project.title} className="wc-cinema-img" draggable={false} />
-            ) : (
-              <div className="wc-placeholder">{project.title}</div>
-            )}
-            <div className="wc-scanlines" aria-hidden="true" />
-          </div>
-          <div className="wc-corners" aria-hidden="true">
-            <span className="wc-corner-tl" />
-            <span className="wc-corner-tr" />
-            <span className="wc-corner-bl" />
-            <span className="wc-corner-br" />
+          {/* Right */}
+          <div className="work-card__visual">
+            <div className="wc-cinema-frame">
+              {coverSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={coverSrc} alt={project.title} className="wc-cinema-img" draggable={false} />
+              ) : (
+                <div className="wc-placeholder">{project.title}</div>
+              )}
+              <div className="wc-scanlines" aria-hidden="true" />
+            </div>
+            <div className="wc-corners" aria-hidden="true">
+              <span className="wc-corner-tl" />
+              <span className="wc-corner-tr" />
+              <span className="wc-corner-bl" />
+              <span className="wc-corner-br" />
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
     </div>
   )
 }
@@ -396,6 +510,99 @@ function WorkHero({ count }: { count: number }) {
 }
 
 /* ────────────────────────────────────────────────────────────── */
+/*  Filter dropdown                                               */
+/* ────────────────────────────────────────────────────────────── */
+
+function FilterDropdown({
+  tags,
+  counts,
+  activeTag,
+  onSelect,
+  totalCount,
+}: {
+  tags: string[]
+  counts: Record<string, number>
+  activeTag: string | null
+  onSelect: (tag: string | null) => void
+  totalCount: number
+}) {
+  const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  // Close on outside click and Esc
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const pick = (tag: string | null) => {
+    onSelect(tag)
+    setOpen(false)
+  }
+
+  return (
+    <div ref={wrapRef} className="work-filter-wrap" role="group" aria-label="Filter by tag">
+      <button
+        type="button"
+        className={`filter-trigger${open ? ' is-open' : ''}`}
+        onClick={() => setOpen(o => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        <span className="filter-trigger__label">Filter</span>
+        <span className={`filter-trigger__value${activeTag ? ' is-set' : ''}`}>
+          {activeTag ?? 'All'}
+        </span>
+        <span className="filter-trigger__chev" aria-hidden="true" />
+      </button>
+
+      {activeTag && (
+        <button type="button" className="filter-clear" onClick={() => onSelect(null)}>
+          Clear
+        </button>
+      )}
+
+      <div className={`filter-popover${open ? ' is-open' : ''}`} role="listbox">
+        <button
+          type="button"
+          className={`filter-option${activeTag === null ? ' is-active' : ''}`}
+          onClick={() => pick(null)}
+          role="option"
+          aria-selected={activeTag === null}
+        >
+          <span className="filter-option__dot" />
+          <span>All</span>
+          <span className="filter-option__count">{totalCount}</span>
+        </button>
+        {tags.map(tag => (
+          <button
+            type="button"
+            key={tag}
+            className={`filter-option${activeTag === tag ? ' is-active' : ''}`}
+            onClick={() => pick(tag)}
+            role="option"
+            aria-selected={activeTag === tag}
+          >
+            <span className="filter-option__dot" />
+            <span>{tag}</span>
+            <span className="filter-option__count">{counts[tag] ?? 0}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ────────────────────────────────────────────────────────────── */
 /*  Main component                                                */
 /* ────────────────────────────────────────────────────────────── */
 
@@ -406,7 +613,19 @@ export default function WorkGrid({ projects, tags }: WorkGridProps) {
     ? projects.filter(p => p.tags?.includes(activeTag))
     : projects
 
-  const allTags = ['All', ...tags]
+  // Tag → project count, for the dropdown badges
+  const counts: Record<string, number> = {}
+  for (const p of projects) {
+    for (const t of p.tags ?? []) counts[t] = (counts[t] ?? 0) + 1
+  }
+
+  // Recompute ScrollTrigger positions when the visible card list changes,
+  // otherwise cards that shifted upward keep their stale trigger offsets
+  // and never fire — which is what made filtering "look broken".
+  useEffect(() => {
+    const id = window.setTimeout(() => ScrollTrigger.refresh(), 50)
+    return () => window.clearTimeout(id)
+  }, [activeTag])
 
   return (
     <>
@@ -415,23 +634,15 @@ export default function WorkGrid({ projects, tags }: WorkGridProps) {
       {/* Hero */}
       <WorkHero count={filtered.length} />
 
-      {/* Tag filter */}
+      {/* Tag filter (dropdown) */}
       {tags.length > 0 && (
-        <div className="work-filter-wrap" role="group" aria-label="Filter by tag">
-          {allTags.map(tag => {
-            const isActive = tag === 'All' ? activeTag === null : activeTag === tag
-            return (
-              <button
-                key={tag}
-                className={`filter-chip${isActive ? ' filter-chip--active' : ''}`}
-                onClick={() => setActiveTag(tag === 'All' ? null : tag)}
-                aria-pressed={isActive}
-              >
-                {tag}
-              </button>
-            )
-          })}
-        </div>
+        <FilterDropdown
+          tags={tags}
+          counts={counts}
+          activeTag={activeTag}
+          onSelect={setActiveTag}
+          totalCount={projects.length}
+        />
       )}
 
       {/* Card stack */}
