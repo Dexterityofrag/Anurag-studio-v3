@@ -2,6 +2,33 @@ import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
+const personSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://anurag.studio/#person",
+      "name": "Anurag Adhikari",
+      "url": "https://anurag.studio",
+      "jobTitle": "Designer & Developer",
+      "description": "Product designer crafting thoughtful digital experiences through strategy, systems, and storytelling.",
+      "image": "https://anurag.studio/portrait.jpg",
+      "sameAs": [
+        "https://linkedin.com/in/dexterityofrag",
+        "https://github.com/Dexterityofrag"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://anurag.studio/#website",
+      "url": "https://anurag.studio",
+      "name": "Anurag Adhikari",
+      "description": "Portfolio of Anurag Adhikari — Designer & Developer",
+      "publisher": { "@id": "https://anurag.studio/#person" }
+    }
+  ]
+};
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -32,19 +59,23 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Anurag | Designer & Developer',
-    template: '%s | Anurag',
+    default: 'Anurag Adhikari | Designer & Developer',
+    template: '%s | Anurag Adhikari',
   },
   description:
-    'Portfolio of Anurag: crafting cinematic digital experiences. UI/UX design, brand identity, and creative development.',
+    'Portfolio of Anurag Adhikari: crafting cinematic digital experiences. UI/UX design, brand identity, and creative development.',
   metadataBase: new URL('https://anurag.studio'),
+  authors: [{ name: 'Anurag Adhikari', url: 'https://anurag.studio' }],
+  creator: 'Anurag Adhikari',
   openGraph: {
     siteName: 'anurag.studio',
     type: 'website',
     locale: 'en_US',
+    images: [{ url: '/portrait.jpg', alt: 'Anurag Adhikari — Designer & Developer' }],
   },
   twitter: {
     card: 'summary_large_image',
+    images: ['/portrait.jpg'],
   },
   robots: {
     index: true,
@@ -59,6 +90,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="me" href="https://linkedin.com/in/dexterityofrag" />
+        <link rel="me" href="https://github.com/Dexterityofrag" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
+      </head>
       <body className={`${spaceGrotesk.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`} suppressHydrationWarning>
         {children}
       </body>

@@ -26,24 +26,25 @@ export async function generateMetadata({ params }: MetaArgs): Promise<Metadata> 
     const post = await fetchPostBySlug(slug).catch(() => null)
     if (!post) return { title: 'Post Not Found' }
 
-    const title = post.metaTitle ?? `${post.title} | Anurag`
+    const title = post.metaTitle ?? `${post.title} | Anurag Adhikari`
     const description =
-        post.metaDescription ?? post.excerpt ?? `${post.title}, a blog post by Anurag.`
+        post.metaDescription ?? post.excerpt ?? `${post.title}, a blog post by Anurag Adhikari.`
 
     return {
         title,
         description,
+        authors: [{ name: 'Anurag Adhikari', url: 'https://anurag.studio' }],
         openGraph: {
             title,
             description,
-            images: post.coverUrl ? [post.coverUrl] : [],
+            images: post.coverUrl ? [post.coverUrl] : ['/portrait.jpg'],
             type: 'article',
         },
         twitter: {
             card: 'summary_large_image',
             title,
             description,
-            images: post.coverUrl ? [post.coverUrl] : [],
+            images: post.coverUrl ? [post.coverUrl] : ['/portrait.jpg'],
         },
     }
 }
@@ -73,10 +74,36 @@ export default async function BlogPostPage({ params }: PageArgs) {
     const prev = currentIdx < allPosts.length - 1 ? allPosts[currentIdx + 1] : null
     const next = currentIdx > 0 ? allPosts[currentIdx - 1] : null
 
+    const articleSchema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": post.excerpt ?? post.metaDescription ?? undefined,
+        "image": post.coverUrl ?? "https://anurag.studio/portrait.jpg",
+        "datePublished": post.publishedAt?.toISOString(),
+        "dateModified": (post.updatedAt ?? post.publishedAt)?.toISOString(),
+        "url": `https://anurag.studio/blog/${post.slug}`,
+        "author": {
+            "@type": "Person",
+            "@id": "https://anurag.studio/#person",
+            "name": "Anurag Adhikari",
+            "url": "https://anurag.studio"
+        },
+        "publisher": {
+            "@id": "https://anurag.studio/#person"
+        }
+    };
+
     return (
-        <PostDetail
-            post={post}
-            adjacent={{ prev, next }}
-        />
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+            />
+            <PostDetail
+                post={post}
+                adjacent={{ prev, next }}
+            />
+        </>
     )
 }

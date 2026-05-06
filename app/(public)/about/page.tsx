@@ -5,16 +5,32 @@ import AboutPage from '@/components/about/AboutPage'
 import { fetchAboutSection } from '@/lib/data/about'
 import { getCertifications } from '@/app/actions/certifications'
 
+const aboutPersonSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://anurag.studio/#person",
+    "name": "Anurag Adhikari",
+    "url": "https://anurag.studio",
+    "jobTitle": "Designer & Developer",
+    "description": "Product designer crafting thoughtful digital experiences through strategy, systems, and storytelling. Based in India.",
+    "image": "https://anurag.studio/portrait.jpg",
+    "sameAs": [
+        "https://linkedin.com/in/dexterityofrag",
+        "https://github.com/Dexterityofrag"
+    ]
+};
+
 export const metadata: Metadata = {
-    title: 'About',
+    title: 'About Anurag Adhikari',
     description:
-        'Product designer crafting thoughtful digital experiences through strategy, systems, and storytelling. Based in India.',
+        'Anurag Adhikari is a product designer crafting thoughtful digital experiences through strategy, systems, and storytelling. Based in India.',
     openGraph: {
-        title: 'About | Anurag Adhikari',
+        title: 'About Anurag Adhikari | Designer & Developer',
         description:
-            'Product designer crafting thoughtful digital experiences through strategy, systems, and storytelling.',
+            'Anurag Adhikari is a product designer crafting thoughtful digital experiences through strategy, systems, and storytelling.',
+        images: [{ url: '/portrait.jpg', alt: 'Anurag Adhikari' }],
     },
-    twitter: { card: 'summary_large_image' },
+    twitter: { card: 'summary_large_image', images: ['/portrait.jpg'] },
 }
 
 export default async function AboutPageRoute() {
@@ -31,5 +47,13 @@ export default async function AboutPageRoute() {
         logoUrl: c.logoUrl ?? null,
         verifyUrl: c.verifyUrl ?? null,
     }))
-    return <AboutPage bio1={bio1} bio2={bio2} certifications={certifications} />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPersonSchema) }}
+            />
+            <AboutPage bio1={bio1} bio2={bio2} certifications={certifications} />
+        </>
+    )
 }
