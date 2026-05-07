@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { fetchProjects } from '@/lib/data/projects'
 import WorkGrid from '@/components/work/WorkGrid'
+import { fetchSiteContent } from '@/lib/data/siteContent'
 
 // Re-validate cached pages every 60s so admin updates appear quickly
 export const revalidate = 60
@@ -17,7 +18,10 @@ export const metadata: Metadata = {
 }
 
 export default async function WorkPage() {
-    const projects = await fetchProjects().catch(() => [])
+    const [projects, videoUrl] = await Promise.all([
+        fetchProjects().catch(() => []),
+        fetchSiteContent('settings.showreelUrl').catch(() => null),
+    ])
 
     // ── Canonical-case + trailing-S collapse ──────────────────────
     // Merges variants like "DESIGN SYSTEM" / "Design Systems" / "design system"
@@ -53,5 +57,5 @@ export default async function WorkPage() {
         new Set(normalizedProjects.flatMap(p => p.tags ?? []))
     ).sort()
 
-    return <WorkGrid projects={normalizedProjects} tags={tags} />
+    return <WorkGrid projects={normalizedProjects} tags={tags} videoUrl={videoUrl ?? ''} />
 }

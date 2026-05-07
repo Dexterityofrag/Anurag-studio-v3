@@ -13,16 +13,8 @@ import type { Project } from '@/lib/types'
 interface WorkGridProps {
   projects: Project[]
   tags: string[]
+  videoUrl?: string
 }
-
-/* ────────────────────────────────────────────────────────────── */
-/*  Default metrics                                               */
-/* ────────────────────────────────────────────────────────────── */
-
-const DEFAULT_METRICS = [
-  { val: '100%', lbl: 'On Time' },
-  { val: '↑ 2×', lbl: 'Engagement' },
-]
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Styles                                                        */
@@ -188,181 +180,350 @@ const css = /* css */ `
   .filter-popover { left: 20px; right: 20px; max-width: none; }
 }
 
-/* ─── CARD STACK ─────────────────────────────────────────────── */
-.work-stack {
+/* ─── VIDEO BANNER ────────────────────────────────────────────── */
+.wg-video-banner {
+  max-width: var(--max-width, 1440px);
+  margin: 0 auto 56px;
+  padding: 0 var(--gutter, 40px);
+}
+.wg-video-frame {
+  position: relative;
+  width: 100%;
+  height: clamp(280px, 42vh, 520px);
+  background: #0a0a0a;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+.wg-video-frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wg-video-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px),
+    radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+.wg-video-label {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  z-index: 3;
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
   display: flex;
-  flex-direction: column;
-  gap: 40px;
+  align-items: center;
+  gap: 8px;
+}
+.wg-video-label::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent, #00FF94);
+  animation: wg-pulse 2s ease infinite;
+}
+@keyframes wg-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,148,0.4); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 4px rgba(0,255,148,0); }
+}
+.wg-video-corners { position: absolute; inset: 16px; z-index: 3; pointer-events: none; }
+.wg-video-corners span { position: absolute; width: 22px; height: 22px; }
+.wg-vc-tl { top:0; left:0; border-top:1px solid rgba(255,255,255,0.14); border-left:1px solid rgba(255,255,255,0.14); }
+.wg-vc-tr { top:0; right:0; border-top:1px solid rgba(255,255,255,0.14); border-right:1px solid rgba(255,255,255,0.14); }
+.wg-vc-bl { bottom:0; left:0; border-bottom:1px solid rgba(255,255,255,0.14); border-left:1px solid rgba(255,255,255,0.14); }
+.wg-vc-br { bottom:0; right:0; border-bottom:1px solid rgba(255,255,255,0.14); border-right:1px solid rgba(255,255,255,0.14); }
+
+/* ─── MASONRY GALLERY ─────────────────────────────────────────── */
+.wg-gallery {
   max-width: var(--max-width, 1440px);
   margin: 0 auto;
   padding: 0 var(--gutter, 40px) 160px;
-}
-
-/* Individual card wrapper (for scroll reveal) */
-.work-card-wrap {
-  opacity: 0;
-  transform: translateY(60px);
-  will-change: opacity, transform;
-}
-/* CSS-only reveal used on mobile/touch instead of GSAP */
-.work-card-wrap--visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* ─── CINEMA CARD (matches fw-card from WorkPreview) ────────── */
-.work-card-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-}
-.work-card {
-  width: 100%;
-  height: clamp(480px, 70vh, 680px);
-  background: #0a0a0a;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 24px 60px rgba(0,0,0,0.4);
-  display: grid;
-  grid-template-columns: 42% 58%;
-  overflow: hidden;
-  position: relative;
-  cursor: none;
-  transition: box-shadow 0.4s ease, transform 0.4s ease;
-}
-.work-card-link:hover .work-card {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 40px 80px rgba(0,0,0,0.5);
-}
-.work-card-link:active .work-card { transform: scale(0.995); }
-
-/* Left content panel */
-.work-card__content {
-  padding: clamp(28px, 4vw, 56px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid rgba(255,255,255,0.06);
   gap: 20px;
-  overflow: hidden;
 }
-.work-card__top { display: flex; flex-direction: column; gap: 14px; }
-.work-card__company {
-  font-family: var(--font-mono, "JetBrains Mono", monospace);
-  font-size: 12px;
-  color: var(--color-muted, rgba(240,240,240,0.5));
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.work-card__title {
-  font-family: var(--font-display, "Space Grotesk", sans-serif);
-  font-size: clamp(1.5rem, 2.4vw, 2.4rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--color-fg, #f0f0f0);
-  line-height: 1.1;
-}
-.work-card__vision {
-  font-family: var(--font-body, "DM Sans", sans-serif);
-  font-size: 15px;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.65;
-}
-.work-card__tags {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.work-card__tag {
-  font-family: var(--font-mono, "JetBrains Mono", monospace);
-  font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--color-muted, rgba(240,240,240,0.5));
-}
-.work-card__bottom { display: flex; flex-direction: column; gap: 20px; }
-.work-card__metrics { display: flex; gap: 32px; }
-.wc-metric { display: flex; flex-direction: column; gap: 4px; }
-.wc-metric__val {
-  font-family: var(--font-display, "Space Grotesk", sans-serif);
-  font-size: clamp(1.4rem, 2vw, 2rem);
-  font-weight: 700; color: var(--color-fg, #f0f0f0); line-height: 1;
-}
-.wc-metric__lbl {
-  font-family: var(--font-mono, "JetBrains Mono", monospace);
-  font-size: 10px; color: var(--color-muted, rgba(240,240,240,0.5));
-  letter-spacing: 0.06em; text-transform: uppercase;
-}
-.work-card__cta {
-  font-family: var(--font-mono, "JetBrains Mono", monospace);
-  font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--color-muted, rgba(240,240,240,0.5));
-  display: inline-flex; align-items: center;
-  gap: 6px; width: fit-content;
-  transition: color 0.3s ease, gap 0.3s ease;
-}
-.work-card-link:hover .work-card__cta { color: var(--accent, #00FF94); gap: 10px; }
 
-/* Right visual panel */
-.work-card__visual {
-  position: relative; background: #060606; overflow: hidden;
+/* scroll reveal */
+.wg-reveal {
+  opacity: 0;
+  transform: translateY(48px);
+  will-change: opacity, transform;
 }
-.wc-cinema-frame {
-  position: absolute; inset: 20px; border-radius: 8px; overflow: hidden;
+.wg-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.wc-cinema-frame::before {
-  content: ''; position: absolute; inset: 0;
-  border: 1px solid rgba(255,255,255,0.04); border-radius: 8px;
-  z-index: 2; pointer-events: none;
+
+/* ─── FULL-WIDTH HERO ROW ─────────────────────────────────────── */
+.wg-large {
+  position: relative;
+  width: 100%;
+  height: clamp(360px, 52vh, 600px);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.06);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: none;
 }
-.wc-cinema-frame::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
-  z-index: 2; pointer-events: none;
+.wg-large__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.wc-scanlines {
-  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+.wg-large:hover .wg-large__img { transform: scale(1.04); }
+.wg-large__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.9) 0%,
+    rgba(0,0,0,0.4) 40%,
+    rgba(0,0,0,0.08) 70%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+.wg-large__scanlines {
+  position: absolute;
+  inset: 0;
   background: repeating-linear-gradient(
     to bottom,
     transparent 0px, transparent 2px,
-    rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+    rgba(0,0,0,0.035) 2px, rgba(0,0,0,0.035) 4px
   );
+  z-index: 2;
+  pointer-events: none;
 }
-.wc-cinema-img {
-  position: absolute; width: 110%; height: 110%;
-  top: -5%; left: -5%; object-fit: cover; display: block;
+.wg-large__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.08);
 }
-.wc-placeholder {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono, "JetBrains Mono", monospace); font-size: 11px;
-  letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.1);
+.wg-large__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(24px, 4vw, 48px);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
 }
-.wc-corners { position: absolute; inset: 20px; z-index: 4; pointer-events: none; }
-.wc-corners span { position: absolute; width: 24px; height: 24px; }
-.wc-corner-tl { top:0; left:0; border-top:1px solid rgba(255,255,255,0.12); border-left:1px solid rgba(255,255,255,0.12); }
-.wc-corner-tr { top:0; right:0; border-top:1px solid rgba(255,255,255,0.12); border-right:1px solid rgba(255,255,255,0.12); }
-.wc-corner-bl { bottom:0; left:0; border-bottom:1px solid rgba(255,255,255,0.12); border-left:1px solid rgba(255,255,255,0.12); }
-.wc-corner-br { bottom:0; right:0; border-bottom:1px solid rgba(255,255,255,0.12); border-right:1px solid rgba(255,255,255,0.12); }
+.wg-large__info { display: flex; flex-direction: column; gap: 8px; }
+.wg-large__company {
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.wg-large__title {
+  font-family: var(--font-display, "Space Grotesk", sans-serif);
+  font-size: clamp(1.6rem, 3.2vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1.1;
+}
+.wg-large__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.wg-large__tag {
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(4px);
+}
+.wg-large__cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent, #00FF94);
+  border: 1px solid rgba(0,255,148,0.3);
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
+}
+.wg-large:hover .wg-large__cta {
+  background: rgba(0,255,148,0.12);
+  border-color: rgba(0,255,148,0.55);
+  gap: 12px;
+}
+/* corner brackets */
+.wg-large__corners { position: absolute; inset: 16px; z-index: 4; pointer-events: none; }
+.wg-large__corners span { position: absolute; width: 22px; height: 22px; }
+.wg-lc-tl { top:0; left:0; border-top:1px solid rgba(255,255,255,0.14); border-left:1px solid rgba(255,255,255,0.14); }
+.wg-lc-tr { top:0; right:0; border-top:1px solid rgba(255,255,255,0.14); border-right:1px solid rgba(255,255,255,0.14); }
+.wg-lc-bl { bottom:0; left:0; border-bottom:1px solid rgba(255,255,255,0.14); border-left:1px solid rgba(255,255,255,0.14); }
+.wg-lc-br { bottom:0; right:0; border-bottom:1px solid rgba(255,255,255,0.14); border-right:1px solid rgba(255,255,255,0.14); }
 
-/* ─── SKELETON ────────────────────────────────────────────────── */
-@keyframes skeleton-shimmer {
-  from { background-position: -400px 0; }
-  to   { background-position:  400px 0; }
+/* ─── SPLIT ROW (2 cards side by side) ───────────────────────── */
+.wg-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
-.skeleton-bar {
-  border-radius: 4px;
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0.04) 25%,
-    rgba(255,255,255,0.08) 50%,
-    rgba(255,255,255,0.04) 75%
+
+/* ─── SMALL CARD (in split row) ──────────────────────────────── */
+.wg-small {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.06);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  cursor: none;
+  min-height: clamp(380px, 50vh, 520px);
+  transition: border-color 0.35s ease;
+}
+.wg-small:hover { border-color: rgba(255,255,255,0.12); }
+.wg-small__img-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 220px;
+  overflow: hidden;
+  background: #060606;
+}
+.wg-small__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wg-small:hover .wg-small__img { transform: scale(1.05); }
+.wg-small__img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.65) 100%);
+  z-index: 1;
+}
+.wg-small__scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 2px,
+    rgba(0,0,0,0.035) 2px, rgba(0,0,0,0.035) 4px
   );
-  background-size: 800px 100%;
-  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  z-index: 2;
+  pointer-events: none;
 }
-.work-card--skeleton .work-card__visual { background: #0e0e0e; }
-.work-card--skeleton { pointer-events: none; }
+.wg-small__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.08);
+}
+.wg-small__content {
+  padding: clamp(18px, 3vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: #0a0a0a;
+  flex-shrink: 0;
+}
+.wg-small__company {
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.wg-small__title {
+  font-family: var(--font-display, "Space Grotesk", sans-serif);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-fg, #f0f0f0);
+  line-height: 1.2;
+}
+.wg-small__tagline {
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wg-small__cta {
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-top: 4px;
+  transition: color 0.25s ease;
+}
+.wg-small:hover .wg-small__cta { color: var(--accent, #00FF94); }
+
+/* corner brackets for small card */
+.wg-small__corners { position: absolute; inset: 12px; z-index: 4; pointer-events: none; }
+.wg-small__corners span { position: absolute; width: 16px; height: 16px; }
+.wg-sc-tl { top:0; left:0; border-top:1px solid rgba(255,255,255,0.1); border-left:1px solid rgba(255,255,255,0.1); }
+.wg-sc-tr { top:0; right:0; border-top:1px solid rgba(255,255,255,0.1); border-right:1px solid rgba(255,255,255,0.1); }
+.wg-sc-bl { bottom:0; left:0; border-bottom:1px solid rgba(255,255,255,0.1); border-left:1px solid rgba(255,255,255,0.1); }
+.wg-sc-br { bottom:0; right:0; border-bottom:1px solid rgba(255,255,255,0.1); border-right:1px solid rgba(255,255,255,0.1); }
 
 /* ─── EMPTY ───────────────────────────────────────────────────── */
-.work-stack__empty {
+.wg-empty {
   text-align: center; padding: 80px 0;
   font-family: var(--font-mono, "JetBrains Mono", monospace);
   font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
@@ -370,130 +531,186 @@ const css = /* css */ `
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .work-card {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    height: auto;
-    min-height: clamp(480px, 80vh, 640px);
-  }
-  .work-card__content { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .work-card__visual { min-height: 240px; }
+@media (max-width: 768px) {
+  .wg-split { grid-template-columns: 1fr; }
+  .wg-large__content { flex-direction: column; align-items: flex-start; }
+  .wg-large__cta { display: none; }
 }
 @media (max-width: 600px) {
   .work-hero { padding-top: 120px; }
   .work-filter-wrap { padding-left: 20px; padding-right: 20px; }
-  .work-stack { padding-left: 20px; padding-right: 20px; }
+  .wg-gallery { padding-left: 20px; padding-right: 20px; gap: 14px; }
+  .wg-video-banner { padding-left: 20px; padding-right: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wg-large__img, .wg-small__img { transition: none; }
 }
 `
 
 /* ────────────────────────────────────────────────────────────── */
-/*  Single card                                                   */
+/*  Scroll-reveal hook                                            */
 /* ────────────────────────────────────────────────────────────── */
 
-function WorkCard({ project }: { project: Project }) {
-  const wrapRef = useRef<HTMLDivElement>(null)
-
+function useReveal(ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
-    const el = wrapRef.current
+    const el = ref.current
     if (!el) return
 
-    // On mobile/touch use CSS transitions + IntersectionObserver (lighter than GSAP)
     const isMobile = window.innerWidth < 768 || window.matchMedia('(hover: none)').matches
 
-    if (isMobile) {
-      const rect = el.getBoundingClientRect()
-      if (rect.top < window.innerHeight * 0.95) {
-        el.classList.add('work-card-wrap--visible')
-        return
-      }
-      const io = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) { el.classList.add('work-card-wrap--visible'); io.disconnect() } },
-        { threshold: 0.1 }
-      )
-      io.observe(el)
-      return () => io.disconnect()
-    }
-
-    // Desktop: GSAP for polished animation
-    const reveal = () => gsap.to(el, {
-      opacity: 1,
-      y: 0,
-      duration: 0.7,
-      ease: 'power3.out',
-    })
+    const revealCss = () => el.classList.add('wg-reveal--visible')
 
     const rect = el.getBoundingClientRect()
     if (rect.top < window.innerHeight * 0.95) {
-      reveal()
+      revealCss()
       return
+    }
+
+    if (isMobile) {
+      const io = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { revealCss(); io.disconnect() } },
+        { threshold: 0.08 }
+      )
+      io.observe(el)
+      return () => io.disconnect()
     }
 
     const st = ScrollTrigger.create({
       trigger: el,
       start: 'top 85%',
       once: true,
-      onEnter: reveal,
+      onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }),
     })
     return () => st.kill()
-  }, [])
+  }, [ref])
+}
+
+/* ────────────────────────────────────────────────────────────── */
+/*  Large card (full-width hero row)                              */
+/* ────────────────────────────────────────────────────────────── */
+
+function LargeCard({ project }: { project: Project }) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  useReveal(wrapRef)
 
   const coverSrc = project.coverUrl ?? project.thumbnailUrl
   const company  = [project.client, project.year].filter(Boolean).join(' · ')
 
   return (
-    <div ref={wrapRef} className="work-card-wrap">
-      <Link href={`/work/${project.slug}`} className="work-card-link" aria-label={`View case study: ${project.title}`}>
-        <div className="work-card" data-cursor="View">
-          {/* Left */}
-          <div className="work-card__content">
-            <div className="work-card__top">
-              {company && <p className="work-card__company">{company}</p>}
-              <h2 className="work-card__title">{project.title}</h2>
-              <p className="work-card__vision">
-                {project.tagline ?? 'A carefully crafted digital experience built for impact.'}
-              </p>
-              {(project.tags ?? []).length > 0 && (
-                <div className="work-card__tags">
-                  {(project.tags ?? []).slice(0, 4).map(tag => (
-                    <span key={tag} className="work-card__tag">{tag}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="work-card__bottom">
-              <dl className="work-card__metrics">
-                {DEFAULT_METRICS.map((m, i) => (
-                  <div key={i} className="wc-metric">
-                    <dt className="wc-metric__val">{m.val}</dt>
-                    <dd className="wc-metric__lbl">{m.lbl}</dd>
-                  </div>
-                ))}
-              </dl>
-              <span className="work-card__cta">VIEW CASE STUDY →</span>
-            </div>
-          </div>
+    <div ref={wrapRef} className="wg-reveal">
+      <Link href={`/work/${project.slug}`} className="wg-large" data-cursor="View" aria-label={`View case study: ${project.title}`}>
+        {coverSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={coverSrc} alt={project.title} className="wg-large__img" draggable={false} />
+        ) : (
+          <div className="wg-large__placeholder">{project.title}</div>
+        )}
+        <div className="wg-large__gradient" />
+        <div className="wg-large__scanlines" aria-hidden="true" />
 
-          {/* Right */}
-          <div className="work-card__visual">
-            <div className="wc-cinema-frame">
-              {coverSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={coverSrc} alt={project.title} className="wc-cinema-img" draggable={false} />
-              ) : (
-                <div className="wc-placeholder">{project.title}</div>
-              )}
-              <div className="wc-scanlines" aria-hidden="true" />
-            </div>
-            <div className="wc-corners" aria-hidden="true">
-              <span className="wc-corner-tl" />
-              <span className="wc-corner-tr" />
-              <span className="wc-corner-bl" />
-              <span className="wc-corner-br" />
-            </div>
+        <div className="wg-large__content">
+          <div className="wg-large__info">
+            {company && <p className="wg-large__company">{company}</p>}
+            <h2 className="wg-large__title">{project.title}</h2>
+            {(project.tags ?? []).length > 0 && (
+              <div className="wg-large__tags">
+                {(project.tags ?? []).slice(0, 3).map(tag => (
+                  <span key={tag} className="wg-large__tag">{tag}</span>
+                ))}
+              </div>
+            )}
           </div>
+          <span className="wg-large__cta">View Case Study →</span>
+        </div>
+
+        <div className="wg-large__corners" aria-hidden="true">
+          <span className="wg-lc-tl" /><span className="wg-lc-tr" />
+          <span className="wg-lc-bl" /><span className="wg-lc-br" />
         </div>
       </Link>
+    </div>
+  )
+}
+
+/* ────────────────────────────────────────────────────────────── */
+/*  Small card (used in split pair row)                           */
+/* ────────────────────────────────────────────────────────────── */
+
+function SmallCard({ project }: { project: Project }) {
+  const coverSrc = project.coverUrl ?? project.thumbnailUrl
+  const company  = [project.client, project.year].filter(Boolean).join(' · ')
+
+  return (
+    <Link href={`/work/${project.slug}`} className="wg-small" data-cursor="View" aria-label={`View case study: ${project.title}`}>
+      <div className="wg-small__img-wrap">
+        {coverSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={coverSrc} alt={project.title} className="wg-small__img" draggable={false} />
+        ) : (
+          <div className="wg-small__placeholder">{project.title}</div>
+        )}
+        <div className="wg-small__img-overlay" />
+        <div className="wg-small__scanlines" aria-hidden="true" />
+      </div>
+
+      <div className="wg-small__content">
+        {company && <p className="wg-small__company">{company}</p>}
+        <h2 className="wg-small__title">{project.title}</h2>
+        {project.tagline && <p className="wg-small__tagline">{project.tagline}</p>}
+        <span className="wg-small__cta">View Case Study →</span>
+      </div>
+
+      <div className="wg-small__corners" aria-hidden="true">
+        <span className="wg-sc-tl" /><span className="wg-sc-tr" />
+        <span className="wg-sc-bl" /><span className="wg-sc-br" />
+      </div>
+    </Link>
+  )
+}
+
+/* ────────────────────────────────────────────────────────────── */
+/*  Split pair row (2 small cards)                                */
+/* ────────────────────────────────────────────────────────────── */
+
+function SplitRow({ projects }: { projects: Project[] }) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  useReveal(wrapRef)
+
+  return (
+    <div ref={wrapRef} className="wg-reveal">
+      <div className="wg-split">
+        {projects.map(p => <SmallCard key={p.id} project={p} />)}
+      </div>
+    </div>
+  )
+}
+
+/* ────────────────────────────────────────────────────────────── */
+/*  Video banner                                                  */
+/* ────────────────────────────────────────────────────────────── */
+
+function VideoBanner({ videoUrl }: { videoUrl: string }) {
+  return (
+    <div className="wg-video-banner">
+      <div className="wg-video-frame">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        >
+          <source src={videoUrl} type="video/mp4" />
+        </video>
+        <div className="wg-video-overlay" />
+        <span className="wg-video-label">Showreel</span>
+        <div className="wg-video-corners" aria-hidden="true">
+          <span className="wg-vc-tl" /><span className="wg-vc-tr" />
+          <span className="wg-vc-bl" /><span className="wg-vc-br" />
+        </div>
+      </div>
     </div>
   )
 }
@@ -550,7 +767,6 @@ function FilterDropdown({
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
 
-  // Close on outside click and Esc
   useEffect(() => {
     if (!open) return
     const onDown = (e: MouseEvent) => {
@@ -627,35 +843,46 @@ function FilterDropdown({
 /*  Main component                                                */
 /* ────────────────────────────────────────────────────────────── */
 
-export default function WorkGrid({ projects, tags }: WorkGridProps) {
+export default function WorkGrid({ projects, tags, videoUrl }: WorkGridProps) {
   const [activeTag, setActiveTag] = useState<string | null>(null)
 
   const filtered = activeTag
     ? projects.filter(p => p.tags?.includes(activeTag))
     : projects
 
-  // Tag → project count, for the dropdown badges
   const counts: Record<string, number> = {}
   for (const p of projects) {
     for (const t of p.tags ?? []) counts[t] = (counts[t] ?? 0) + 1
   }
 
-  // Recompute ScrollTrigger positions when the visible card list changes,
-  // otherwise cards that shifted upward keep their stale trigger offsets
-  // and never fire — which is what made filtering "look broken".
   useEffect(() => {
     const id = window.setTimeout(() => ScrollTrigger.refresh(), 50)
     return () => window.clearTimeout(id)
   }, [activeTag])
 
+  // Build alternating rows: large → split(2) → large → split(2) ...
+  const rows: Array<{ type: 'large'; project: Project } | { type: 'split'; projects: Project[] }> = []
+  let i = 0
+  while (i < filtered.length) {
+    rows.push({ type: 'large', project: filtered[i] })
+    i++
+    if (i < filtered.length) {
+      const pair = filtered.slice(i, i + 2)
+      if (pair.length === 1) {
+        rows.push({ type: 'large', project: pair[0] })
+      } else {
+        rows.push({ type: 'split', projects: pair })
+      }
+      i += pair.length
+    }
+  }
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
-      {/* Hero */}
       <WorkHero count={filtered.length} />
 
-      {/* Tag filter (dropdown) */}
       {tags.length > 0 && (
         <FilterDropdown
           tags={tags}
@@ -666,14 +893,17 @@ export default function WorkGrid({ projects, tags }: WorkGridProps) {
         />
       )}
 
-      {/* Card stack */}
-      <div className="work-stack">
+      {videoUrl && <VideoBanner videoUrl={videoUrl} />}
+
+      <div className="wg-gallery">
         {filtered.length > 0 ? (
-          filtered.map(project => (
-            <WorkCard key={project.id} project={project} />
-          ))
+          rows.map((row, idx) =>
+            row.type === 'large'
+              ? <LargeCard key={`large-${row.project.id}`} project={row.project} />
+              : <SplitRow key={`split-${idx}`} projects={row.projects} />
+          )
         ) : (
-          <p className="work-stack__empty">No projects found for this filter.</p>
+          <p className="wg-empty">No projects found for this filter.</p>
         )}
       </div>
     </>
