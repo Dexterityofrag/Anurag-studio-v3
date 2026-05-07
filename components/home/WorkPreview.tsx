@@ -349,7 +349,8 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
     const img     = imgRef.current
     if (!wrapper || !card) return
 
-    // Magnetic 3D tilt on mouse move
+    // 3D tilt: only on pointer-hover devices (not touch/iOS)
+    const isTouch = window.matchMedia('(hover: none)').matches
     const onMove = (e: MouseEvent) => {
       const rect = card.getBoundingClientRect()
       const x = (e.clientX - rect.left) / rect.width  - 0.5
@@ -365,8 +366,10 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
     const onLeave = () => {
       gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.7, ease: 'elastic.out(1,0.6)', overwrite: true })
     }
-    card.addEventListener('mousemove', onMove)
-    card.addEventListener('mouseleave', onLeave)
+    if (!isTouch) {
+      card.addEventListener('mousemove', onMove)
+      card.addEventListener('mouseleave', onLeave)
+    }
 
     // Card scale-in as it enters its sticky slot
     // Cards always stay opacity:1 — sticky stacking handles visibility
@@ -397,8 +400,10 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
     }
 
     return () => {
-      card.removeEventListener('mousemove', onMove)
-      card.removeEventListener('mouseleave', onLeave)
+      if (!isTouch) {
+        card.removeEventListener('mousemove', onMove)
+        card.removeEventListener('mouseleave', onLeave)
+      }
       cardST.kill()
       imgST?.kill()
     }

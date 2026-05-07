@@ -33,6 +33,17 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
             window.history.scrollRestoration = 'manual'
         }
 
+        // Lenis smooth scroll causes jank on iOS Safari / touch devices.
+        // On mobile we fall back to native scroll and let ScrollTrigger work directly.
+        const isTouchDevice =
+            navigator.maxTouchPoints > 0 || window.innerWidth < 1024
+
+        if (isTouchDevice) {
+            // Still refresh ScrollTrigger so scroll-triggered animations work
+            ScrollTrigger.refresh()
+            return
+        }
+
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

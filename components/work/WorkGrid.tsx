@@ -204,6 +204,12 @@ const css = /* css */ `
   transform: translateY(60px);
   will-change: opacity, transform;
 }
+/* CSS-only reveal used on mobile/touch instead of GSAP */
+.work-card-wrap--visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
 
 /* ─── CINEMA CARD (matches fw-card from WorkPreview) ────────── */
 .work-card-link {
@@ -392,6 +398,24 @@ function WorkCard({ project }: { project: Project }) {
     const el = wrapRef.current
     if (!el) return
 
+    // On mobile/touch use CSS transitions + IntersectionObserver (lighter than GSAP)
+    const isMobile = window.innerWidth < 768 || window.matchMedia('(hover: none)').matches
+
+    if (isMobile) {
+      const rect = el.getBoundingClientRect()
+      if (rect.top < window.innerHeight * 0.95) {
+        el.classList.add('work-card-wrap--visible')
+        return
+      }
+      const io = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { el.classList.add('work-card-wrap--visible'); io.disconnect() } },
+        { threshold: 0.1 }
+      )
+      io.observe(el)
+      return () => io.disconnect()
+    }
+
+    // Desktop: GSAP for polished animation
     const reveal = () => gsap.to(el, {
       opacity: 1,
       y: 0,
@@ -399,9 +423,6 @@ function WorkCard({ project }: { project: Project }) {
       ease: 'power3.out',
     })
 
-    // If the card is already in view at mount time (e.g. after a filter
-    // change shortened the list), reveal immediately instead of waiting
-    // for a ScrollTrigger that may never fire.
     const rect = el.getBoundingClientRect()
     if (rect.top < window.innerHeight * 0.95) {
       reveal()
