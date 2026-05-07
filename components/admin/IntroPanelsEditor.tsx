@@ -117,6 +117,8 @@ const PANEL_DEFAULTS = [
   { body: 'Every pixel is a decision. Every decision is intentional', em: 'intentional', sub: 'Craft + precision' },
 ]
 
+const DEFAULT_TAGLINE = 'Systems that scale. Typography that respects the reader.\nInteractions that feel inevitable.'
+
 type Row = { key: string; value: string | null }
 
 export default function IntroPanelsEditor({ rows }: { rows: Row[] }) {
@@ -134,16 +136,20 @@ export default function IntroPanelsEditor({ rows }: { rows: Row[] }) {
       sub:  get(`intro_panels.panel${n}.sub`)  || PANEL_DEFAULTS[n - 1].sub,
     }))
   )
+  const [tagline, setTagline] = useState(get('about_teaser.tagline') || DEFAULT_TAGLINE)
 
   const update = (i: number, field: 'body' | 'em' | 'sub', val: string) =>
     setPanels(prev => prev.map((p, j) => j === i ? { ...p, [field]: val } : p))
 
   const handleSave = () => {
-    const entries = panels.flatMap((p, i) => [
-      { key: `intro_panels.panel${i + 1}.body`, value: p.body, groupName: 'intro_panels', description: `Panel ${i + 1} statement text` },
-      { key: `intro_panels.panel${i + 1}.em`,   value: p.em,   groupName: 'intro_panels', description: `Panel ${i + 1} emphasized word` },
-      { key: `intro_panels.panel${i + 1}.sub`,  value: p.sub,  groupName: 'intro_panels', description: `Panel ${i + 1} subtitle label` },
-    ])
+    const entries = [
+      ...panels.flatMap((p, i) => [
+        { key: `intro_panels.panel${i + 1}.body`, value: p.body, groupName: 'intro_panels', description: `Panel ${i + 1} statement text` },
+        { key: `intro_panels.panel${i + 1}.em`,   value: p.em,   groupName: 'intro_panels', description: `Panel ${i + 1} emphasized word` },
+        { key: `intro_panels.panel${i + 1}.sub`,  value: p.sub,  groupName: 'intro_panels', description: `Panel ${i + 1} subtitle label` },
+      ]),
+      { key: 'about_teaser.tagline', value: tagline, groupName: 'about_teaser', description: 'About teaser tagline on home page' },
+    ]
     startTransition(async () => {
       const res = await upsertContentKeys(entries)
       if (res.error) { setErr(res.error) }
@@ -209,9 +215,29 @@ export default function IntroPanelsEditor({ rows }: { rows: Row[] }) {
         </div>
       ))}
 
+      {/* About Teaser tagline */}
+      <div className="ipe__panel-card">
+        <div className="ipe__panel-header">
+          <span className="ipe__panel-num">—</span>
+          <span className="ipe__panel-title">About Teaser Tagline</span>
+        </div>
+        <div className="ipe__panel-body">
+          <div className="ipe__field">
+            <label className="ipe__label">Tagline</label>
+            <span className="ipe__hint">Shown in the About Teaser section on the home page. Use \n to split into multiple lines.</span>
+            <textarea
+              className="ipe__textarea"
+              rows={3}
+              value={tagline}
+              onChange={e => setTagline(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="ipe__actions">
         <button className="ipe__save-btn" onClick={handleSave} disabled={isPending}>
-          {isPending ? 'Saving…' : 'Save Panels'}
+          {isPending ? 'Saving…' : 'Save'}
         </button>
         {saved && <span className="ipe__saved">✓ Saved. Home page updated.</span>}
         {err   && <span className="ipe__err">{err}</span>}

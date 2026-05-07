@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { siteContent } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { inArray } from 'drizzle-orm'
 import IntroPanelsEditor from '@/components/admin/IntroPanelsEditor'
 
 export const dynamic = 'force-dynamic'
@@ -16,20 +16,21 @@ const INTRO_DEFAULTS = [
   { key: 'intro_panels.panel3.body', value: 'Every pixel is a decision. Every decision is intentional', groupName: 'intro_panels', description: 'Panel 3 statement text' },
   { key: 'intro_panels.panel3.em',   value: 'intentional', groupName: 'intro_panels', description: 'Panel 3 emphasized word' },
   { key: 'intro_panels.panel3.sub',  value: 'Craft + precision', groupName: 'intro_panels', description: 'Panel 3 subtitle label' },
+  { key: 'about_teaser.tagline', value: 'Systems that scale. Typography that respects the reader.\nInteractions that feel inevitable.', groupName: 'about_teaser', description: 'About teaser tagline on home page' },
 ]
 
 export default async function AdminIntroPage() {
-  // Seed defaults if not yet in DB
   await db
     .insert(siteContent)
     .values(INTRO_DEFAULTS.map(d => ({ ...d, contentType: 'text', updatedAt: new Date() })))
     .onConflictDoNothing()
     .catch(() => null)
 
+  const keys = INTRO_DEFAULTS.map(d => d.key)
   const rows = await db
     .select({ key: siteContent.key, value: siteContent.value })
     .from(siteContent)
-    .where(eq(siteContent.groupName, 'intro_panels'))
+    .where(inArray(siteContent.key, keys))
     .catch(() => [] as { key: string; value: string | null }[])
 
   return <IntroPanelsEditor rows={rows} />
