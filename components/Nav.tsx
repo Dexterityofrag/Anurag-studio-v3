@@ -110,7 +110,7 @@ const LINKS = [
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
 
-export default function Nav() {
+export default function Nav({ cvUrl }: { cvUrl?: string }) {
   const [time, setTime] = useState<string | null>(null)
 
   // Live clock
@@ -157,7 +157,7 @@ export default function Nav() {
       </header>
 
       {/* ── Mobile liquid-glass pill (≤768px) ───────────────── */}
-      <MobilePill />
+      <MobilePill cvUrl={cvUrl} />
     </>
   )
 }

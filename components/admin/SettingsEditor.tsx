@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { upsertContentKeys } from '@/app/actions/admin'
+import { CV_URL } from '@/lib/constants'
 
 /* ────────────────────────────────────────────────────────────── */
 /*  Styles                                                        */
@@ -222,6 +223,7 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
     const [accentColor, setAccentColor] = useState(settings['settings.accentColor'] ?? '#00FF94')
     const [element3d, setElement3d] = useState(settings['settings.element3d'] ?? 'icosahedron')
     const [fontDisplay, setFontDisplay] = useState(settings['settings.fontDisplay'] ?? 'Clash Display')
+    const [cvUrl, setCvUrl] = useState(settings['settings.cvUrl'] ?? CV_URL)
 
     const handleSave = () => {
         startTransition(async () => {
@@ -229,6 +231,7 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                 { key: 'settings.accentColor', value: accentColor, groupName: 'settings', description: 'Brand accent color (hex)' },
                 { key: 'settings.element3d', value: element3d, groupName: 'settings', description: '3D element shape' },
                 { key: 'settings.fontDisplay', value: fontDisplay, groupName: 'settings', description: 'Display font name' },
+                { key: 'settings.cvUrl', value: cvUrl, groupName: 'settings', description: 'CV / resume download URL' },
             ])
             setSaved(true)
             setTimeout(() => setSaved(false), 2500)
@@ -364,6 +367,39 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                         <div className="se__note">
                             Font changes require a Fontshare CDN update in layout.tsx to take full effect.
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── CV / Resume Link ───────────────────────────── */}
+            <div className="se__card">
+                <p className="se__card-title">Links</p>
+                <div className="se__field">
+                    <div className="se__label">
+                        CV / Resume URL
+                        <div className="se__desc">Used in footer, mobile nav, and contact page</div>
+                    </div>
+                    <div>
+                        <input
+                            className="se__input"
+                            value={cvUrl}
+                            onChange={(e) => setCvUrl(e.target.value)}
+                            placeholder="https://drive.google.com/..."
+                            type="url"
+                        />
+                        {cvUrl && (
+                            <div className="se__note" style={{ marginTop: 8 }}>
+                                Current:{' '}
+                                <a
+                                    href={cvUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: '#00FF94', wordBreak: 'break-all' }}
+                                >
+                                    {cvUrl}
+                                </a>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

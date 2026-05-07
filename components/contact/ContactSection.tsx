@@ -460,7 +460,7 @@ const css = /* css */ `
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
 
-export default function ContactSection() {
+export default function ContactSection({ cvUrl }: { cvUrl?: string }) {
   const [state, formAction, isPending] = useActionState<ContactState, FormData>(
     submitContact,
     null
@@ -557,7 +557,7 @@ export default function ContactSection() {
           <div className="contact__cv-wrap">
             <span className="contact__cv-label">The One-Pager</span>
             <a
-              href={CV_URL}
+              href={cvUrl || CV_URL}
               target="_blank"
               rel="noopener noreferrer"
               download

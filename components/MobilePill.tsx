@@ -356,7 +356,7 @@ const TOP_THRESHOLD = 40
 const HIDE_THRESHOLD = 320
 const SCROLL_DELTA = 4
 
-export default function MobilePill() {
+export default function MobilePill({ cvUrl }: { cvUrl?: string }) {
   const pathname = usePathname()
   const [state, setState] = useState<PillState>('expanded')
   const userExpandedRef = useRef(false)
@@ -463,7 +463,7 @@ export default function MobilePill() {
           ))}
 
           <a
-            href={CV_URL}
+            href={cvUrl || CV_URL}
             target="_blank"
             rel="noopener noreferrer"
             tabIndex={state === 'expanded' ? 0 : -1}

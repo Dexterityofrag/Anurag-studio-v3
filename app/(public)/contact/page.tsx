@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import ContactSection from '@/components/contact/ContactSection'
+import { fetchSiteContent } from '@/lib/data/siteContent'
+import { CV_URL } from '@/lib/constants'
 
 export const metadata: Metadata = {
     title: 'Contact',
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
     twitter: { card: 'summary_large_image' },
 }
 
-export default function ContactPage() {
-    return <ContactSection />
+export default async function ContactPage() {
+    const cvUrl = await fetchSiteContent('settings.cvUrl').catch(() => null)
+    return <ContactSection cvUrl={cvUrl ?? CV_URL} />
 }

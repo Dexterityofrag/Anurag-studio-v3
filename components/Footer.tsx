@@ -639,7 +639,7 @@ function flipCharsInElement(
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
 
-export default function Footer() {
+export default function Footer({ cvUrl }: { cvUrl?: string }) {
   const pathname = usePathname()
   const [copied, setCopied] = useState(false)
   const statementRef  = useRef<HTMLDivElement>(null)
@@ -778,7 +778,7 @@ export default function Footer() {
         <div className="ft-cv-row">
           <span className="ft-cv-label">The One-Pager</span>
           <a
-            href={CV_URL}
+            href={cvUrl || CV_URL}
             target="_blank"
             rel="noopener noreferrer"
             download
