@@ -1,23 +1,21 @@
 import { db } from '@/lib/db'
 import { siteContent } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, or } from 'drizzle-orm'
 import SettingsEditor from '@/components/admin/SettingsEditor'
 import CredentialsEditor from '@/components/admin/CredentialsEditor'
 import { upsertContentKeys, getAdminEmail } from '@/app/actions/admin'
 
-// ─── Default settings keys ────────────────────────────────────
-// Run as a top-level module-scope async (Next.js server component)
-// This is a one-time seed — upsertContentKeys is idempotent.
 const DEFAULTS = [
     { key: 'hero.eyebrow', value: 'NAVIGATING THE UNKNOWN, PIXEL BY PIXEL.', groupName: 'hero', contentType: 'text', description: 'Eyebrow text above name' },
     { key: 'hero.subtitle', value: 'Precision structure, bold creative vision.', groupName: 'hero', contentType: 'text', description: 'Tagline below name' },
     { key: 'hero.badge', value: 'Available for work', groupName: 'hero', contentType: 'text', description: 'Availability badge label' },
     { key: 'settings.accentColor', value: '#00FF94', groupName: 'settings', contentType: 'text', description: 'Brand accent color hex' },
+    { key: 'contact_cta.heading', value: "Let's Talk.", groupName: 'contact_cta', contentType: 'text', description: 'Contact CTA heading' },
+    { key: 'contact_cta.email', value: 'hello@anurag.studio', groupName: 'contact_cta', contentType: 'text', description: 'Contact CTA email' },
 ]
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 export default async function AdminSettingsPage() {
-    // Seed defaults without revalidatePath (safe inside server component fetch flow)
     try {
         await db
             .insert(siteContent)
@@ -29,7 +27,7 @@ export default async function AdminSettingsPage() {
         db
             .select()
             .from(siteContent)
-            .where(eq(siteContent.groupName, 'settings'))
+            .where(or(eq(siteContent.groupName, 'settings'), eq(siteContent.groupName, 'contact_cta')))
             .catch(() => []),
         getAdminEmail(),
     ])

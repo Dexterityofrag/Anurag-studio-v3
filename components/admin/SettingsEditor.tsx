@@ -225,6 +225,8 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
     const [fontDisplay, setFontDisplay] = useState(settings['settings.fontDisplay'] ?? 'Clash Display')
     const [cvUrl, setCvUrl] = useState(settings['settings.cvUrl'] ?? CV_URL)
     const [showreelUrl, setShowreelUrl] = useState(settings['settings.showreelUrl'] ?? '')
+    const [ctaHeading, setCtaHeading] = useState(settings['contact_cta.heading'] ?? '')
+    const [ctaEmail, setCtaEmail] = useState(settings['contact_cta.email'] ?? '')
 
     const handleSave = () => {
         startTransition(async () => {
@@ -234,6 +236,8 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                 { key: 'settings.fontDisplay', value: fontDisplay, groupName: 'settings', description: 'Display font name' },
                 { key: 'settings.cvUrl', value: cvUrl, groupName: 'settings', description: 'CV / resume download URL' },
                 { key: 'settings.showreelUrl', value: showreelUrl, groupName: 'settings', description: 'Showreel / sizzle reel video URL (MP4)' },
+                { key: 'contact_cta.heading', value: ctaHeading, groupName: 'contact_cta', description: 'Contact CTA heading text' },
+                { key: 'contact_cta.email', value: ctaEmail, groupName: 'contact_cta', description: 'Contact CTA email address' },
             ])
             setSaved(true)
             setTimeout(() => setSaved(false), 2500)
@@ -435,6 +439,38 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                             </div>
                         )}
                     </div>
+                </div>
+            </div>
+
+            {/* ── Contact CTA ────────────────────────────────── */}
+            <div className="se__card">
+                <p className="se__card-title">Contact CTA</p>
+
+                <div className="se__field">
+                    <div className="se__label">
+                        Heading
+                        <div className="se__desc">Footer CTA headline (default: "Let's Talk.")</div>
+                    </div>
+                    <input
+                        className="se__input"
+                        value={ctaHeading}
+                        onChange={(e) => setCtaHeading(e.target.value)}
+                        placeholder="Let's Talk."
+                    />
+                </div>
+
+                <div className="se__field">
+                    <div className="se__label">
+                        Email
+                        <div className="se__desc">Contact email shown in CTA footer</div>
+                    </div>
+                    <input
+                        className="se__input"
+                        value={ctaEmail}
+                        onChange={(e) => setCtaEmail(e.target.value)}
+                        placeholder="hello@anurag.studio"
+                        type="email"
+                    />
                 </div>
             </div>
 

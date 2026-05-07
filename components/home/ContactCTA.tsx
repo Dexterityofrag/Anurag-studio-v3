@@ -132,12 +132,19 @@ const FALLBACK_SOCIALS = [
   { platform: 'Behance', url: 'https://www.behance.net/anuragadhikari5' },
 ]
 
+const DEFAULT_EMAIL = 'hello@anurag.studio'
+
 export default function ContactCTA({
   socialLinks,
+  heading,
+  email,
 }: {
   socialLinks?: Array<{ platform: string; url: string }>
+  heading?: string
+  email?: string
 }) {
   const links = socialLinks && socialLinks.length > 0 ? socialLinks : FALLBACK_SOCIALS
+  const activeEmail = email || DEFAULT_EMAIL
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -166,18 +173,28 @@ export default function ContactCTA({
 
       <section ref={sectionRef} className="cta-footer" id="contact-cta">
         <h2 className="cta-footer__heading">
-          <span className="cta-footer__word">
-            <span className="cta-footer__word-inner">Let&apos;s</span>
-          </span>
-          {' '}
-          <span className="cta-footer__word">
-            <span className="cta-footer__word-inner"><em>Talk.</em></span>
-          </span>
+          {heading
+            ? heading.split(' ').map((word, i) => (
+                <span key={i} className="cta-footer__word">
+                  <span className="cta-footer__word-inner">{word}</span>
+                  {i < heading.split(' ').length - 1 && ' '}
+                </span>
+              ))
+            : <>
+                <span className="cta-footer__word">
+                  <span className="cta-footer__word-inner">Let&apos;s</span>
+                </span>
+                {' '}
+                <span className="cta-footer__word">
+                  <span className="cta-footer__word-inner"><em>Talk.</em></span>
+                </span>
+              </>
+          }
         </h2>
 
         <div className="cta-footer__links">
-          <a href="mailto:hello@anurag.studio" className="cta-footer__email">
-            hello@anurag.studio
+          <a href={`mailto:${activeEmail}`} className="cta-footer__email">
+            {activeEmail}
           </a>
           <div className="cta-footer__socials">
             {links.map((s) => (

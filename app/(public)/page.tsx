@@ -24,7 +24,7 @@ const HERO_DEFAULTS = {
 
 export default async function HomePage() {
   // Parallel data fetching
-  const [hero, featuredProjects, bioData, recentPosts, partnersData, showreelUrl, socialLinks, introPanelsContent, homeStatsContent, aboutTeaserContent] = await Promise.all([
+  const [hero, featuredProjects, bioData, recentPosts, partnersData, showreelUrl, socialLinks, introPanelsContent, homeStatsContent, aboutTeaserContent, contactCtaContent] = await Promise.all([
     fetchSiteContentGroup('hero').catch(() => ({} as Record<string, string>)),
     fetchProjects({ featured: true }).catch(() => []),
     fetchAboutSection('bio').catch(() => []),
@@ -35,6 +35,7 @@ export default async function HomePage() {
     fetchSiteContentGroup('intro_panels').catch(() => ({} as Record<string, string>)),
     fetchSiteContentGroup('home_stats').catch(() => ({} as Record<string, string>)),
     fetchSiteContentGroup('about_teaser').catch(() => ({} as Record<string, string>)),
+    fetchSiteContentGroup('contact_cta').catch(() => ({} as Record<string, string>)),
   ])
 
   const eyebrow = hero.eyebrow || HERO_DEFAULTS.eyebrow
@@ -59,6 +60,8 @@ export default async function HomePage() {
     .filter(s => s.display && s.label)
 
   const aboutTeaserTagline = aboutTeaserContent['tagline'] || undefined
+  const ctaHeading = contactCtaContent['heading'] || undefined
+  const ctaEmail   = contactCtaContent['email']   || undefined
 
   return (
     <main>
@@ -69,7 +72,7 @@ export default async function HomePage() {
       <div className="tone-a"><WorkPreview projects={featuredProjects.slice(0, 4)} videoUrl={showreelUrl ?? ''} /></div>
       <div className="tone-a"><AboutTeaser bio={bioData[0] ?? null} tagline={aboutTeaserTagline} /></div>
       <div className="tone-b"><BlogTeaser posts={recentPosts} /></div>
-      <div className="tone-a"><ContactCTA socialLinks={socialLinks} /></div>
+      <div className="tone-a"><ContactCTA socialLinks={socialLinks} heading={ctaHeading} email={ctaEmail} /></div>
     </main>
   )
 }
