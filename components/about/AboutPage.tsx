@@ -142,6 +142,11 @@ type CertificationData = {
   verifyUrl: string | null
 }
 
+export interface ExperienceEntry { range: string; role: string; company: string; desc: string }
+export interface FoundationEntry { num?: string; title: string; body: string }
+export interface PhilosophyEntry { indexLabel?: string; title: string; subtitle?: string; body: string }
+export interface AboutStatEntry  { display: string; label: string }
+
 /* ─────────────────────────────────────────────────────────────── */
 /*  Count-up hook                                                  */
 /* ─────────────────────────────────────────────────────────────── */
@@ -1039,7 +1044,53 @@ const css = /* css */ `
 /*  Component                                                      */
 /* ─────────────────────────────────────────────────────────────── */
 
-export default function AboutPage({ bio1, bio2, certifications = [] }: { bio1?: string | null; bio2?: string | null; certifications?: CertificationData[] }) {
+const DEFAULT_PHILOSOPHY: PhilosophyEntry[] = [
+  {
+    indexLabel: '03 / THE DRIVE',
+    title: 'Always',
+    subtitle: 'The Best',
+    body: "I set a simple standard for myself: be the best in the room, in the craft, in the work. Not through obsession with perfection, but through genuine care for every detail. Whether it's a micro-interaction or a full product ecosystem, I treat every pixel as a decision, and every decision as intentional. The drive to improve never stops.",
+  },
+  {
+    indexLabel: '04 / THE VISION',
+    title: 'Design',
+    subtitle: 'Beyond Screen',
+    body: "Jony Ive didn't just design products; he shaped how a generation thinks about objects, simplicity, and intention. That level of impact is what drives me. I want to build things that go beyond interfaces: experiences that shape how people feel, think, and move through the world. Design as culture. Design as legacy.",
+  },
+]
+
+function parseAboutStat(display: string) {
+  const last = display.slice(-1)
+  return (last === '+' || last === '%')
+    ? { num: parseFloat(display.slice(0, -1)), suffix: last }
+    : { num: parseFloat(display), suffix: '' }
+}
+
+export default function AboutPage({
+  bio1, bio2, certifications = [],
+  experience,
+  offscreenTitle,
+  offscreenBody,
+  aboutStats,
+  philosophy,
+  foundations,
+}: {
+  bio1?: string | null
+  bio2?: string | null
+  certifications?: CertificationData[]
+  experience?: ExperienceEntry[]
+  offscreenTitle?: string
+  offscreenBody?: string
+  aboutStats?: AboutStatEntry[]
+  philosophy?: PhilosophyEntry[]
+  foundations?: FoundationEntry[]
+}) {
+  const activeExperience  = experience?.length  ? experience  : EXPERIENCE
+  const activeFoundations = foundations?.length
+    ? foundations.map((f, i) => ({ num: f.num || String(i + 1).padStart(2, '0'), ...f }))
+    : CORE_FOUNDATIONS
+  const activePhilosophy  = philosophy?.length  ? philosophy  : DEFAULT_PHILOSOPHY
+  const activeAboutStats  = aboutStats?.length   ? aboutStats  : null
   /* Refs */
   const line1Ref   = useRef<HTMLSpanElement>(null)
   const line2Ref   = useRef<HTMLSpanElement>(null)
@@ -1212,55 +1263,57 @@ export default function AboutPage({ bio1, bio2, certifications = [] }: { bio1?: 
         <div className="abt-offscreen-left">
           <p className="abt-index">02 / THE OFF-SCREEN</p>
           <h2 className="abt-offscreen-title">
-            Gaming<br /><span>&amp; Music</span>
+            {offscreenTitle
+              ? offscreenTitle.split('\n').map((line, i) => (
+                  <span key={i}>{i > 0 && <br />}<span>{line}</span></span>
+                ))
+              : <>Gaming<br /><span>&amp; Music</span></>
+            }
           </h2>
         </div>
         <div className="abt-fade-up">
           <p className="abt-offscreen-body">
-            Off screen, I&apos;m deeply into{' '}
-            <span className="abt-offscreen-em">gaming and music</span>.
-            {' '}Games inspire the way I think about{' '}
-            <span className="abt-offscreen-em">immersion, flow, interaction, and world-building</span>,
-            {' '}while music shapes my sense of{' '}
-            <span className="abt-offscreen-em">rhythm, emotion, and atmosphere</span> in design.
-            Both constantly influence how I create experiences that feel alive, intentional, and memorable.
+            {offscreenBody
+              ? offscreenBody
+              : <>Off screen, I&apos;m deeply into{' '}
+                  <span className="abt-offscreen-em">gaming and music</span>.
+                  {' '}Games inspire the way I think about{' '}
+                  <span className="abt-offscreen-em">immersion, flow, interaction, and world-building</span>,
+                  {' '}while music shapes my sense of{' '}
+                  <span className="abt-offscreen-em">rhythm, emotion, and atmosphere</span> in design.
+                  Both constantly influence how I create experiences that feel alive, intentional, and memorable.
+                </>
+            }
           </p>
         </div>
       </section>
 
       {/* ══ STATS BAND ════════════════════════════════════════ */}
       <div className="abt-stats" aria-label="Statistics">
-        <StatCell num={1} suffix=".5+" label="Years Experience" />
-        <StatCell num={4}  suffix="+"  label="Projects Shipped" />
-        <StatCell num={3}  suffix=""   label="Certifications" />
+        {activeAboutStats
+          ? activeAboutStats.slice(0, 3).map((s, i) => {
+              const p = parseAboutStat(s.display)
+              return <StatCell key={i} num={p.num} suffix={p.suffix} label={s.label} />
+            })
+          : <>
+              <StatCell num={1} suffix=".5+" label="Years Experience" />
+              <StatCell num={4}  suffix="+"  label="Projects Shipped" />
+              <StatCell num={3}  suffix=""   label="Certifications" />
+            </>
+        }
       </div>
 
       {/* ══ PHILOSOPHY BLOCKS ════════════════════════════════ */}
       <div className="abt-philosophy">
-        <div className="abt-philosophy-block abt-fade-up">
-          <p className="abt-index">03 / THE DRIVE</p>
-          <h2 className="abt-phil-title">
-            Always<br /><span className="outline-word">The Best</span>
-          </h2>
-          <p className="abt-phil-body">
-            I set a simple standard for myself: be the best in the room, in the craft, in the work.
-            Not through obsession with perfection, but through genuine care for every detail. Whether
-            it&apos;s a micro-interaction or a full product ecosystem, I treat every pixel as a decision,
-            and every decision as intentional. The drive to improve never stops.
-          </p>
-        </div>
-        <div className="abt-philosophy-block abt-fade-up">
-          <p className="abt-index">04 / THE VISION</p>
-          <h2 className="abt-phil-title">
-            Design<br /><span className="outline-word">Beyond Screen</span>
-          </h2>
-          <p className="abt-phil-body">
-            Jony Ive didn&apos;t just design products; he shaped how a generation thinks about objects,
-            simplicity, and intention. That level of impact is what drives me. I want to build things that
-            go beyond interfaces: experiences that shape how people feel, think, and move through the world.
-            Design as culture. Design as legacy.
-          </p>
-        </div>
+        {activePhilosophy.slice(0, 2).map((p, i) => (
+          <div key={i} className="abt-philosophy-block abt-fade-up">
+            <p className="abt-index">{p.indexLabel || `0${i + 3} / THE DRIVE`}</p>
+            <h2 className="abt-phil-title">
+              {p.title}{p.subtitle && <><br /><span className="outline-word">{p.subtitle}</span></>}
+            </h2>
+            <p className="abt-phil-body">{p.body}</p>
+          </div>
+        ))}
       </div>
 
       {/* ══ EXPERIENCE TIMELINE ═══════════════════════════════ */}
@@ -1268,7 +1321,7 @@ export default function AboutPage({ bio1, bio2, certifications = [] }: { bio1?: 
         <h2 className="abt-exp-head abt-fade-up">
           Career <span className="outline-word">Timeline</span>
         </h2>
-        {EXPERIENCE.map((row, i) => (
+        {activeExperience.map((row, i) => (
           <div key={i} className="abt-exp-row">
             <span className="abt-exp-range">{row.range}</span>
             <div>
@@ -1289,7 +1342,7 @@ export default function AboutPage({ bio1, bio2, certifications = [] }: { bio1?: 
           <p className="abt-section-label">The Principles</p>
         </div>
         <div className="abt-foundations-grid">
-          {CORE_FOUNDATIONS.map((f, i) => (
+          {activeFoundations.map((f, i) => (
             <div key={i} className="abt-found-card abt-fade-up">
               <span className="abt-found-num">{f.num}</span>
               <p className="abt-found-name">{f.title}</p>

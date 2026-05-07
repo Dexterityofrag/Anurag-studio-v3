@@ -6,12 +6,21 @@ import { useEffect, useRef, useCallback } from 'react'
 /*  Data                                                          */
 /* ────────────────────────────────────────────────────────────── */
 
-const STATS = [
-  { value: 1.5, suffix: '+', label: 'Years Experience',   prefix: '' },
-  { value: 5,   suffix: '+', label: 'Projects Shipped',   prefix: '' },
-  { value: 100, suffix: '%', label: 'On-Time Delivery',   prefix: '' },
-  { value: 5,   suffix: '+', label: 'Happy Clients',      prefix: '' },
+export interface StatProp { display: string; label: string }
+
+const DEFAULT_STATS: StatProp[] = [
+  { display: '1.5+', label: 'Years Experience' },
+  { display: '5+',   label: 'Projects Shipped' },
+  { display: '100%', label: 'On-Time Delivery' },
+  { display: '5+',   label: 'Happy Clients'    },
 ]
+
+function parseStat(display: string) {
+  const last = display.slice(-1)
+  return (last === '+' || last === '%' || last === 'x')
+    ? { value: display.slice(0, -1), suffix: last }
+    : { value: display, suffix: '' }
+}
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -186,7 +195,11 @@ function flipReveal(
 /*  Component                                                     */
 /* ────────────────────────────────────────────────────────────── */
 
-export default function StatsStrip() {
+export default function StatsStrip({ stats }: { stats?: StatProp[] }) {
+  const resolvedRef = useRef(
+    (stats?.length ? stats : DEFAULT_STATS).map(s => ({ ...parseStat(s.display), label: s.label }))
+  )
+
   const sectionRef = useRef<HTMLElement>(null)
   const numRefs = useRef<(HTMLSpanElement | null)[]>([])
   const hasAnimated = useRef(false)
@@ -195,7 +208,7 @@ export default function StatsStrip() {
   const flipStat = useCallback((i: number) => {
     const el = numRefs.current[i]
     if (!el) return
-    flipReveal(el, STATS[i].value.toString(), 1400, 120)
+    flipReveal(el, resolvedRef.current[i].value, 1400, 120)
   }, [])
 
   /** Initial scroll-triggered animation (once) */
@@ -203,7 +216,7 @@ export default function StatsStrip() {
     if (hasAnimated.current) return
     hasAnimated.current = true
 
-    STATS.forEach((_, i) => {
+    resolvedRef.current.forEach((_, i) => {
       setTimeout(() => flipStat(i), i * 100 + 200)
     })
   }, [flipStat])
@@ -249,14 +262,14 @@ export default function StatsStrip() {
 
       <section ref={sectionRef} className="ss" aria-label="Key metrics">
         <div className="ss__grid">
-          {STATS.map((stat, i) => (
+          {resolvedRef.current.map((stat, i) => (
             <div key={stat.label} className="ss__item">
               <div className="ss__num">
                 <span
                   className="ss__num-val"
                   ref={el => { numRefs.current[i] = el }}
                 >
-                  {stat.value.toString().split('').map((_, j) => (
+                  {stat.value.split('').map((_, j) => (
                     <span key={j} className="ss__num-char">0</span>
                   ))}
                 </span>

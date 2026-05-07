@@ -109,8 +109,11 @@ const css = /* css */ `
 .at__cta span { position: relative; z-index: 1; }
 `
 
-export default function AboutTeaser({ bio }: { bio: AboutInfo | null }) {
+const DEFAULT_TAGLINE = 'Systems that scale. Typography that respects the reader.\nInteractions that feel inevitable.'
+
+export default function AboutTeaser({ bio, tagline }: { bio: AboutInfo | null; tagline?: string }) {
   void bio
+  const activeTagline = tagline || DEFAULT_TAGLINE
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -163,8 +166,9 @@ export default function AboutTeaser({ bio }: { bio: AboutInfo | null }) {
         </h2>
 
         <p className="at__tagline">
-          Systems that scale. Typography that respects the reader.<br />
-          Interactions that feel inevitable.
+          {activeTagline.split('\n').map((line, i, arr) => (
+            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+          ))}
         </p>
 
         <Link href="/about" className="at__cta">

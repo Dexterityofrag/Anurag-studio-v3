@@ -8,6 +8,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 /*  Panel data                                                      */
 /* ─────────────────────────────────────────────────────────────── */
 
+/* External prop shape (from DB / server) */
+export interface PanelProp {
+  body: string  // plain text statement
+  em: string    // word to highlight with accent colour
+  sub: string   // subtitle label
+}
+
+/* Internal shape used by the animation engine */
 interface PanelDef {
   num: string
   fullHtml: string
@@ -15,26 +23,32 @@ interface PanelDef {
   sub: string
 }
 
-const PANELS: PanelDef[] = [
+const DEFAULT_PANELS: PanelProp[] = [
   {
-    num: '01',
-    fullHtml: 'I design for those who crave experiences that are <em>unforgettable</em>',
-    emWord: 'unforgettable',
+    body: 'I design for those who crave experiences that are unforgettable',
+    em: 'unforgettable',
     sub: 'Experience Design',
   },
   {
-    num: '02',
-    fullHtml: "I don't just deliver design. I deliver <em>outcomes</em>",
-    emWord: 'outcomes',
+    body: "I don't just deliver design. I deliver outcomes",
+    em: 'outcomes',
     sub: 'Strategy-first thinking',
   },
   {
-    num: '03',
-    fullHtml: 'Every pixel is a decision. Every decision is <em>intentional</em>',
-    emWord: 'intentional',
+    body: 'Every pixel is a decision. Every decision is intentional',
+    em: 'intentional',
     sub: 'Craft + precision',
   },
 ]
+
+function toDef(p: PanelProp, i: number): PanelDef {
+  return {
+    num: String(i + 1).padStart(2, '0'),
+    fullHtml: p.body,
+    emWord: p.em,
+    sub: p.sub,
+  }
+}
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -244,11 +258,17 @@ function buildFlipHtml(
 /*  Component                                                      */
 /* ─────────────────────────────────────────────────────────────── */
 
-export default function IntroPanels() {
+export default function IntroPanels({ panels }: { panels?: PanelProp[] }) {
+  // Capture panel defs at mount — panels is static server data, won't change at runtime
+  const defsRef = useRef<PanelDef[]>(
+    (panels?.length ? panels : DEFAULT_PANELS).map(toDef)
+  )
+  const defs = defsRef.current
+
   const wrapRef       = useRef<HTMLDivElement>(null)
   const progressRef   = useRef<HTMLDivElement>(null)
   const panelRefs     = useRef<PanelRefs[]>(
-    PANELS.map(() => ({ panel: null, counter: null, sub: null, text: null }))
+    defs.map(() => ({ panel: null, counter: null, sub: null, text: null }))
   )
 
   useEffect(() => {
@@ -259,6 +279,8 @@ export default function IntroPanels() {
     if (!wrap) return
 
     const refs = panelRefs.current
+
+    const PANELS = defsRef.current
 
     /* Track previous char count per panel for scramble detection */
     const prevCounts = PANELS.map(() => 0)
@@ -328,7 +350,7 @@ export default function IntroPanels() {
       <div ref={wrapRef} className="ip-wrap" aria-label="Introduction">
         <div className="ip-pin">
 
-          {PANELS.map((p, i) => (
+          {defs.map((p, i) => (
             <div
               key={i}
               ref={(el) => { panelRefs.current[i].panel = el }}
@@ -339,7 +361,7 @@ export default function IntroPanels() {
                   ref={(el) => { panelRefs.current[i].counter = el }}
                   className="ip-counter"
                 >
-                  {p.num} / 0{PANELS.length}
+                  {p.num} / 0{defs.length}
                 </p>
 
                 <p
