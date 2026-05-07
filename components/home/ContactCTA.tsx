@@ -125,7 +125,19 @@ const css = /* css */ `
 }
 `
 
-export default function ContactCTA() {
+const FALLBACK_SOCIALS = [
+  { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/dexterityofrag' },
+  { platform: 'Instagram', url: 'https://instagram.com/lightlyricist' },
+  { platform: 'GitHub', url: 'https://github.com/Dexterityofrag' },
+  { platform: 'Behance', url: 'https://www.behance.net/anuragadhikari5' },
+]
+
+export default function ContactCTA({
+  socialLinks,
+}: {
+  socialLinks?: Array<{ platform: string; url: string }>
+}) {
+  const links = socialLinks && socialLinks.length > 0 ? socialLinks : FALLBACK_SOCIALS
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -168,10 +180,11 @@ export default function ContactCTA() {
             hello@anurag.studio
           </a>
           <div className="cta-footer__socials">
-            <a href="https://www.linkedin.com/in/dexterityofrag" target="_blank" rel="noopener noreferrer" className="cta-footer__social">LinkedIn</a>
-            <a href="https://instagram.com/lightlyricist" target="_blank" rel="noopener noreferrer" className="cta-footer__social">Instagram</a>
-            <a href="https://github.com/Dexterityofrag" target="_blank" rel="noopener noreferrer" className="cta-footer__social">GitHub</a>
-            <a href="https://www.behance.net/anuragadhikari5" target="_blank" rel="noopener noreferrer" className="cta-footer__social">Behance</a>
+            {links.map((s) => (
+              <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" className="cta-footer__social">
+                {s.platform}
+              </a>
+            ))}
           </div>
         </div>
       </section>

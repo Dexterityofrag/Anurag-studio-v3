@@ -1,2 +1,2 @@
 export const CV_URL =
-  'https://drive.google.com/uc?export=download&id=1NaXwf7JkmyRKSqifQ4MVSEHrX4_ZLZHq'
+  'https://drive.google.com/file/d/1diruLL4pu7F1lipLDFuXfWsF16_SO1Ii/view?usp=share_link'

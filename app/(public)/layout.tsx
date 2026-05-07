@@ -37,7 +37,7 @@ export default async function PublicLayout({
   const { accentColor, cvUrl } = await Promise.race([
     getSettings(),
     new Promise<{ accentColor: string; cvUrl: string }>((resolve) =>
-      setTimeout(() => resolve({ accentColor: '#00FF94', cvUrl: '' }), 400)
+      setTimeout(() => resolve({ accentColor: '#00FF94', cvUrl: '' }), 2000)
     ),
   ]);
 

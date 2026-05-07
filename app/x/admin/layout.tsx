@@ -37,10 +37,9 @@ export default async function AdminLayout({
 }) {
     const session = await auth()
 
-    /* ── Not authenticated: render children bare (login page) ── */
-    /* Middleware already redirects non-login admin routes to login */
+    /* ── Not authenticated: wrap in is-admin-page so cursor:none doesn't apply ── */
     if (!session) {
-        return <>{children}</>
+        return <div className="is-admin-page">{children}</div>
     }
 
     return (

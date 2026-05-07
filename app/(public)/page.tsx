@@ -6,6 +6,7 @@ import { fetchProjects } from '@/lib/data/projects'
 import { fetchAboutSection } from '@/lib/data/about'
 import { fetchPosts } from '@/lib/data/posts'
 import { getPartners } from '@/app/actions/partners'
+import { fetchSocialLinks } from '@/lib/data/social'
 import HeroSection from '@/components/home/HeroSection'
 import IntroPanels from '@/components/home/IntroPanels'
 import WorkPreview from '@/components/home/WorkPreview'
@@ -23,13 +24,14 @@ const HERO_DEFAULTS = {
 
 export default async function HomePage() {
   // Parallel data fetching
-  const [hero, featuredProjects, bioData, recentPosts, partnersData, showreelUrl] = await Promise.all([
+  const [hero, featuredProjects, bioData, recentPosts, partnersData, showreelUrl, socialLinks] = await Promise.all([
     fetchSiteContentGroup('hero').catch(() => ({} as Record<string, string>)),
     fetchProjects({ featured: true }).catch(() => []),
     fetchAboutSection('bio').catch(() => []),
     fetchPosts({ limit: 3 }).catch(() => []),
     getPartners().catch(() => [] as Awaited<ReturnType<typeof getPartners>>),
     fetchSiteContent('settings.showreelUrl').catch(() => null),
+    fetchSocialLinks().catch(() => []),
   ])
 
   const eyebrow = hero.eyebrow || HERO_DEFAULTS.eyebrow
@@ -45,7 +47,7 @@ export default async function HomePage() {
       <div className="tone-a"><WorkPreview projects={featuredProjects.slice(0, 4)} videoUrl={showreelUrl ?? ''} /></div>
       <div className="tone-a"><AboutTeaser bio={bioData[0] ?? null} /></div>
       <div className="tone-b"><BlogTeaser posts={recentPosts} /></div>
-      <div className="tone-a"><ContactCTA /></div>
+      <div className="tone-a"><ContactCTA socialLinks={socialLinks} /></div>
     </main>
   )
 }

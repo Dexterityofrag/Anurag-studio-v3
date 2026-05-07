@@ -25,8 +25,7 @@ export async function saveContentGroup(
                     .where(eq(siteContent.id, e.id))
             )
         )
-        revalidatePath('/')
-        revalidatePath('/about')
+        revalidatePath('/', 'layout')
         return {}
     } catch (err) {
         console.error('saveContentGroup error:', err)
@@ -64,7 +63,7 @@ export async function upsertContentKeys(
                     })
             )
         )
-        revalidatePath('/')
+        revalidatePath('/', 'layout')
         revalidatePath('/x/admin/content')
         revalidatePath('/x/admin/settings')
         return {}
@@ -125,6 +124,7 @@ export async function saveSocialLink(
             await db.insert(socialLinks).values(data)
         }
         revalidatePath('/x/admin/social')
+        revalidatePath('/', 'layout')
         return { success: true }
     } catch (err) {
         console.error('saveSocialLink error:', err)
@@ -137,6 +137,7 @@ export async function deleteSocialLink(id: string): Promise<{ error?: string }> 
         await requireAdmin()
         await db.delete(socialLinks).where(eq(socialLinks.id, id))
         revalidatePath('/x/admin/social')
+        revalidatePath('/', 'layout')
         return {}
     } catch (err) {
         console.error('deleteSocialLink error:', err)
