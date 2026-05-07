@@ -224,6 +224,7 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
     const [element3d, setElement3d] = useState(settings['settings.element3d'] ?? 'icosahedron')
     const [fontDisplay, setFontDisplay] = useState(settings['settings.fontDisplay'] ?? 'Clash Display')
     const [cvUrl, setCvUrl] = useState(settings['settings.cvUrl'] ?? CV_URL)
+    const [showreelUrl, setShowreelUrl] = useState(settings['settings.showreelUrl'] ?? '')
 
     const handleSave = () => {
         startTransition(async () => {
@@ -232,6 +233,7 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                 { key: 'settings.element3d', value: element3d, groupName: 'settings', description: '3D element shape' },
                 { key: 'settings.fontDisplay', value: fontDisplay, groupName: 'settings', description: 'Display font name' },
                 { key: 'settings.cvUrl', value: cvUrl, groupName: 'settings', description: 'CV / resume download URL' },
+                { key: 'settings.showreelUrl', value: showreelUrl, groupName: 'settings', description: 'Showreel / sizzle reel video URL (MP4)' },
             ])
             setSaved(true)
             setTimeout(() => setSaved(false), 2500)
@@ -371,9 +373,11 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                 </div>
             </div>
 
-            {/* ── CV / Resume Link ───────────────────────────── */}
+            {/* ── Links (CV + Showreel) ──────────────────────── */}
             <div className="se__card">
-                <p className="se__card-title">Links</p>
+                <p className="se__card-title">Links &amp; Media</p>
+
+                {/* CV URL */}
                 <div className="se__field">
                     <div className="se__label">
                         CV / Resume URL
@@ -397,6 +401,36 @@ export default function SettingsEditor({ settings }: { settings: Record<string, 
                                     style={{ color: '#00FF94', wordBreak: 'break-all' }}
                                 >
                                     {cvUrl}
+                                </a>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Showreel URL */}
+                <div className="se__field">
+                    <div className="se__label">
+                        Showreel Video URL
+                        <div className="se__desc">MP4 URL — shown on landing page &amp; work page. Must be a direct video link, not YouTube.</div>
+                    </div>
+                    <div>
+                        <input
+                            className="se__input"
+                            value={showreelUrl}
+                            onChange={(e) => setShowreelUrl(e.target.value)}
+                            placeholder="https://cdn.example.com/showreel.mp4"
+                            type="url"
+                        />
+                        {showreelUrl && (
+                            <div className="se__note" style={{ marginTop: 8 }}>
+                                Current:{' '}
+                                <a
+                                    href={showreelUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: '#00FF94', wordBreak: 'break-all' }}
+                                >
+                                    {showreelUrl}
                                 </a>
                             </div>
                         )}

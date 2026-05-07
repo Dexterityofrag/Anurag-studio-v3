@@ -1,7 +1,7 @@
 // Cache home page output for 60s — DB data rarely changes in real-time
 export const revalidate = 60
 
-import { fetchSiteContentGroup } from '@/lib/data/siteContent'
+import { fetchSiteContentGroup, fetchSiteContent } from '@/lib/data/siteContent'
 import { fetchProjects } from '@/lib/data/projects'
 import { fetchAboutSection } from '@/lib/data/about'
 import { fetchPosts } from '@/lib/data/posts'
@@ -23,12 +23,13 @@ const HERO_DEFAULTS = {
 
 export default async function HomePage() {
   // Parallel data fetching
-  const [hero, featuredProjects, bioData, recentPosts, partnersData] = await Promise.all([
+  const [hero, featuredProjects, bioData, recentPosts, partnersData, showreelUrl] = await Promise.all([
     fetchSiteContentGroup('hero').catch(() => ({} as Record<string, string>)),
     fetchProjects({ featured: true }).catch(() => []),
     fetchAboutSection('bio').catch(() => []),
     fetchPosts({ limit: 3 }).catch(() => []),
     getPartners().catch(() => [] as Awaited<ReturnType<typeof getPartners>>),
+    fetchSiteContent('settings.showreelUrl').catch(() => null),
   ])
 
   const eyebrow = hero.eyebrow || HERO_DEFAULTS.eyebrow
@@ -41,7 +42,7 @@ export default async function HomePage() {
       <div className="tone-b"><IntroPanels /></div>
       <div className="tone-a"><WorkedWith partners={partnersData} /></div>
       <div className="tone-b"><StatsStrip /></div>
-      <div className="tone-a"><WorkPreview projects={featuredProjects.slice(0, 4)} /></div>
+      <div className="tone-a"><WorkPreview projects={featuredProjects.slice(0, 4)} videoUrl={showreelUrl ?? ''} /></div>
       <div className="tone-a"><AboutTeaser bio={bioData[0] ?? null} /></div>
       <div className="tone-b"><BlogTeaser posts={recentPosts} /></div>
       <div className="tone-a"><ContactCTA /></div>
