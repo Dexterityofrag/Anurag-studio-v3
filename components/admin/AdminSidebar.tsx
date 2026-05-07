@@ -17,6 +17,9 @@ import {
     Home,
     Users,
     Award,
+    Layers,
+    BarChart3,
+    User,
 } from 'lucide-react'
 
 /* ────────────────────────────────────────────────────────────── */
@@ -26,14 +29,17 @@ import {
 const NAV = [
     { href: '/x/admin', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/x/admin/hero', icon: Home, label: 'Hero Section' },
+    { href: '/x/admin/intro', icon: Layers, label: 'Intro Panels' },
+    { href: '/x/admin/stats', icon: BarChart3, label: 'Stats' },
+    { href: '/x/admin/about', icon: User, label: 'About' },
     { href: '/x/admin/projects', icon: FolderKanban, label: 'Projects' },
     { href: '/x/admin/posts', icon: FileText, label: 'Blog Posts' },
-    { href: '/x/admin/content', icon: Settings, label: 'Site Content' },
-    { href: '/x/admin/settings', icon: Settings, label: 'Settings' },
-    { href: '/x/admin/media', icon: ImageIcon, label: 'Media' },
     { href: '/x/admin/partners', icon: Users, label: 'Partners' },
     { href: '/x/admin/certifications', icon: Award, label: 'Certifications' },
     { href: '/x/admin/social', icon: LinkIcon, label: 'Social Links' },
+    { href: '/x/admin/media', icon: ImageIcon, label: 'Media' },
+    { href: '/x/admin/content', icon: Settings, label: 'Site Content' },
+    { href: '/x/admin/settings', icon: Settings, label: 'Settings' },
 ]
 
 /* ────────────────────────────────────────────────────────────── */

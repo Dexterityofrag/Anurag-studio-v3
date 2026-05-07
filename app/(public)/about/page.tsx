@@ -35,11 +35,12 @@ export const metadata: Metadata = {
 }
 
 export default async function AboutPageRoute() {
-    const [bioRows, certsRaw, experienceRows, aboutPageContent] = await Promise.all([
+    const [bioRows, certsRaw, experienceRows, aboutPageContent, aboutStatsContent] = await Promise.all([
         fetchAboutSection('bio').catch(() => []),
         getCertifications().catch(() => []),
         fetchAboutSection('experience').catch(() => []),
         fetchSiteContentGroup('about_page').catch(() => ({} as Record<string, string>)),
+        fetchSiteContentGroup('about_stats').catch(() => ({} as Record<string, string>)),
     ])
 
     const bio1 = bioRows[0]?.content ?? null
@@ -75,9 +76,10 @@ export default async function AboutPageRoute() {
         body:  aboutPageContent[`foundation${n}.body`]  || '',
     })).filter(f => f.title && f.body)
 
+    // about_stats group from Stats admin page (takes priority over about_page group)
     const aboutStats: AboutStatEntry[] = [1, 2, 3].map(n => ({
-        display: aboutPageContent[`stats.item${n}.display`] || '',
-        label:   aboutPageContent[`stats.item${n}.label`]   || '',
+        display: aboutStatsContent[`item${n}.display`] || aboutPageContent[`stats.item${n}.display`] || '',
+        label:   aboutStatsContent[`item${n}.label`]   || aboutPageContent[`stats.item${n}.label`]   || '',
     })).filter(s => s.display && s.label)
 
     const offscreenTitle = aboutPageContent['offscreen.title'] || undefined
