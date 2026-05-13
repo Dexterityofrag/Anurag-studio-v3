@@ -47,7 +47,8 @@ const css = /* css */ `
 }
 
 .prose ul, .prose ol {
-  padding-left: 1.5rem;
+  padding-left: 0;
+  list-style-position: inside;
   margin-bottom: 1.4em;
 }
 .prose li {
