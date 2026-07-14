@@ -59,6 +59,9 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com data:",
               `img-src 'self' data: blob: https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com https://miro.medium.com https://cdn-images-1.medium.com`,
               `connect-src 'self' https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com`,
+              // the showreel is served from Spaces; without media-src it falls back to
+              // default-src 'self' and the <video> is blocked
+              `media-src 'self' blob: https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com`,
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

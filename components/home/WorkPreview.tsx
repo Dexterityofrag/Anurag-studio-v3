@@ -498,11 +498,13 @@ export default function WorkPreview({ projects, videoUrl }: WorkPreviewProps) {
                 muted
                 loop
                 playsInline
-                preload="none"
+                // src goes on the element, not a <source> child: React appends children
+                // after the element exists, so resource selection runs with no source,
+                // lands in NETWORK_NO_SOURCE, and never retries — the video stays black.
+                src={videoUrl}
+                preload="metadata"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-              >
-                <source src={videoUrl} type="video/mp4" />
-              </video>
+              />
             ) : (
               <div className="fw-video-placeholder">
                 <div className="fw-video-placeholder__icon">
