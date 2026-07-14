@@ -68,7 +68,12 @@ const css = /* css */ `
 .fw-video-frame {
   position: relative;
   width: 100%;
-  height: clamp(300px, 56vh, 680px);
+  /* the reel is 16:9 — the frame has to be too, or object-fit: cover crops it.
+     height is capped by capping the WIDTH, so the ratio is never violated. */
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-width: calc(78vh * 16 / 9);
+  margin-inline: auto;
   background: #070707;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.07);
@@ -341,8 +346,8 @@ const css = /* css */ `
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Tighten video frame height on mobile */
-  .fw-video-frame { height: clamp(200px, 52vw, 280px); border-radius: 10px; }
+  /* height comes from the 16:9 aspect ratio — overriding it here would crop again */
+  .fw-video-frame { border-radius: 10px; }
 
   /* Switch strip to 2-column grid on mobile */
   .fw-strip__scroll {
