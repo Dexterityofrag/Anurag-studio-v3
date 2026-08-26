@@ -421,7 +421,10 @@ function StripCard({ project, index }: { project: Project; index: number }) {
     return () => st.kill()
   }, [index])
 
-  const coverSrc = project.coverUrl ?? project.thumbnailUrl
+  // This card is a 0.84:1 portrait box (clamp(240px,28vw,320px) wide by
+  // clamp(280px,34vh,380px) tall). The wide 16:9 master would lose about half
+  // its width to object-fit: cover here, so prefer the portrait master.
+  const coverSrc = project.thumbnailUrl ?? project.coverUrl
   const company  = [project.client, project.year].filter(Boolean).join(' · ')
 
   return (

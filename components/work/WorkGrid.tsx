@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Project } from '@/lib/types'
@@ -595,23 +594,31 @@ function LargeCard({ project }: { project: Project }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   useReveal(wrapRef)
 
-  const coverSrc = project.coverUrl ?? project.thumbnailUrl
+  /* Art direction, not just responsive sizing. This card is ~2.91:1 on desktop
+     but ~0.96:1 on mobile, so one source cannot serve both without cutting
+     through the subject. next/image cannot swap src by media query, and two
+     <Image>s toggled with CSS both download, so <picture> is the only correct
+     tool. The masters are pre-generated WebP at known sizes, so little is lost
+     by stepping outside the optimiser here. */
+  const wideSrc = project.coverUrl ?? project.thumbnailUrl
+  const tallSrc = project.thumbnailUrl ?? project.coverUrl
+  const coverSrc = wideSrc
   const company  = [project.client, project.year].filter(Boolean).join(' · ')
 
   return (
     <div ref={wrapRef} className="wg-reveal">
       <Link href={`/work/${project.slug}`} className="wg-large" data-cursor="View" aria-label={`View case study: ${project.title}`}>
         {coverSrc ? (
-          <Image
-            src={coverSrc}
-            alt={project.title}
-            className="wg-large__img"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1440px) 90vw, 1360px"
-            style={{ objectFit: 'cover' }}
-            priority
-            draggable={false}
-          />
+          <picture>
+            <source media="(max-width: 768px)" srcSet={tallSrc ?? undefined} />
+            <img
+              src={coverSrc}
+              alt={project.title}
+              className="wg-large__img"
+              decoding="async"
+              draggable={false}
+            />
+          </picture>
         ) : (
           <div className="wg-large__placeholder">{project.title}</div>
         )}
@@ -647,22 +654,27 @@ function LargeCard({ project }: { project: Project }) {
 /* ────────────────────────────────────────────────────────────── */
 
 function SmallCard({ project }: { project: Project }) {
-  const coverSrc = project.coverUrl ?? project.thumbnailUrl
+  /* Same art-direction problem as the large card: ~2.49:1 desktop, ~1.08:1 mobile. */
+  const wideSrc = project.coverUrl ?? project.thumbnailUrl
+  const tallSrc = project.thumbnailUrl ?? project.coverUrl
+  const coverSrc = wideSrc
   const company  = [project.client, project.year].filter(Boolean).join(' · ')
 
   return (
     <Link href={`/work/${project.slug}`} className="wg-small" data-cursor="View" aria-label={`View case study: ${project.title}`}>
       <div className="wg-small__img-wrap">
         {coverSrc ? (
-          <Image
-            src={coverSrc}
-            alt={project.title}
-            className="wg-small__img"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1440px) 50vw, 680px"
-            style={{ objectFit: 'cover' }}
-            draggable={false}
-          />
+          <picture>
+            <source media="(max-width: 768px)" srcSet={tallSrc ?? undefined} />
+            <img
+              src={coverSrc}
+              alt={project.title}
+              className="wg-small__img"
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+            />
+          </picture>
         ) : (
           <div className="wg-small__placeholder">{project.title}</div>
         )}
