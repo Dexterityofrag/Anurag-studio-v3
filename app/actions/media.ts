@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { media } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { deleteObject } from '@/lib/storage/spaces'
+import { deleteObject } from '@/lib/storage/r2'
 import { requireAdmin } from '@/lib/auth-guard'
 
 export async function saveMediaRecord(data: {

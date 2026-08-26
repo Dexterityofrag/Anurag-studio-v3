@@ -4,6 +4,13 @@ import { NextResponse } from 'next/server'
 /* ────────────────────────────────────────────────────────────── */
 /*  Simple in-memory sliding-window rate limiter                  */
 /*  Max 5 failed attempts per IP within 15 minutes                */
+/*                                                                */
+/*  WARNING: on Vercel this middleware runs on the Edge runtime,   */
+/*  where every isolate holds its own copy of `attempts`. The cap  */
+/*  is therefore per-isolate, not global, and provides far weaker  */
+/*  protection than it did on a single DigitalOcean instance.      */
+/*  See lib/rate-limit.ts for the same caveat and the recommended  */
+/*  Cloudflare WAF mitigation.                                     */
 /* ────────────────────────────────────────────────────────────── */
 
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 minutes

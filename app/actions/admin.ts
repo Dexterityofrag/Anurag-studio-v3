@@ -75,6 +75,11 @@ export async function upsertContentKeys(
 
 /* ─── Seed defaults (safe to call multiple times) ─────────── */
 export async function seedDefaultContent(): Promise<{ error?: string }> {
+    try {
+        await requireAdmin()
+    } catch {
+        return { error: 'Unauthorized' }
+    }
     const defaults = [
         { key: 'hero.eyebrow', value: 'NAVIGATING THE UNKNOWN, PIXEL BY PIXEL.', contentType: 'text', groupName: 'hero', description: 'Eyebrow text above main name (mono, wide-tracked)' },
         { key: 'hero.subtitle', value: 'Precision structure, bold creative vision.', contentType: 'text', groupName: 'hero', description: 'Tagline below main name' },
@@ -282,6 +287,9 @@ export async function updateAdminCredentials(data: {
 
 /** Fetch the current admin email (for pre-filling the form) */
 export async function getAdminEmail(): Promise<string> {
+    // Guard OUTSIDE the try: an unauthorized caller must reject, never fall
+    // through to the catch and leak the admin login email.
+    await requireAdmin()
     try {
         const [dbCred] = await db
             .select({ email: adminCredentials.email })

@@ -1,0 +1,77 @@
+/* ─────────────────────────────────────────────────────────────
+   Shared foundation for both CV documents.
+
+   These pages are print artefacts, not site pages, so this file
+   undoes the dark theme, the custom cursor, and the accent
+   scrollbar that globals.css applies everywhere else.
+
+   Per-document @page rules live in ats/ats.css and
+   designed/designed.css, because @page cannot be scoped and each
+   document is loaded as its own URL.
+   ───────────────────────────────────────────────────────────── */
+
+html:has(.cv-page),
+html:has(.cv-page) body {
+    background: #ffffff;
+    color: #111111;
+}
+
+/* globals.css hides the cursor on body and every link. Not here. */
+html:has(.cv-page) body,
+html:has(.cv-page) a,
+html:has(.cv-page) button {
+    cursor: auto;
+}
+
+html:has(.cv-page) a {
+    cursor: pointer;
+}
+
+html:has(.cv-page) ::selection {
+    background: #111111;
+    color: #ffffff;
+}
+
+html:has(.cv-page) ::-webkit-scrollbar-track {
+    background: #e9e9e7;
+}
+
+html:has(.cv-page) ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.cv-page {
+    background: #ffffff;
+    color: #111111;
+    min-height: 100vh;
+}
+
+/* Links stay visually plain in the document. The href is what
+   matters: page.pdf() turns each one into a real PDF link
+   annotation, which is what makes them tappable. */
+.cv-page a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.cv-page a:hover {
+    text-decoration: underline;
+}
+
+/* Never split a role or a project across a page boundary. */
+.cv-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+@media print {
+
+    html:has(.cv-page),
+    html:has(.cv-page) body {
+        background: #ffffff !important;
+    }
+
+    .cv-screen-only {
+        display: none !important;
+    }
+}

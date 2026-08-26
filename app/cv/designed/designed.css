@@ -1,0 +1,251 @@
+/* ─────────────────────────────────────────────────────────────
+   Designed document. One A4 page.
+
+   This one is a work sample as much as a CV, so it is monochrome
+   apart from the contact links, which take a single restrained
+   blue to signal that they are tappable. Hairline rules only.
+   No icons, no rating bars, no progress meters.
+   ───────────────────────────────────────────────────────────── */
+
+@page {
+    size: A4;
+    /* Zero here, real margins come from .designed padding, so the
+       sheet can be measured against exactly 210mm x 297mm. */
+    margin: 0;
+}
+
+.designed {
+    --ink: #16181a;
+    --ink-2: #4b5056;
+    --ink-3: #8d9298;
+    --rule: #e3e3df;
+    --link: #1f4788;
+
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12mm 16mm;
+    margin: 0 auto;
+    background: #ffffff;
+    color: var(--ink);
+    font-family: var(--font-body), "DM Sans", sans-serif;
+    font-size: 8.4pt;
+    line-height: 1.44;
+    /* Hairlines stay crisp at this scale. */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+
+.d-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10mm;
+    padding-bottom: 3.2mm;
+    border-bottom: 0.5px solid var(--rule);
+}
+
+/* Without this the flex child refuses to shrink and the contact line
+   runs past the right edge of the sheet. */
+.d-header-text {
+    min-width: 0;
+}
+
+.d-name {
+    font-family: var(--font-display), "Space Grotesk", sans-serif;
+    font-size: 25pt;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    margin: 0;
+}
+
+.d-title {
+    font-size: 9.5pt;
+    font-weight: 400;
+    color: var(--ink-2);
+    margin: 1.5mm 0 0;
+    letter-spacing: 0.005em;
+}
+
+.d-contact {
+    margin: 3mm 0 0;
+    font-family: var(--font-mono), "JetBrains Mono", monospace;
+    font-size: 6.8pt;
+    color: var(--ink-3);
+    letter-spacing: 0.01em;
+    line-height: 1.65;
+}
+
+/* Each item stays whole, the line wraps at the separators. Stops a
+   phone number or a URL from splitting across two rows. */
+.d-contact > span:not(.d-sep),
+.d-contact > a {
+    white-space: nowrap;
+}
+
+.d-contact a {
+    color: var(--link);
+}
+
+/* The separator now carries its own spaces, so no extra padding. */
+.d-contact .d-sep {
+    color: #c9c9c4;
+}
+
+/* Square frame. Collapses cleanly when no headshot is present. */
+.d-photo {
+    flex: 0 0 auto;
+    width: 26mm;
+    height: 26mm;
+    border-radius: 1mm;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.02);
+}
+
+/* ── Section grid ───────────────────────────────────────────── */
+
+.d-section {
+    display: grid;
+    grid-template-columns: 24mm 1fr;
+    gap: 0 7mm;
+    padding: 3mm 0 0;
+    break-inside: avoid;
+}
+
+.d-section + .d-section {
+    border-top: 0.5px solid var(--rule);
+    margin-top: 3mm;
+}
+
+.d-label {
+    font-family: var(--font-mono), "JetBrains Mono", monospace;
+    font-size: 6.6pt;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    margin: 0.6mm 0 0;
+}
+
+.d-body {
+    min-width: 0;
+}
+
+.d-summary {
+    margin: 0;
+    font-size: 9pt;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+/* ── Entries ────────────────────────────────────────────────── */
+
+.d-entry + .d-entry {
+    margin-top: 2.4mm;
+}
+
+.d-entry-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 5mm;
+    margin: 0 0 1.2mm;
+}
+
+.d-role {
+    font-size: 9.2pt;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin: 0;
+}
+
+.d-org {
+    font-weight: 400;
+    color: var(--ink-2);
+}
+
+.d-dates {
+    flex: 0 0 auto;
+    font-family: var(--font-mono), "JetBrains Mono", monospace;
+    font-size: 6.8pt;
+    color: var(--ink-3);
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+}
+
+.d-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-2);
+}
+
+.d-list li {
+    position: relative;
+    padding-left: 3.4mm;
+    margin-bottom: 0.6mm;
+}
+
+/* A small square rather than a bullet glyph, so the marker sits on
+   the same optical grid as the hairline rules. */
+.d-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.42mm;
+    width: 1.05mm;
+    height: 1.05mm;
+    background: var(--ink-3);
+}
+
+/* ── Compact tail sections ──────────────────────────────────── */
+
+.d-inline {
+    margin: 0;
+    color: var(--ink-2);
+}
+
+.d-inline + .d-inline {
+    margin-top: 1.6mm;
+}
+
+.d-key {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.d-skills {
+    margin: 0;
+    color: var(--ink-2);
+}
+
+.d-skills .d-sep {
+    padding: 0 1.4mm;
+    color: var(--rule);
+}
+
+/* ── Screen preview only ────────────────────────────────────── */
+
+@media screen {
+    .d-sheet {
+        background: #eeeeec;
+        padding: 40px 20px 80px;
+        min-height: 100vh;
+    }
+
+    .designed {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 10px 50px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media print {
+    .d-sheet {
+        background: transparent;
+        padding: 0;
+    }
+
+    .designed {
+        box-shadow: none;
+    }
+}

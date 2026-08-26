@@ -8,12 +8,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${PORT:-8080}",
+    "start": "next start",
     "lint": "eslint",
+    "admin:password": "node scripts/set-admin-password.mjs",
+    "env:vercel": "node scripts/env-vercel.mjs",
+    "cv:render": "node --experimental-strip-types scripts/render-cv.ts",
     "reel:studio": "remotion studio remotion/index.ts",
     "reel:render": "remotion render remotion/index.ts Showreel out/showreel.mp4 --codec h264 --crf 18 --muted",
     "reel:sound": "node --experimental-strip-types scripts/build-sound.ts",
-    "reel:render:linkedin": "npm run reel:sound && remotion render remotion/index.ts ShowreelSound out/showreel-linkedin.mp4 --codec h264 --crf 18"
+    "reel:render:linkedin": "npm run reel:sound && remotion render remotion/index.ts ShowreelSound out/showreel-linkedin.mp4 --codec h264 --crf 18",
+    "seed:projects": "tsx --env-file=.env.local scripts/seed-projects.ts",
+    "seed:descriptions": "tsx --env-file=.env.local scripts/seed-descriptions.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1007.0",
@@ -65,6 +70,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

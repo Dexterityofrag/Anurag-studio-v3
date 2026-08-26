@@ -1,0 +1,153 @@
+/* ─────────────────────────────────────────────────────────────
+   ATS document.
+
+   Every rule here exists to survive a resume parser:
+   single column, no tables, no images, no headers or footers,
+   a font stack parsers have always handled, plain bullets, and
+   consistent date formatting. Nothing decorative.
+   ───────────────────────────────────────────────────────────── */
+
+@page {
+    size: A4;
+    /* Real page margins rather than padding, so page two of a two
+       page document gets the same margins as page one. */
+    margin: 14mm 15mm;
+}
+
+.ats {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.42;
+    color: #000000;
+    background: #ffffff;
+    /* A4 content width: 210mm sheet less two 15mm margins. */
+    max-width: 180mm;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+
+.ats-name {
+    font-size: 20pt;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin: 0 0 2pt;
+}
+
+.ats-title {
+    font-size: 11.5pt;
+    font-weight: 700;
+    margin: 0 0 5pt;
+}
+
+.ats-contact {
+    font-size: 10pt;
+    margin: 0 0 2pt;
+}
+
+/* ── Sections ───────────────────────────────────────────────── */
+
+.ats-h2 {
+    font-size: 12pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 13pt 0 0;
+    padding-bottom: 2pt;
+    border-bottom: 1px solid #000000;
+}
+
+.ats-section {
+    margin: 0;
+}
+
+.ats-summary {
+    margin: 6pt 0 0;
+    text-align: left;
+}
+
+.ats-skills {
+    margin: 6pt 0 0;
+}
+
+/* Keeps a skill phrase whole so the text layer never reads it as two
+   fragments on separate lines. */
+.ats-nowrap {
+    white-space: nowrap;
+}
+
+/* ── Experience ─────────────────────────────────────────────── */
+
+.ats-entry {
+    margin: 9pt 0 0;
+}
+
+.ats-role {
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 0;
+}
+
+.ats-org {
+    font-size: 10.5pt;
+    font-weight: 400;
+    margin: 0 0 3pt;
+}
+
+/* Solid round bullets only. Custom glyphs, checkmarks, and arrows
+   are the classic thing parsers mangle. */
+.ats-list {
+    margin: 0;
+    padding-left: 16pt;
+    list-style-type: disc;
+}
+
+.ats-list li {
+    margin: 0 0 2.5pt;
+    padding-left: 2pt;
+}
+
+/* ── Compact blocks ─────────────────────────────────────────── */
+
+.ats-line {
+    margin: 6pt 0 0;
+}
+
+.ats-line strong {
+    font-weight: 700;
+}
+
+.ats-tools {
+    margin: 5pt 0 0;
+}
+
+/* ── Screen preview only ────────────────────────────────────── */
+
+@media screen {
+    .ats-sheet {
+        background: #f4f4f2;
+        padding: 40px 20px 80px;
+        min-height: 100vh;
+    }
+
+    .ats {
+        background: #ffffff;
+        padding: 14mm 15mm;
+        max-width: 210mm;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 8px 40px rgba(0, 0, 0, 0.08);
+    }
+}
+
+@media print {
+    .ats-sheet {
+        background: transparent;
+        padding: 0;
+    }
+
+    .ats {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+    }
+}

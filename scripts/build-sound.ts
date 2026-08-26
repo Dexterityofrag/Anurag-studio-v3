@@ -110,24 +110,35 @@ function sub(frame: number, f0 = 110, f1 = 38, gain = 0.5, dur = 0.85) {
 }
 
 /**
- * air whoosh: white noise through a sweeping one-pole bandpass-ish filter.
- * `rise` sweeps the cutoff up (accelerating move), otherwise it sweeps down.
+ * air: the soft breath under a camera move. Replaces the old noise whoosh, which
+ * was a bright hiss and read as harsh.
+ *
+ * Two-pole lowpassed noise (very dark, a "hhh" not a "shhh") plus a warm pitched
+ * body that glides. The envelope is a raised cosine, so it has no attack transient
+ * whatsoever: it can never click or sound like a hit. Deliberately unpitched-ish
+ * and breathy so it never competes with the bell tones on the flow stations.
+ *
+ * ALWAYS starts on the frame of its visual cue. These are not anticipations.
  */
-function whoosh(frame: number, dur = 0.6, gain = 0.13, rise = true, pan = 0) {
+function air(frame: number, dur = 0.9, gain = 0.1, pan = 0, glide = 0) {
   const s = f2s(frame)
-  let lp = 0
-  let hp = 0
-  for (let i = 0; i < dur * SR; i++) {
-    const t = i / SR
-    const k = clamp01(t / dur)
-    // bell-shaped loudness so it swells and leaves
-    const e = Math.sin(Math.PI * k) ** 1.5
-    const sweep = rise ? k : 1 - k
-    const cutoff = 0.02 + 0.30 * sweep // one-pole coefficient
-    const n = Math.random() * 2 - 1
-    lp += cutoff * (n - lp)
-    hp = lp - hp * 0.02
-    add(s + i, lp * e * gain, pan * (rise ? 1 : -1))
+  const n = Math.floor(dur * SR)
+  let lp1 = 0
+  let lp2 = 0
+  let phase = 0
+  for (let i = 0; i < n; i++) {
+    const k = i / n
+    const e = 0.5 - 0.5 * Math.cos(2 * Math.PI * k) // 0 → 1 → 0, perfectly smooth
+    // the cutoff opens a little at the middle of the move, then closes again
+    const cut = 0.006 + 0.016 * Math.sin(Math.PI * k)
+    const nz = Math.random() * 2 - 1
+    lp1 += cut * (nz - lp1)
+    lp2 += cut * (lp1 - lp2) // second pole: kills the hiss
+    // quiet pitched body, gliding, gives warmth without a bell attack
+    const f = 196 * Math.pow(2, glide * k)
+    phase += (2 * Math.PI * f) / SR
+    const body = Math.sin(phase) * 0.16 + Math.sin(phase * 1.5) * 0.05
+    add(s + i, (lp2 * 18 + body) * e * gain, pan * Math.sin(Math.PI * k))
   }
 }
 
@@ -143,21 +154,6 @@ function shimmer(frame: number, gain = 0.05, dur = 1.8) {
       v += Math.sin(2 * Math.PI * parts[p] * t + p) / parts.length
     }
     add(s + i, v * e * gain, Math.sin(t * 1.7) * 0.4)
-  }
-}
-
-/** reverse swell: noise+tone rising into a hit (used before the pull-back) */
-function swell(frame: number, dur = 1.2, gain = 0.11) {
-  const s = f2s(frame - dur * FPS) // lands ON `frame`
-  let lp = 0
-  for (let i = 0; i < dur * SR; i++) {
-    const t = i / SR
-    const k = clamp01(t / dur)
-    const e = Math.pow(k, 2.2) // grows into the landing
-    const n = Math.random() * 2 - 1
-    lp += (0.03 + 0.12 * k) * (n - lp)
-    const tone = Math.sin(2 * Math.PI * (180 + 260 * k) * t) * 0.35
-    add(s + i, (lp + tone) * e * gain, 0)
   }
 }
 
@@ -202,34 +198,35 @@ for (let c = 0; c < 13; c++) {
   tick(10 + c * 2.5, 1800 + (c % 3) * 260, 0.045, 0.035, (c % 2 ? 1 : -1) * 0.15)
 }
 sub(55, 130, 42, 0.30)
-whoosh(48, 0.5, 0.10, true)
+air(55, 0.8, 0.09, 0, -0.3) // starts ON the slam, not before it
 note(58, 261.63, 0.13, 2.4) // C4, the reel's root
 
-// 2. CUT: wordmark pushes through the lens
-whoosh(AT.why - 12, 0.75, 0.17, true)
-sub(AT.why + 6, 90, 34, 0.26)
+// 2. CUT: wordmark pushes through the lens (transition runs 133 → 155)
+air(AT.why, CUTS.zPush / FPS, 0.13, 0, 0.5)
+sub(AT.why + CUTS.zPush, 90, 34, 0.26) // lands when Why does
 
 // "the why." resolves
 note(AT.why + 45, 392.0, 0.16, 2.6, -0.2) // G4
 tick(AT.why + 68, 2600, 0.10) // the period arrives
 
-// 3. CUT: the dot falls and lands on the rail
-// descending tone across the fall
+// 3. CUT: the dot falls and lands on the rail (transition runs 313 → 343).
+// The fall gets ONE sound, a descending tone across the exact frames the dot is
+// moving. No air layered on top: two sounds here read as a double transition.
 {
-  const s = f2s(AT.flow - 30)
-  const dur = 1.0
-  for (let i = 0; i < dur * SR; i++) {
+  const s = f2s(AT.flow)
+  const dur = CUTS.dotDrop / FPS // exactly the length of the fall
+  const n = Math.floor(dur * SR)
+  for (let i = 0; i < n; i++) {
     const t = i / SR
-    const k = clamp01(t / dur)
-    const freq = 780 - 420 * k * k
-    const e = env(t, dur, 0.02, 2.6)
-    add(s + i, Math.sin(2 * Math.PI * freq * t) * e * 0.07, 0.3 - 0.6 * k)
+    const k = i / n
+    const freq = 760 - 400 * k * k // accelerates down, like the dot
+    const e = Math.sin(Math.PI * Math.pow(k, 0.85)) // swells, lands, gone
+    add(s + i, Math.sin(2 * Math.PI * freq * t) * e * 0.11, 0.35 - 0.7 * k)
   }
 }
-const RAIL_LAND = AT.flow + F_ENTRY // 347
-tick(RAIL_LAND, 3000, 0.16, 0.06)
-sub(RAIL_LAND, 120, 45, 0.24, 0.6)
-whoosh(RAIL_LAND, 0.9, 0.11, true) // rail streaks outward from the landing
+// the landing itself, on the frame the dot touches the rail
+tick(AT.flow + CUTS.dotDrop, 3000, 0.16, 0.06)
+sub(AT.flow + CUTS.dotDrop, 120, 45, 0.24, 0.6)
 
 // 4. FLOW — five stations, an ascending pentatonic, one note per step.
 // These carry the whole middle of the film, so they sit well above the drone.
@@ -240,19 +237,19 @@ for (let i = 0; i < 5; i++) {
   note(arrive, PENT[i], 0.19, 2.2, (i - 2) * 0.22)
   note(arrive, PENT[i] * 2, 0.05, 1.4, (i - 2) * 0.22) // octave, adds sparkle
   if (i > 0) {
-    // the hop that got us here
-    whoosh(arrive - F_HOP, F_HOP / FPS, 0.13, true, (i - 2) * 0.3)
+    // the hop that got us here: the camera is moving for exactly these frames
+    air(arrive - F_HOP, F_HOP / FPS, 0.07, (i - 2) * 0.35, 0.25)
   }
 }
 
-// pull back to the whole flow: a swell landing on the wide view, then a pad
-swell(AT.flow + F_OVERVIEW + 20, 1.3, 0.17)
+// pull back to the whole flow: soft air on the move itself, then a pad settles
+air(AT.flow + F_OVERVIEW, 1.9, 0.10, 0, -0.4)
 pad(AT.flow + F_OVERVIEW + 10, 130.81, 2.8, 0.13) // C3 under the wide shot
-note(AT.flow + F_OVERVIEW + 22, 523.25, 0.10, 2.8, 0) // C5 resolves the ascent
+note(AT.flow + F_OVERVIEW + 30, 523.25, 0.11, 2.8, 0) // C5 resolves the ascent
 
-// 5. CUT: rail rotates into the toolkit spine
-whoosh(AT.tools - 14, 0.85, 0.16, false)
-sub(AT.tools + 8, 100, 40, 0.24)
+// 5. CUT: rail rotates into the toolkit spine (transition runs 767 → 793)
+air(AT.tools, CUTS.railRotate / FPS, 0.12, 0.3, -0.35)
+sub(AT.tools + CUTS.railRotate, 100, 40, 0.24) // lands when the spine does
 
 // 6. TOOLS — the six names land on a steady pulse (26 frames apart, ~69bpm).
 // A tick alone was inaudible under the bed, so each name also gets a note:
@@ -265,10 +262,10 @@ for (let i = 0; i < 6; i++) {
 }
 pad(AT.tools + T_ROLL_START, 130.81, 5.6, 0.09) // holds the section together
 
-// 7. CUT: collapse to a point of light, bloom open
-sub(AT.outro, 140, 32, 0.38, 1.1)
-whoosh(AT.outro - 10, 0.7, 0.13, false)
-shimmer(AT.outro + 6, 0.07, 2.2)
+// 7. CUT: collapse to a point of light, bloom open (transition runs 948 → 972)
+sub(AT.outro, 140, 32, 0.38, 1.1) // the implosion, on the frame it collapses
+air(AT.outro, CUTS.bloomOut / FPS, 0.11, 0, -0.5)
+shimmer(AT.outro + 12, 0.07, 2.2) // the bloom opening
 
 // 8. OUTRO — resolve, then leave in silence for the loop
 note(AT.outro + 30, 261.63, 0.17, 3.2, -0.25) // C

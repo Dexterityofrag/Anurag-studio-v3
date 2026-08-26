@@ -8,7 +8,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import ImageExt from '@tiptap/extension-image'
 import LinkExt from '@tiptap/extension-link'
-import { saveProject, fixProjectImageAcl, type ProjectFormState } from '@/app/actions/projects'
+import { saveProject, type ProjectFormState } from '@/app/actions/projects'
 import type { Project } from '@/lib/types'
 import type { JSONContent } from '@tiptap/core'
 
@@ -321,9 +321,7 @@ export default function ProjectEditor({ project }: ProjectEditorProps) {
     const [isPublished, setIsPublished] = useState(project?.isPublished ?? false)
     const [displayOrder, setDisplayOrder] = useState(project?.displayOrder?.toString() ?? '0')
     const [coverUploading, setCoverUploading] = useState(false)
-    const [coverFixing, setCoverFixing] = useState(false)
     const [thumbUploading, setThumbUploading] = useState(false)
-    const [thumbFixing, setThumbFixing] = useState(false)
 
     const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -522,29 +520,13 @@ export default function ProjectEditor({ project }: ProjectEditorProps) {
                                         />
                                     </label>
                                     {coverUrl && (
-                                        <>
-                                            <button
-                                                type="button"
-                                                className="pe__fix-img"
-                                                disabled={coverFixing}
-                                                onClick={async () => {
-                                                    setCoverFixing(true)
-                                                    const result = await fixProjectImageAcl(coverUrl)
-                                                    if (result.error) alert(result.error)
-                                                    else alert('Cover image ACL fixed!')
-                                                    setCoverFixing(false)
-                                                }}
-                                            >
-                                                {coverFixing ? 'Fixing...' : 'Fix Image'}
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="pe__remove-img"
-                                                onClick={() => setCoverUrl('')}
-                                            >
-                                                Remove
-                                            </button>
-                                        </>
+                                        <button
+                                            type="button"
+                                            className="pe__remove-img"
+                                            onClick={() => setCoverUrl('')}
+                                        >
+                                            Remove
+                                        </button>
                                     )}
                                 </div>
                             </div>
@@ -580,29 +562,13 @@ export default function ProjectEditor({ project }: ProjectEditorProps) {
                                         />
                                     </label>
                                     {thumbnailUrl && (
-                                        <>
-                                            <button
-                                                type="button"
-                                                className="pe__fix-img"
-                                                disabled={thumbFixing}
-                                                onClick={async () => {
-                                                    setThumbFixing(true)
-                                                    const result = await fixProjectImageAcl(thumbnailUrl)
-                                                    if (result.error) alert(result.error)
-                                                    else alert('Thumbnail ACL fixed!')
-                                                    setThumbFixing(false)
-                                                }}
-                                            >
-                                                {thumbFixing ? 'Fixing...' : 'Fix Image'}
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="pe__remove-img"
-                                                onClick={() => setThumbnailUrl('')}
-                                            >
-                                                Remove
-                                            </button>
-                                        </>
+                                        <button
+                                            type="button"
+                                            className="pe__remove-img"
+                                            onClick={() => setThumbnailUrl('')}
+                                        >
+                                            Remove
+                                        </button>
                                     )}
                                 </div>
                             </div>

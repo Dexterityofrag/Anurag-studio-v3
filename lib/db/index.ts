@@ -12,7 +12,10 @@ const client =
   globalThis._pgClient ??
   postgres(process.env.DATABASE_URL!, {
     ssl: process.env.DATABASE_URL?.includes('sslmode=require') ? 'require' : false,
-    max: 10,
+    // On Vercel (serverless), each concurrent function instance gets its own pool.
+    // max: 10 would hit Neon's connection limit quickly. Use max: 1 for serverless.
+    // Note: DATABASE_URL should be the pooled connection string (host contains '-pooler' for Neon).
+    max: 1,
   })
 
 if (process.env.NODE_ENV !== 'production') {

@@ -1,0 +1,165 @@
+/* ─────────────────────────────────────────────────────────────
+   Cover letter. One A4 page.
+
+   Shares the designed CV's ink scale, name treatment, and mono
+   contact line so the two read as one set. Body type is set much
+   larger than the CV's, because this is prose meant to be read
+   straight through rather than a dense reference document.
+   ───────────────────────────────────────────────────────────── */
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+.letter {
+    --ink: #16181a;
+    --ink-2: #3f444a;
+    --ink-3: #8d9298;
+    --rule: #e3e3df;
+    --link: #1f4788;
+
+    width: 210mm;
+    min-height: 297mm;
+    padding: 15mm 20mm;
+    margin: 0 auto;
+    background: #ffffff;
+    color: var(--ink);
+    font-family: var(--font-body), "DM Sans", sans-serif;
+    font-size: 10pt;
+    line-height: 1.58;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header, matched to the designed CV ─────────────────────── */
+
+.l-header {
+    padding-bottom: 4mm;
+    border-bottom: 0.5px solid var(--rule);
+}
+
+.l-name {
+    font-family: var(--font-display), "Space Grotesk", sans-serif;
+    font-size: 22pt;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin: 0;
+}
+
+.l-title {
+    font-size: 9.5pt;
+    font-weight: 400;
+    color: var(--ink-2);
+    margin: 1.5mm 0 0;
+}
+
+.l-contact {
+    margin: 3mm 0 0;
+    font-family: var(--font-mono), "JetBrains Mono", monospace;
+    font-size: 6.9pt;
+    color: var(--ink-3);
+    letter-spacing: 0.01em;
+    line-height: 1.65;
+}
+
+/* Items stay whole, the line wraps at the separators. */
+.l-contact > span:not(.l-sep),
+.l-contact > a {
+    white-space: nowrap;
+}
+
+.l-contact a {
+    color: var(--link);
+}
+
+.l-contact .l-sep {
+    color: #c9c9c4;
+}
+
+/* ── Date and recipient ─────────────────────────────────────── */
+
+.l-date {
+    margin: 8mm 0 0;
+    font-family: var(--font-mono), "JetBrains Mono", monospace;
+    font-size: 7.4pt;
+    color: var(--ink-3);
+    letter-spacing: 0.01em;
+}
+
+.l-recipient {
+    margin: 6mm 0 0;
+    color: var(--ink);
+}
+
+.l-recipient span {
+    display: block;
+}
+
+.l-recipient span:first-child {
+    font-weight: 600;
+}
+
+.l-recipient span + span {
+    color: var(--ink-2);
+    font-size: 9.4pt;
+}
+
+/* ── Body ───────────────────────────────────────────────────── */
+
+.l-salutation {
+    margin: 8mm 0 0;
+}
+
+.l-body p {
+    margin: 4.5mm 0 0;
+    color: var(--ink-2);
+    /* Ragged right. Justified text opens rivers at this measure. */
+    text-align: left;
+    hyphens: none;
+}
+
+.l-body a {
+    color: var(--link);
+}
+
+/* ── Signoff ────────────────────────────────────────────────── */
+
+.l-signoff {
+    margin: 8mm 0 0;
+}
+
+.l-signoff .l-signature {
+    display: block;
+    margin-top: 5mm;
+    font-family: var(--font-display), "Space Grotesk", sans-serif;
+    font-size: 12pt;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+}
+
+/* ── Screen preview only ────────────────────────────────────── */
+
+@media screen {
+    .l-sheet {
+        background: #eeeeec;
+        padding: 40px 20px 80px;
+        min-height: 100vh;
+    }
+
+    .letter {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 10px 50px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media print {
+    .l-sheet {
+        background: transparent;
+        padding: 0;
+    }
+
+    .letter {
+        box-shadow: none;
+    }
+}

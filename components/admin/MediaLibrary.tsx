@@ -362,7 +362,7 @@ export default function MediaLibrary({ files }: Props) {
         for (let i = 0; i < arr.length; i++) {
             const file = arr[i]
             try {
-                // 1. Upload via server-side FormData (guarantees ACL: public-read)
+                // 1. Upload via server-side FormData to R2
                 const formData = new FormData()
                 formData.append('file', file)
                 formData.append('folder', 'media')

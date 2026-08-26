@@ -6,7 +6,6 @@ import {
   updatePartner,
   createPartner,
   deletePartner,
-  fixPartnerImageAcl,
 } from '@/app/actions/partners'
 
 /* ────────────────────────────────────────────────────────────── */
@@ -322,7 +321,6 @@ function PartnerCard({
   const [previewUrl, setPreviewUrl] = useState(partner.previewImageUrl ?? '')
   const [isPending, startTransition] = useTransition()
   const [uploading, setUploading] = useState(false)
-  const [fixing, setFixing] = useState(false)
 
   const handleSave = () => {
     startTransition(async () => {
@@ -353,7 +351,7 @@ function PartnerCard({
     if (!file) return
     setUploading(true)
     try {
-      // Upload via server-side FormData (guarantees ACL: public-read)
+      // Upload via server-side FormData to R2
       const formData = new FormData()
       formData.append('file', file)
       formData.append('folder', 'partners')
@@ -455,30 +453,12 @@ function PartnerCard({
             />
           </label>
         {previewUrl && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <button
-              className="pw__fix-img"
-              disabled={fixing}
-              onClick={async () => {
-                setFixing(true)
-                const result = await fixPartnerImageAcl(previewUrl)
-                if (result.error) {
-                  alert(result.error)
-                } else {
-                  alert('Image ACL fixed! Refresh the page to see the image.')
-                }
-                setFixing(false)
-              }}
-            >
-              {fixing ? 'Fixing...' : '🔧 Fix Image'}
-            </button>
-            <button
-              className="pw__remove-img"
-              onClick={() => setPreviewUrl('')}
-            >
-              Remove
-            </button>
-          </div>
+          <button
+            className="pw__remove-img"
+            onClick={() => setPreviewUrl('')}
+          >
+            Remove
+          </button>
         )}
         </div>
         {previewUrl && (

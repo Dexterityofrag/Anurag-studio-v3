@@ -1,10 +1,17 @@
 import type { NextConfig } from "next";
 
-/* ── DO Spaces CDN hostnames (constructed from env or defaults) ── */
-const BUCKET = process.env.DO_SPACES_BUCKET ?? 'anurag-studio-media'
-const REGION = process.env.DO_SPACES_REGION ?? 'sgp1'
-const spacesCdnHost = `${BUCKET}.${REGION}.cdn.digitaloceanspaces.com`
-const spacesHost = `${BUCKET}.${REGION}.digitaloceanspaces.com`
+/* ── R2 public hostname (constructed from env or defaults) ── */
+const parseR2PublicUrl = () => {
+  const url = process.env.R2_PUBLIC_URL
+  if (!url) return null
+  try {
+    const u = new URL(url)
+    return u.hostname
+  } catch {
+    return null
+  }
+}
+const r2Host = parseR2PublicUrl()
 
 const nextConfig: NextConfig = {
   /* ── Hide "X-Powered-By: Next.js" header ────────────────────── */
@@ -14,15 +21,18 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
 
   images: {
-    remotePatterns: [
-      { protocol: 'https', hostname: '*.digitaloceanspaces.com' },
-      { protocol: 'https', hostname: '*.cdn.digitaloceanspaces.com' },
-      /* Explicit multi-level subdomain matches for DO Spaces CDN */
-      { protocol: 'https', hostname: spacesCdnHost },
-      { protocol: 'https', hostname: spacesHost },
-      { protocol: 'https', hostname: 'miro.medium.com' },
-      { protocol: 'https', hostname: 'cdn-images-1.medium.com' },
-    ],
+    remotePatterns: (() => {
+      const patterns = [
+        /* Blog cover images from Medium */
+        { protocol: 'https' as const, hostname: 'miro.medium.com' },
+        { protocol: 'https' as const, hostname: 'cdn-images-1.medium.com' },
+      ]
+      /* R2 public hostname (if configured) */
+      if (r2Host) {
+        patterns.unshift({ protocol: 'https' as const, hostname: r2Host })
+      }
+      return patterns
+    })(),
   },
 
   /* ── Security headers on every response ─────────────────────── */
@@ -57,11 +67,17 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
-              `img-src 'self' data: blob: https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com https://miro.medium.com https://cdn-images-1.medium.com`,
-              `connect-src 'self' https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com`,
-              // the showreel is served from Spaces; without media-src it falls back to
-              // default-src 'self' and the <video> is blocked
-              `media-src 'self' blob: https://${spacesCdnHost} https://${spacesHost} https://*.digitaloceanspaces.com https://*.cdn.digitaloceanspaces.com`,
+              ...(r2Host ? [
+                `img-src 'self' data: blob: https://${r2Host} https://miro.medium.com https://cdn-images-1.medium.com`,
+                `connect-src 'self' https://${r2Host}`,
+                // the showreel is served from R2; without media-src it falls back to
+                // default-src 'self' and the <video> is blocked
+                `media-src 'self' blob: https://${r2Host}`,
+              ] : [
+                "img-src 'self' data: blob: https://miro.medium.com https://cdn-images-1.medium.com",
+                "connect-src 'self'",
+                "media-src 'self' blob:",
+              ]),
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

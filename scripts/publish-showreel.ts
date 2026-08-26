@@ -1,8 +1,8 @@
 /**
- * One-off: publish the rendered showreel to DO Spaces and point the site at it.
+ * One-off: publish the rendered showreel to R2 and point the site at it.
  *
- * The /api/upload route is images-only, so this goes straight to Spaces from the
- * server the way lib/storage/spaces.ts does, plus a long Cache-Control the shared
+ * The /api/upload route is images-only, so this goes straight to R2 from the
+ * server the way lib/storage/r2.ts does, plus a long Cache-Control the shared
  * helper doesn't set (the object key is content-addressed by date+hash, so it is
  * safe to treat as immutable).
  *
@@ -18,31 +18,33 @@ config({ path: '.env.local' })
 const FILE = 'out/showreel.mp4'
 const KEY = `showreel/${new Date().toISOString().split('T')[0]}_showreel-v2.mp4`
 
-const BUCKET = process.env.DO_SPACES_BUCKET ?? 'anurag-studio-media'
-const REGION = process.env.DO_SPACES_REGION ?? 'nyc3'
+const BUCKET = process.env.R2_BUCKET ?? 'anurag-studio-media'
 
-const spaces = new S3Client({
-  endpoint: `https://${REGION}.digitaloceanspaces.com`,
-  region: REGION,
+const r2 = new S3Client({
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  region: 'auto',
   credentials: {
-    accessKeyId: process.env.DO_SPACES_KEY!,
-    secretAccessKey: process.env.DO_SPACES_SECRET!,
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
   },
 })
 
-const publicUrl = `https://${BUCKET}.${REGION}.cdn.digitaloceanspaces.com/${KEY}`
+const publicUrlBase = (process.env.R2_PUBLIC_URL ?? '').replace(/\/$/, '')
+if (!publicUrlBase) {
+  throw new Error('R2_PUBLIC_URL environment variable is not set')
+}
+const publicUrl = `${publicUrlBase}/${KEY}`
 
 const body = readFileSync(FILE)
 const mb = (statSync(FILE).size / 1024 / 1024).toFixed(2)
 console.log(`uploading ${FILE} (${mb} MB) -> ${KEY}`)
 
-await spaces.send(
+await r2.send(
   new PutObjectCommand({
     Bucket: BUCKET,
     Key: KEY,
     Body: body,
     ContentType: 'video/mp4',
-    ACL: 'public-read',
     CacheControl: 'public, max-age=31536000, immutable',
   }),
 )

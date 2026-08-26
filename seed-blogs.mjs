@@ -1,9 +1,15 @@
 // seed-blogs.mjs — Insert 7 Medium posts + fix about data + remove junk project
 import postgres from 'postgres'
+import { config } from 'dotenv'
 
-const DATABASE_URL = 'postgresql://doadmin:AVNS_NxNPAd3TxvxyfSi9Vsp@anurag-studio-db-do-user-33474512-0.h.db.ondigitalocean.com:25060/defaultdb?sslmode=require'
+config({ path: '.env.local' })
 
-const sql = postgres(DATABASE_URL, { ssl: 'require' })
+if (!process.env.DATABASE_URL) {
+  console.error('ERROR: DATABASE_URL env var is not set. Please set it in .env.local or export it.')
+  process.exit(1)
+}
+
+const sql = postgres(process.env.DATABASE_URL, { ssl: 'require' })
 
 /* ─── BLOG POSTS ────────────────────────────────────────────── */
 const posts = [
