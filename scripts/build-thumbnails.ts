@@ -102,7 +102,10 @@ async function compose(canvas: { w: number; h: number; centre: number }, r: Reci
     const targetH = Math.round(canvas.h * (shot.scale ?? 0.72))
     const targetW = Math.round((srcW / srcH) * targetH)
 
-    let png = await rounded(await sharp(src).toBuffer(), targetW, targetH, Math.round(targetW * 0.055))
+    // .rotate() with no argument bakes in EXIF orientation. Without it, a
+    // source photo stored sideways with a rotation flag composites sideways —
+    // exactly what happened to the About page portrait.
+    let png = await rounded(await sharp(src).rotate().toBuffer(), targetW, targetH, Math.round(targetW * 0.055))
 
     if (shot.rotate) {
       png = await sharp(png).rotate(shot.rotate, { background: { r: 0, g: 0, b: 0, alpha: 0 } }).toBuffer()
