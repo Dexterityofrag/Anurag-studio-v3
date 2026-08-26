@@ -1238,7 +1238,8 @@ export default function AboutPage({
         <div className="abt-hero-right">
           <div className="abt-portrait-wrap p1">
             <Image
-              src="/portrait.jpg"
+              src="/portrait.webp"
+              sizes="(max-width: 768px) 100vw, 45vw"
               alt="Anurag Adhikari"
               width={600}
               height={750}
@@ -1248,7 +1249,8 @@ export default function AboutPage({
           </div>
           <div className="abt-portrait-wrap p2">
             <Image
-              src="/portrait2.jpg"
+              src="/portrait2.webp"
+              sizes="(max-width: 768px) 100vw, 38vw"
               alt="Anurag with family"
               width={600}
               height={600}

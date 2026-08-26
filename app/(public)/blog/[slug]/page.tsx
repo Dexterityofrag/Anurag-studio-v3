@@ -37,14 +37,14 @@ export async function generateMetadata({ params }: MetaArgs): Promise<Metadata> 
         openGraph: {
             title,
             description,
-            images: post.coverUrl ? [post.coverUrl] : ['/portrait.jpg'],
+            images: post.coverUrl ? [post.coverUrl] : ['/portrait-og.jpg'],
             type: 'article',
         },
         twitter: {
             card: 'summary_large_image',
             title,
             description,
-            images: post.coverUrl ? [post.coverUrl] : ['/portrait.jpg'],
+            images: post.coverUrl ? [post.coverUrl] : ['/portrait-og.jpg'],
         },
     }
 }
@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: PageArgs) {
         "@type": "BlogPosting",
         "headline": post.title,
         "description": post.excerpt ?? post.metaDescription ?? undefined,
-        "image": post.coverUrl ?? "https://anurag.studio/portrait.jpg",
+        "image": post.coverUrl ?? "https://anurag.studio/portrait-og.jpg",
         "datePublished": post.publishedAt?.toISOString(),
         "dateModified": (post.updatedAt ?? post.publishedAt)?.toISOString(),
         "url": `https://anurag.studio/blog/${post.slug}`,
