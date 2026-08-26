@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Project } from '@/lib/types'
@@ -432,8 +433,18 @@ function StripCard({ project, index }: { project: Project; index: number }) {
       aria-label={`View case study: ${project.title}`}
     >
       {coverSrc ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={coverSrc} alt={project.title} className="fw-strip-card__img" draggable={false} />
+        <Image
+          src={coverSrc}
+          alt={project.title}
+          className="fw-strip-card__img"
+          fill
+          sizes="(max-width: 768px) 50vw, (max-width: 1142px) 28vw, 320px"
+          style={{ objectFit: 'cover' }}
+          /* No `priority` here: this strip is the fifth section down the page.
+             Preloading below-the-fold images makes them compete with the hero
+             for bandwidth and pushes LCP out. Lazy is correct. */
+          draggable={false}
+        />
       ) : (
         <div className="fw-strip-card__placeholder">{project.title}</div>
       )}

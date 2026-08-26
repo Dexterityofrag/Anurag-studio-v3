@@ -157,6 +157,10 @@ export default function CustomCursor() {
     const label = labelRef.current
     if (!outer || !dot || !label) return
 
+    let lastTarget: Element | null = null
+    let lastHovering = false
+    let lastTagText = ''
+
     /* RAF loop - move both elements together */
     const flush = () => {
       if (dirty.current) {
@@ -180,20 +184,25 @@ export default function CustomCursor() {
       outer.classList.add('on')
       dot.classList.add('on')
 
-      const hovering = isInteractive(e.target as Element)
-      outer.classList.toggle('hover', hovering)
-      outer.classList.toggle('idle', !hovering)
-      dot.classList.toggle('hover', hovering)
+      // Only update interactive state if target changed
+      if (e.target !== lastTarget) {
+        lastTarget = e.target as Element
+        lastHovering = isInteractive(lastTarget)
+        lastTagText = getCursorTag(lastTarget)
 
-      const tagText = getCursorTag(e.target as Element)
-      if (label.textContent !== tagText) label.textContent = tagText
-      label.classList.toggle('on', tagText !== '' && hovering)
+        outer.classList.toggle('hover', lastHovering)
+        outer.classList.toggle('idle', !lastHovering)
+        dot.classList.toggle('hover', lastHovering)
+        label.classList.toggle('on', lastTagText !== '' && lastHovering)
+        if (label.textContent !== lastTagText) label.textContent = lastTagText
+      }
     }
 
     const onLeave = () => {
       outer.classList.remove('on')
       dot.classList.remove('on')
       label.classList.remove('on')
+      lastTarget = null
     }
     const onEnter = () => {
       outer.classList.add('on')

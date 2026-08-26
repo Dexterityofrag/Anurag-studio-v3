@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Project } from '@/lib/types'
@@ -601,8 +602,16 @@ function LargeCard({ project }: { project: Project }) {
     <div ref={wrapRef} className="wg-reveal">
       <Link href={`/work/${project.slug}`} className="wg-large" data-cursor="View" aria-label={`View case study: ${project.title}`}>
         {coverSrc ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={coverSrc} alt={project.title} className="wg-large__img" draggable={false} />
+          <Image
+            src={coverSrc}
+            alt={project.title}
+            className="wg-large__img"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1440px) 90vw, 1360px"
+            style={{ objectFit: 'cover' }}
+            priority
+            draggable={false}
+          />
         ) : (
           <div className="wg-large__placeholder">{project.title}</div>
         )}
@@ -645,8 +654,15 @@ function SmallCard({ project }: { project: Project }) {
     <Link href={`/work/${project.slug}`} className="wg-small" data-cursor="View" aria-label={`View case study: ${project.title}`}>
       <div className="wg-small__img-wrap">
         {coverSrc ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={coverSrc} alt={project.title} className="wg-small__img" draggable={false} />
+          <Image
+            src={coverSrc}
+            alt={project.title}
+            className="wg-small__img"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1440px) 50vw, 680px"
+            style={{ objectFit: 'cover' }}
+            draggable={false}
+          />
         ) : (
           <div className="wg-small__placeholder">{project.title}</div>
         )}

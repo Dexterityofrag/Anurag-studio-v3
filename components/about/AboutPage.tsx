@@ -1396,8 +1396,14 @@ export default function AboutPage({
                     {/* Front */}
                     <div className="abt-cert-front">
                       {cert.logoUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={cert.logoUrl} alt={cert.issuer} className="abt-cert-issuer-logo" />
+                        <Image
+                          src={cert.logoUrl}
+                          alt={cert.issuer}
+                          className="abt-cert-issuer-logo"
+                          width={48}
+                          height={48}
+                          style={{ objectFit: 'contain' }}
+                        />
                       ) : (
                         <div className="abt-cert-issuer-placeholder">
                           {cert.issuer.charAt(0)}

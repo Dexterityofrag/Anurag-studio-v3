@@ -123,7 +123,6 @@ const css = /* css */ `
   /* velocity blur applied via JS */
   filter: blur(var(--scroll-blur, 0px));
   transition: filter 0.08s linear;
-  will-change: filter;
 }
 
 .v3-name-line {
@@ -147,7 +146,6 @@ const css = /* css */ `
     opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--char-delay, 0s),
     filter  0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--char-delay, 0s),
     transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--char-delay, 0s);
-  will-change: transform, opacity, filter;
 }
 .h-char.in {
   opacity: 1;
@@ -404,7 +402,6 @@ const css = /* css */ `
   font-size: 10px;
   letter-spacing: 0.08em;
   opacity: 0;
-  will-change: transform, opacity;
 }
 
 /* Cursor + name tag */
@@ -637,6 +634,7 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     let lastY = window.scrollY
     let lastT = performance.now()
     let rafId: number
+    let timeoutId: NodeJS.Timeout | null = null
 
     function onScroll() {
       cancelAnimationFrame(rafId)
@@ -648,8 +646,9 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
         const velocity = dy / dt   // px/ms
         const blur = Math.min(velocity * 18, 22)
         hero.style.setProperty('--scroll-blur', blur + 'px')
-        // decay
-        setTimeout(() => hero?.style.setProperty('--scroll-blur', '0px'), 120)
+        // decay — clear old timeout before setting new one
+        if (timeoutId) clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => hero?.style.setProperty('--scroll-blur', '0px'), 120)
         lastY = window.scrollY
         lastT = now
       })
@@ -659,6 +658,7 @@ export default function HeroSection({ eyebrow, subtitle, badge }: HeroProps) {
     return () => {
       window.removeEventListener('scroll', onScroll)
       cancelAnimationFrame(rafId)
+      if (timeoutId) clearTimeout(timeoutId)
     }
   }, [])
 

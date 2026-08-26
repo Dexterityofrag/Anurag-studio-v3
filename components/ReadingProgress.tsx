@@ -23,18 +23,32 @@ export default function ReadingProgress() {
     const [visible, setVisible] = useState(false)
 
     useEffect(() => {
-        const onScroll = () => {
-            const scrollY = window.scrollY
-            const docHeight = document.body.scrollHeight - window.innerHeight
-            if (docHeight <= 0) return
+        let rafId: number
 
-            setWidth((scrollY / docHeight) * 100)
-            setVisible(scrollY > 100)
+        const onScroll = () => {
+            if (!rafId) {
+                rafId = requestAnimationFrame(() => {
+                    const scrollY = window.scrollY
+                    const docHeight = document.body.scrollHeight - window.innerHeight
+                    if (docHeight > 0) {
+                        setWidth((scrollY / docHeight) * 100)
+                        setVisible(scrollY > 100)
+                    }
+                    rafId = 0
+                })
+            }
         }
 
         window.addEventListener('scroll', onScroll, { passive: true })
+
+        // Seed the initial value through the same rAF path rather than setting
+        // state synchronously in the effect body, which triggers a cascading
+        // render. One frame of delay here is imperceptible.
         onScroll()
-        return () => window.removeEventListener('scroll', onScroll)
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+            if (rafId) cancelAnimationFrame(rafId)
+        }
     }, [])
 
     return (
