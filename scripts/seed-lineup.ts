@@ -131,9 +131,9 @@ const RECIPE: Recipe = {
   // Wide: three screens, the token screen leading, so the card reads as a
   // multi-screen product rather than a single cropped screenshot.
   wide: [
-    { file: 'projects/lineup/home.webp', scale: 0.54, dx: -0.205, dy: 0.015, rotate: -7 },
-    { file: 'projects/lineup/live-queue.webp', scale: 0.54, dx: 0.205, dy: 0.015, rotate: 7 },
-    { file: 'projects/lineup/token.webp', scale: 0.66, dx: 0, dy: 0 },
+    { file: 'projects/lineup/home.webp', scale: 0.43, dx: -0.215, dy: 0.015, rotate: -7 },
+    { file: 'projects/lineup/live-queue.webp', scale: 0.43, dx: 0.215, dy: 0.015, rotate: 7 },
+    { file: 'projects/lineup/token.webp', scale: 0.52, dx: 0, dy: 0 },
   ],
   // Portrait: one hero screen, larger, because the strip card is narrow.
   portrait: [

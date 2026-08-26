@@ -35,8 +35,8 @@ const RECIPES: Recipe[] = [
     bg: '#0A2327',
     glow: '#5EC8C8',
     wide: [
-      { file: `${P}/evolusis/landing-scroll.png`, scale: 0.50, dx: 0.10, dy: -0.03, rotate: 3 },
-      { file: `${P}/evolusis/landing-hero.png`, scale: 0.62, dx: -0.05, dy: 0.02 },
+      { file: `${P}/evolusis/landing-scroll.png`, scale: 0.38, dx: 0.10, dy: -0.03, rotate: 3 },
+      { file: `${P}/evolusis/landing-hero.png`, scale: 0.50, dx: -0.05, dy: 0.02 },
     ],
     portrait: [
       { file: `${P}/evolusis/landing-scroll.png`, scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
@@ -48,8 +48,8 @@ const RECIPES: Recipe[] = [
     bg: '#0A2327',
     glow: '#4FB6C4',
     wide: [
-      { file: `${P}/evolusis/dashboard-replica.png`, scale: 0.48, dx: 0.11, dy: -0.04, rotate: 3 },
-      { file: `${P}/evolusis/dashboard-live.png`, scale: 0.64, dx: -0.05, dy: 0.02 },
+      { file: `${P}/evolusis/dashboard-replica.png`, scale: 0.38, dx: 0.11, dy: -0.04, rotate: 3 },
+      { file: `${P}/evolusis/dashboard-live.png`, scale: 0.50, dx: -0.05, dy: 0.02 },
     ],
     portrait: [
       { file: `${P}/evolusis/dashboard-replica.png`, scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
@@ -61,8 +61,8 @@ const RECIPES: Recipe[] = [
     bg: '#0B2129',
     glow: '#57C2B4',
     wide: [
-      { file: `${P}/evolusis/chat-consent.png`, scale: 0.48, dx: 0.11, dy: -0.04, rotate: 3 },
-      { file: `${P}/evolusis/chat-replica.png`, scale: 0.64, dx: -0.05, dy: 0.02 },
+      { file: `${P}/evolusis/chat-consent.png`, scale: 0.38, dx: 0.11, dy: -0.04, rotate: 3 },
+      { file: `${P}/evolusis/chat-replica.png`, scale: 0.50, dx: -0.05, dy: 0.02 },
     ],
     portrait: [
       { file: `${P}/evolusis/chat-consent.png`, scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
@@ -76,8 +76,8 @@ const RECIPES: Recipe[] = [
     bg: '#0B1418',
     glow: '#3E9BC4',
     wide: [
-      { file: `${P}/mission-control/ONjh7VsHgILILEYDKonQBH7JNk.png`, scale: 0.46, dx: 0.12, dy: -0.05, rotate: 3 },
-      { file: `${P}/mission-control/hdYWk78rDMrafA7S7eVoWOcKgHs.png`, scale: 0.64, dx: -0.05, dy: 0.02 },
+      { file: `${P}/mission-control/ONjh7VsHgILILEYDKonQBH7JNk.png`, scale: 0.37, dx: 0.12, dy: -0.05, rotate: 3 },
+      { file: `${P}/mission-control/hdYWk78rDMrafA7S7eVoWOcKgHs.png`, scale: 0.50, dx: -0.05, dy: 0.02 },
     ],
     portrait: [
       { file: `${P}/mission-control/ONjh7VsHgILILEYDKonQBH7JNk.png`, scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
@@ -91,8 +91,8 @@ const RECIPES: Recipe[] = [
     bg: '#150E08',
     glow: '#C8862A',
     wide: [
-      { file: `${P}/awr/BAmbDD2w2ChS0D9wn9V5wD8RTLE.jpg`, scale: 0.46, dx: 0.12, dy: -0.05, rotate: 3 },
-      { file: `${P}/awr/oJwIrsqUDgpBTpEUbCLkLvIUk.jpg`, scale: 0.64, dx: -0.05, dy: 0.02 },
+      { file: `${P}/awr/BAmbDD2w2ChS0D9wn9V5wD8RTLE.jpg`, scale: 0.37, dx: 0.12, dy: -0.05, rotate: 3 },
+      { file: `${P}/awr/oJwIrsqUDgpBTpEUbCLkLvIUk.jpg`, scale: 0.50, dx: -0.05, dy: 0.02 },
     ],
     portrait: [
       { file: `${P}/awr/BAmbDD2w2ChS0D9wn9V5wD8RTLE.jpg`, scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
@@ -106,8 +106,8 @@ const RECIPES: Recipe[] = [
     bg: '#0C1822',
     glow: '#3B82F6',
     wide: [
-      { file: `${P}/cloudqa/ehAiohEx9OBe2JhTfA68msZt9o.png`, scale: 0.46, dx: 0.12, dy: -0.05, rotate: 3 },
-      { file: `${P}/cloudqa/1hZb6qngyXXOWLMRvkUFoSbEar0.png`, scale: 0.52, dx: -0.05, dy: 0.03 },
+      { file: `${P}/cloudqa/ehAiohEx9OBe2JhTfA68msZt9o.png`, scale: 0.37, dx: 0.12, dy: -0.05, rotate: 3 },
+      { file: `${P}/cloudqa/1hZb6qngyXXOWLMRvkUFoSbEar0.png`, scale: 0.44, dx: -0.05, dy: 0.03 },
     ],
     portrait: [
       { file: `${P}/cloudqa/ehAiohEx9OBe2JhTfA68msZt9o.png`, scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
@@ -121,8 +121,8 @@ const RECIPES: Recipe[] = [
     bg: '#180E06',
     glow: '#F97316',
     wide: [
-      { file: `${P}/orange/bgMZor6QuJV3Y7gZXZr12MhVZo.png`, scale: 0.46, dx: 0.12, dy: -0.05, rotate: 3 },
-      { file: `${P}/orange/5XOIhTm28b1XsGO6dLNVcEqD4rk.png`, scale: 0.60, dx: -0.05, dy: 0.02 },
+      { file: `${P}/orange/bgMZor6QuJV3Y7gZXZr12MhVZo.png`, scale: 0.37, dx: 0.12, dy: -0.05, rotate: 3 },
+      { file: `${P}/orange/5XOIhTm28b1XsGO6dLNVcEqD4rk.png`, scale: 0.38, dx: -0.05, dy: 0.02 },
     ],
     portrait: [
       { file: `${P}/orange/bgMZor6QuJV3Y7gZXZr12MhVZo.png`, scale: 0.28, dx: 0.03, dy: 0.16, rotate: 3 },
