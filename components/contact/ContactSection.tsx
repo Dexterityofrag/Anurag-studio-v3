@@ -438,6 +438,29 @@ const css = /* css */ `
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+/* ─── DESKTOP FIT ────────────────────────────────────────────── */
+/* The page is a single screen, so on short desktops (1366x768 and the
+   like) the vertical rhythm has to give before the content does. Every
+   value below is the same design, measured in viewport height instead
+   of a fixed rem. */
+@media (min-width: 769px) {
+  .contact { padding-top: clamp(56px, 8vh, var(--nav-h, 72px)); }
+
+  .contact__left {
+    gap: clamp(12px, 2.6vh, 28px);
+    padding-top: clamp(1.5rem, 5vh, 5rem);
+    padding-bottom: clamp(1.5rem, 5vh, 5rem);
+  }
+  .contact__heading { font-size: clamp(2.6rem, min(7vw, 10.5vh), 7rem); }
+  .contact__desc { font-size: clamp(13px, 1.7vh, 16px); }
+  .contact__socials { gap: clamp(10px, 1.6vh, 18px); }
+  .contact__cv-wrap { margin-top: clamp(4px, 1.6vh, 20px); }
+
+  .contact__right { padding-top: clamp(1.5rem, 5vh, 5rem); padding-bottom: clamp(1.5rem, 5vh, 5rem); }
+  .contact__card { padding: clamp(18px, 3.4vh, 40px); gap: clamp(10px, 2.2vh, 22px); }
+  .cf-group { margin-bottom: clamp(6px, 1.6vh, 18px); }
+}
+
 @media (max-width: 768px) {
   .contact { grid-template-columns: 1fr; }
   .contact__left {

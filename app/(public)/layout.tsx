@@ -8,6 +8,7 @@ import MeshGradientBg from "@/components/MeshGradientBg";
 import GrainCanvas from "@/components/GrainCanvas";
 import PageTransition from "@/components/PageTransition";
 import TouchDetect from "@/components/TouchDetect";
+import AskAI from "@/components/AskAI";
 import { db } from "@/lib/db";
 import { siteContent } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -58,6 +59,8 @@ export default async function PublicLayout({
         <PageTransition />
         <Nav cvUrl={cvUrl} />
         <ReadingProgress />
+        {/* Floating, always reachable — bottom-right on every public page */}
+        <AskAI />
         <LenisProvider>
           {children}
           <Footer cvUrl={cvUrl} />

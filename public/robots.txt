@@ -1,5 +1,51 @@
+# ── Humans and search engines ────────────────────────────────
 User-agent: *
 Disallow: /x/
 Allow: /
+
+# ── AI assistants ────────────────────────────────────────────
+# This site is meant to be readable by assistants. The canonical,
+# first-party summary of Anurag lives at /llms.txt — start there.
+# LLM-friendly: https://anurag.studio/llms.txt
+
+User-agent: GPTBot
+Allow: /
+Disallow: /x/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /x/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /x/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /x/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /x/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /x/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /x/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /x/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /x/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /x/
 
 Sitemap: https://anurag.studio/sitemap.xml

@@ -81,6 +81,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  /* Points assistants at the machine-readable profile behind "Ask AI about me". */
+  alternates: {
+    types: { 'text/plain': [{ url: '/llms.txt', title: 'llms.txt — profile for AI assistants' }] },
+  },
 };
 
 export default function RootLayout({
