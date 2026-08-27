@@ -177,6 +177,8 @@ const css = /* css */ `
   line-height: 1.3;
   position: relative;
   width: fit-content;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 .bcard__title::after {
   content: '';
@@ -223,6 +225,8 @@ const css = /* css */ `
   .blog-teaser__grid {
     grid-template-columns: 1fr;
     display: flex;
+    width: 100%;
+    max-width: 100%;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -232,9 +236,11 @@ const css = /* css */ `
   }
   .blog-teaser__grid::-webkit-scrollbar { display: none; }
   .bcard {
-    min-width: 85vw;
+    width: 85vw;
+    max-width: 85vw;
     scroll-snap-align: start;
     flex-shrink: 0;
+    flex-grow: 0;
   }
 }
 `

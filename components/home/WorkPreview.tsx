@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Project } from '@/lib/types'
@@ -421,10 +420,14 @@ function StripCard({ project, index }: { project: Project; index: number }) {
     return () => st.kill()
   }, [index])
 
-  // This card is a 0.84:1 portrait box (clamp(240px,28vw,320px) wide by
-  // clamp(280px,34vh,380px) tall). The wide 16:9 master would lose about half
-  // its width to object-fit: cover here, so prefer the portrait master.
-  const coverSrc = project.thumbnailUrl ?? project.coverUrl
+  /* Three different card shapes, so this needs art direction:
+       > 768px  0.84:1 portrait strip card   -> portrait master
+       421-768  2-col grid, ~0.9:1           -> portrait master
+       <= 420   1 col, ~345x180 = 1.9:1      -> WIDE master
+     Serving the portrait master at <=420 crops away more than half of it. */
+  const tallSrc = project.thumbnailUrl ?? project.coverUrl
+  const wideSrc = project.coverUrl ?? project.thumbnailUrl
+  const coverSrc = tallSrc
   const company  = [project.client, project.year].filter(Boolean).join(' · ')
 
   return (
@@ -436,18 +439,19 @@ function StripCard({ project, index }: { project: Project; index: number }) {
       aria-label={`View case study: ${project.title}`}
     >
       {coverSrc ? (
-        <Image
-          src={coverSrc}
-          alt={project.title}
-          className="fw-strip-card__img"
-          fill
-          sizes="(max-width: 768px) 50vw, (max-width: 1142px) 28vw, 320px"
-          style={{ objectFit: 'cover' }}
-          /* No `priority` here: this strip is the fifth section down the page.
-             Preloading below-the-fold images makes them compete with the hero
-             for bandwidth and pushes LCP out. Lazy is correct. */
-          draggable={false}
-        />
+        <picture>
+          <source media="(max-width: 420px)" srcSet={wideSrc ?? undefined} />
+          {/* No `priority`: this strip is the fifth section down the page, so
+              preloading it would compete with the hero and push LCP out. */}
+          <img
+            src={coverSrc}
+            alt={project.title}
+            className="fw-strip-card__img"
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+          />
+        </picture>
       ) : (
         <div className="fw-strip-card__placeholder">{project.title}</div>
       )}

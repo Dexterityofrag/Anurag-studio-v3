@@ -14,7 +14,7 @@ const aboutPersonSchema = {
     "url": "https://anurag.studio",
     "jobTitle": "Designer & Developer",
     "description": "Product designer crafting thoughtful digital experiences through strategy, systems, and storytelling. Based in India.",
-    "image": "https://anurag.studio/portrait-og.jpg",
+    "image": "https://anurag.studio/og.png",
     "sameAs": [
         "https://linkedin.com/in/dexterityofrag",
         "https://github.com/Dexterityofrag"
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
         title: 'About Anurag Adhikari | Designer & Developer',
         description:
             'Anurag Adhikari is a product designer crafting thoughtful digital experiences through strategy, systems, and storytelling.',
-        images: [{ url: '/portrait-og.jpg', alt: 'Anurag Adhikari' }],
+        images: [{ url: '/og.png', alt: 'Anurag Adhikari' }],
     },
-    twitter: { card: 'summary_large_image', images: ['/portrait-og.jpg'] },
+    twitter: { card: 'summary_large_image', images: ['/og.png'] },
 }
 
 export default async function AboutPageRoute() {

@@ -12,7 +12,7 @@ const personSchema = {
       "url": "https://anurag.studio",
       "jobTitle": "Designer & Developer",
       "description": "Product designer crafting thoughtful digital experiences through strategy, systems, and storytelling.",
-      "image": "https://anurag.studio/portrait-og.jpg",
+      "image": "https://anurag.studio/og.png",
       "sameAs": [
         "https://linkedin.com/in/dexterityofrag",
         "https://github.com/Dexterityofrag"
@@ -71,11 +71,11 @@ export const metadata: Metadata = {
     siteName: 'anurag.studio',
     type: 'website',
     locale: 'en_US',
-    images: [{ url: '/portrait-og.jpg', alt: 'Anurag Adhikari — Designer & Developer' }],
+    images: [{ url: '/og.png', alt: 'Anurag Adhikari — Designer & Developer' }],
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/portrait-og.jpg'],
+    images: ['/og.png'],
   },
   robots: {
     index: true,
