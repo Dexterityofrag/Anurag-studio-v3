@@ -86,7 +86,12 @@ async function rounded(buf: Buffer, w: number, h: number, radius: number) {
     .toBuffer()
 }
 
-async function compose(canvas: { w: number; h: number; centre: number }, r: Recipe, shots: Shot[]) {
+/**
+ * `r` is deliberately narrower than `Recipe`: composition only ever needs the
+ * two palette values. Keeping it that way lets the case-study figure builder
+ * reuse this geometry without inventing a fake thumbnail recipe around it.
+ */
+async function compose(canvas: { w: number; h: number; centre: number }, r: { bg: string; glow: string }, shots: Shot[]) {
   const base = sharp(backdrop(canvas.w, canvas.h, r.bg, r.glow, canvas.centre)).png()
   const layers: sharp.OverlayOptions[] = []
 
@@ -141,5 +146,5 @@ export async function build(recipes: Recipe[]) {
   }
 }
 
-export type { Recipe }
-export { WIDE, PORTRAIT }
+export type { Recipe, Shot }
+export { WIDE, PORTRAIT, compose, backdrop, rounded }

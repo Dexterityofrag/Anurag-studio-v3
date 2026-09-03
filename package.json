@@ -15,6 +15,7 @@
     "brand": "tsx scripts/build-brand-assets.ts",
     "seed:lineup": "tsx --env-file=.env.local scripts/seed-lineup.ts",
     "thumbs": "tsx --env-file=.env.local scripts/build-recipes.ts",
+    "images:case": "tsx scripts/build-case-images.ts",
     "cv:render": "node --experimental-strip-types scripts/render-cv.ts",
     "reel:studio": "remotion studio remotion/index.ts",
     "reel:render": "remotion render remotion/index.ts Showreel out/showreel.mp4 --codec h264 --crf 18 --muted",

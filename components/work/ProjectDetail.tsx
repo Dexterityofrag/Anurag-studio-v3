@@ -156,51 +156,112 @@ const css = /* css */ `
 /* ─── RIGHT MAIN CONTENT ──────────────────────────────────────── */
 .pd-main {
   padding: clamp(4rem,8vh,6rem) 0 clamp(4rem,8vh,6rem) clamp(2.5rem,5vw,5rem);
+  min-width: 0;
 }
-.pd-main .tiptap-content h1,
-.pd-main .tiptap-content h2 {
+
+/* TiptapRenderer emits .prose, not .tiptap-content. These selectors used to
+   say .tiptap-content, matched nothing, and every case study quietly fell back
+   to the shared blog prose styling. Keep them pointed at .prose. */
+.pd-main .prose {
+  /* .prose caps itself at 720px. The text still wants ~68ch, but figures need
+     the full column, so the cap moves onto the text elements instead. */
+  max-width: none;
+}
+.pd-main .prose h1,
+.pd-main .prose h2 {
   font-family: var(--font-display); font-weight: 700;
   font-size: clamp(1.5rem,2.5vw,2.2rem);
   letter-spacing: -0.025em; color: var(--text, #FAFAFA);
   margin: clamp(2.5rem,5vh,4rem) 0 clamp(0.8rem,1.5vh,1.2rem);
   line-height: 1.1;
 }
-.pd-main .tiptap-content h1:first-child,
-.pd-main .tiptap-content h2:first-child { margin-top: 0; }
-.pd-main .tiptap-content h3 {
+.pd-main .prose h1:first-child,
+.pd-main .prose h2:first-child { margin-top: 0; }
+.pd-main .prose h3 {
   font-family: var(--font-display); font-weight: 600;
   font-size: clamp(1.1rem,1.8vw,1.5rem);
   letter-spacing: -0.015em; color: var(--text, #FAFAFA);
   margin: clamp(2rem,4vh,3rem) 0 0.75rem;
 }
-.pd-main .tiptap-content p {
+.pd-main .prose p {
   font-family: var(--font-body); font-size: clamp(1rem,1.3vw,1.1rem);
   color: rgba(255,255,255,0.6); line-height: 1.85;
   margin-bottom: 1.4em; max-width: 68ch;
 }
-.pd-main .tiptap-content ul,
-.pd-main .tiptap-content ol { padding-left: 1.5rem; margin-bottom: 1.4em; }
-.pd-main .tiptap-content li {
+.pd-main .prose ul,
+.pd-main .prose ol { padding-left: 1.5rem; margin-bottom: 1.4em; max-width: 68ch; }
+.pd-main .prose li {
   font-family: var(--font-body); font-size: clamp(1rem,1.3vw,1.1rem);
   color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 0.4em;
 }
+
+/* ─── INLINE FIGURES ──────────────────────────────────────────
+   Images are woven through the argument rather than dumped at the end, so
+   they need to read as evidence: wider than the 68ch text measure, with the
+   caption tied visually to the image above it.
+
+   Captions are <p class="pd-figcap"><em>…</em></p>. Tiptap's schema has no
+   class attribute on paragraphs, so the class is dropped the first time the
+   case study is opened and saved in the admin editor. The <em> is a real
+   Tiptap mark and survives, which is why the caption carries both: with the
+   class it is a styled caption, without it, still a distinct italic line. */
+.pd-main .prose img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: clamp(2.5rem,5vh,3.5rem) 0 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  background: #0e0e0e;
+}
+.pd-main .prose p.pd-figcap {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.36);
+  margin: 0.9rem 0 clamp(2.5rem,5vh,3.5rem);
+  max-width: 62ch;
+}
+.pd-main .prose p.pd-figcap em { font-style: normal; }
 .pd-plain {
   font-family: var(--font-body); font-size: clamp(1rem,1.3vw,1.1rem);
   color: rgba(255,255,255,0.6); line-height: 1.85; max-width: 68ch;
 }
 
-/* ─── FEATURED IMAGE ──────────────────────────────────────────── */
-.pd-featured {
+/* ─── CLOSING GALLERY ─────────────────────────────────────────── */
+.pd-gallery {
   padding: 0 var(--page-px, clamp(1.5rem,5vw,4rem)) clamp(4rem,8vh,6rem);
   max-width: 1400px; margin: 0 auto;
 }
-.pd-featured__inner { position: relative; overflow: hidden; background: #111; }
-.pd-featured__img {
+.pd-gallery__label {
+  font-family: var(--font-mono); font-size: 9px;
+  color: rgba(255,255,255,0.28); letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 1.25rem;
+}
+.pd-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: clamp(1rem,2vw,1.75rem);
+}
+/* Browsers give <figure> a 40px side margin by default, which would break the
+   grid columns out of alignment. */
+.pd-gallery__item { min-width: 0; margin: 0; }
+.pd-gallery__frame {
+  position: relative; overflow: hidden; background: #111;
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 6px;
+}
+.pd-gallery__img {
   width: 100%; height: auto; display: block;
   transform: scale(1.02);
   transition: transform 0.8s cubic-bezier(0.22,1,0.36,1);
 }
-.pd-featured__inner:hover .pd-featured__img { transform: scale(1); }
+.pd-gallery__frame:hover .pd-gallery__img { transform: scale(1); }
+.pd-gallery__cap {
+  font-family: var(--font-mono); font-size: 11px; line-height: 1.6;
+  color: rgba(255,255,255,0.36); margin-top: 0.85rem;
+}
 
 /* ─── PREV / NEXT ─────────────────────────────────────────────── */
 .pd-nav { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,0.06); }
@@ -248,8 +309,14 @@ export default function ProjectDetail({ project, adjacent }: ProjectDetailProps)
   const [scrollPct, setScrollPct] = useState(0)
   const [imgLoaded, setImgLoaded]  = useState(false)
   const images = (project.images ?? []) as ImageItem[]
-  const featuredImg = images[1] ?? images[0] ?? null
   const category = project.tags?.slice(0, 2).join(', ') ?? 'Project'
+
+  // The case study body now carries its own figures, so the gallery shows only
+  // what the writing did not already use: the closing plates. Matching on the
+  // rendered HTML keeps the two in sync automatically. Weave an image into the
+  // copy and it leaves the gallery; pull it out and it comes back.
+  const descriptionHtml = project.descriptionHtml ?? ''
+  const gallery = images.filter((img) => !descriptionHtml.includes(img.url))
 
   useEffect(() => {
     const onScroll = () => {
@@ -360,17 +427,27 @@ export default function ProjectDetail({ project, adjacent }: ProjectDetailProps)
         </main>
       </div>
 
-      {/* ── FEATURED IMAGE ── */}
-      {featuredImg && (
-        <section className="pd-featured">
-          <div className="pd-featured__inner">
-            <Image
-              src={featuredImg.url}
-              alt={featuredImg.alt || project.title}
-              width={1600} height={900}
-              sizes="(max-width:768px) 100vw, calc(100vw - 2*var(--page-px, 40px))"
-              className="pd-featured__img"
-            />
+      {/* ── CLOSING GALLERY ── */}
+      {gallery.length > 0 && (
+        <section className="pd-gallery">
+          <p className="pd-gallery__label">More from this project</p>
+          <div className="pd-gallery__grid">
+            {gallery.map((img) => (
+              <figure key={img.url} className="pd-gallery__item">
+                <div className="pd-gallery__frame">
+                  <Image
+                    src={img.url}
+                    alt={img.alt || project.title}
+                    width={1600} height={1000}
+                    sizes="(max-width:768px) 100vw, (max-width:1400px) 50vw, 680px"
+                    className="pd-gallery__img"
+                  />
+                </div>
+                {img.caption && (
+                  <figcaption className="pd-gallery__cap">{img.caption}</figcaption>
+                )}
+              </figure>
+            ))}
           </div>
         </section>
       )}

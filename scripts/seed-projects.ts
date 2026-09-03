@@ -71,18 +71,9 @@ const projectSeeds: ProjectSeed[] = [
     thumbnailUrl: '/projects/evolusis/05-evo-chat.png',
     displayOrder: 3,
   },
-  {
-    slug: 'evo-coach-ai-voice-coaching',
-    title: 'Evo Coach — AI Voice Coaching',
-    tagline: 'Mobile-first AI voice roleplay for high-stakes workplace conversations — clinical warmth by design',
-    role: 'Product Design Consultant',
-    year: 2025,
-    tags: ['Voice UX', 'Mobile Design', 'AI Products', 'Product Design', 'Interaction Design'],
-    client: 'Evolusis',
-    coverUrl: '/projects/evolusis/04-evo-coach.png',
-    thumbnailUrl: '/projects/evolusis/04-evo-coach.png',
-    displayOrder: 4,
-  },
+  // Evo Coach was retired as a standalone case study; its voice work is now
+  // covered inside the Evo Chat write-up, which is where the consent and
+  // permission design actually belongs.
   {
     slug: 'mission-control',
     title: 'Mission Control: Operator-First Drone (No-Code) HMI',
@@ -93,7 +84,7 @@ const projectSeeds: ProjectSeed[] = [
     client: null,
     coverUrl: '/projects/mission-control/Bg1OTmRCa4HBnnu0CMG91vRZ2VY.png',
     thumbnailUrl: '/projects/mission-control/Bg1OTmRCa4HBnnu0CMG91vRZ2VY.png',
-    displayOrder: 5,
+    displayOrder: 4,
   },
   {
     slug: 'awr',
@@ -105,7 +96,7 @@ const projectSeeds: ProjectSeed[] = [
     client: null,
     coverUrl: '/projects/awr/BAmbDD2w2ChS0D9wn9V5wD8RTLE.jpg',
     thumbnailUrl: '/projects/awr/BAmbDD2w2ChS0D9wn9V5wD8RTLE.jpg',
-    displayOrder: 6,
+    displayOrder: 5,
   },
   {
     slug: 'cloudqa',
@@ -117,7 +108,7 @@ const projectSeeds: ProjectSeed[] = [
     client: null,
     coverUrl: '/projects/cloudqa/1hZb6qngyXXOWLMRvkUFoSbEar0.png',
     thumbnailUrl: '/projects/cloudqa/1hZb6qngyXXOWLMRvkUFoSbEar0.png',
-    displayOrder: 7,
+    displayOrder: 6,
   },
   {
     slug: 'orange',
@@ -129,7 +120,7 @@ const projectSeeds: ProjectSeed[] = [
     client: null,
     coverUrl: '/projects/orange/5XOIhTm28b1XsGO6dLNVcEqD4rk.png',
     thumbnailUrl: '/projects/orange/5XOIhTm28b1XsGO6dLNVcEqD4rk.png',
-    displayOrder: 8,
+    displayOrder: 7,
   },
 ]
 
