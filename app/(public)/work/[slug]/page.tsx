@@ -60,13 +60,21 @@ type PageArgs = { params: Promise<{ slug: string }> }
 
 export default async function ProjectPage({ params }: PageArgs) {
     const { slug } = await params
-    const [project, adjacent] = await Promise.all([
+    const [project, adjacent, all] = await Promise.all([
         fetchProjectBySlug(slug).catch(() => null),
         fetchAdjacentProjects(slug).catch(() => ({ prev: null, next: null })),
+        fetchProjects().catch(() => []),
     ])
 
     if (!project) notFound()
 
-    return <ProjectDetail project={project} adjacent={adjacent} />
+    // The hero counter reads "03 / 07". It comes from the published set in
+    // display order, the same order /work lists them in, so the number a
+    // visitor sees here matches the position they clicked from.
+    const at = all.findIndex((p) => p.slug === slug)
+    const position =
+        at >= 0 && all.length > 1 ? { index: at + 1, total: all.length } : undefined
+
+    return <ProjectDetail project={project} adjacent={adjacent} position={position} />
 
 }
