@@ -214,9 +214,6 @@ const DESCRIPTIONS: Record<string, Block[]> = {
     { type: 'paragraph', text: 'An actual coaching exchange does. Someone types that a colleague keeps taking credit for their work, and the response does not solve it for them, it asks a better question. A visitor reads that in about three seconds and understands the product, the tone and the boundary all at once.' },
     { type: 'paragraph', text: 'Everything else on the page is sequenced behind that: what it does, who it is for, what it costs you to try, and the proof strip that makes those claims survivable.' },
 
-    fig('evolusis-landing-page', 'scroll', 'The Evolusis landing page scrolled, showing the compacted navigation and a Dashboard action',
-      'Scrolled. The nav compacts and the primary action switches to Dashboard for anyone already signed in, so returning users are not sold to twice.'),
-
     { type: 'heading', level: 2, text: 'The Small Things That Took Longest' },
     { type: 'paragraph', text: 'The trust signals. The customer logos, the line about professionals already growing with Evo, the ticker of outcomes along the bottom edge. Each one is a few words and each one was argued over, because on a page whose job is a demo booking, those are the difference between a click and a closed tab.' },
     { type: 'paragraph', text: 'The rule I held to: every number on the page has to be one the company can defend in a sales call. A landing page that overstates gets found out in the first meeting, and then the whole page is a liability.' },
@@ -504,7 +501,6 @@ const IMAGES: Record<string, ImageItem[]> = {
   ],
   'evolusis-landing-page': [
     { url: '/projects/evolusis-landing-page/case/hero.webp', alt: 'Evolusis landing page hero' },
-    { url: '/projects/evolusis-landing-page/case/scroll.webp', alt: 'Evolusis landing page scrolled state' },
   ],
   'evo-dashboard-evo-by-evolusis': [
     { url: '/projects/evo-dashboard-evo-by-evolusis/case/dashboard-dark.webp', alt: 'Evo dashboard, free account, dark theme' },
@@ -521,7 +517,6 @@ const IMAGES: Record<string, ImageItem[]> = {
     { url: '/projects/mission-control/case/unified-hmi.webp', alt: 'The unified Mission Control HMI, annotated' },
     { url: '/projects/mission-control/case/safety-logic.webp', alt: 'Safety logic and spatial risk on the canvas' },
     { url: '/projects/mission-control/case/glass-box.webp', alt: 'Generated code and operator brief side by side' },
-    { url: '/projects/mission-control/case/on-desk.webp', alt: 'Mission Control shown on a laptop', caption: 'Where the work was done.' },
   ],
   awr: [
     { url: '/projects/awr/case/brand.webp', alt: 'Anurag Whiskey Reserve brand slide' },
@@ -541,7 +536,6 @@ const IMAGES: Record<string, ImageItem[]> = {
     { url: '/projects/orange/case/home.webp', alt: 'The Orange+ home screen' },
     { url: '/projects/orange/case/in-hand.webp', alt: 'Orange+ splash and home screens' },
     { url: '/projects/orange/case/on-homescreen.webp', alt: 'The Orange+ icon on a home screen' },
-    { url: '/projects/orange/case/on-desk.webp', alt: 'Orange+ on a phone, closing plate', caption: 'Orange+, where it actually lives.' },
   ],
 }
 

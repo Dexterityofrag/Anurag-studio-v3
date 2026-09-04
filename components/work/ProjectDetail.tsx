@@ -662,15 +662,39 @@ const css = /* css */ `
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 .cs-next__link:hover .cs-next__arrow { opacity: 1; transform: translateX(0); }
-.cs-next__prev {
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 0 var(--cs-gut) clamp(3rem,6vh,4.5rem);
+/* The closing rule of the whole page. Everything stays left: the Ask AI pill
+   is fixed to the bottom-right of the viewport, so anything sitting in that
+   corner at the end of the page is underneath it. */
+.cs-next__foot {
+  border-top: 1px solid var(--cs-rule);
+  padding: clamp(1.5rem,3vh,2rem) var(--cs-gut) clamp(2rem,4vh,2.75rem);
+  display: flex; align-items: center; justify-content: flex-start;
+  gap: clamp(1.25rem,3vw,2.5rem); flex-wrap: wrap;
   font-family: var(--font-mono); font-size: 10px; font-weight: 500;
   letter-spacing: 0.12em; text-transform: uppercase;
+}
+.cs-next__prev {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-width: 0; max-width: min(100%, 640px);
   color: var(--cs-dim); text-decoration: none; transition: color 0.2s ease;
 }
 .cs-next__prev:hover { color: #fff; }
-.cs-next__prev svg { width: 13px; height: 13px; }
+.cs-next__prev svg { width: 13px; height: 13px; flex-shrink: 0; transition: transform 0.25s ease; }
+.cs-next__prev:hover svg { transform: translateX(-3px); }
+.cs-next__prev-label { flex-shrink: 0; }
+.cs-next__prev-title {
+  color: rgba(255,255,255,0.28);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.cs-next__prev:hover .cs-next__prev-title { color: rgba(255,255,255,0.6); }
+.cs-next__all {
+  color: var(--cs-dim); text-decoration: none;
+  border-bottom: 1px solid var(--cs-rule);
+  padding-bottom: 2px; flex-shrink: 0;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.cs-next__all:hover { color: #fff; border-bottom-color: currentColor; }
 
 /* ─── RESPONSIVE ────────────────────────────────────────────── */
 @media (max-width: 900px) {
@@ -750,6 +774,13 @@ const css = /* css */ `
   .cs-close__inner { align-items: flex-start; }
   .cs-close__cta { width: 100%; justify-content: space-between; }
   .cs-next__inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .cs-next__prev-title { display: none; }
+  /* The mobile nav pill is fixed to the bottom of the viewport, so the last
+     row of the last section lands underneath it. Clear its height. */
+  .cs-next__foot {
+    font-size: 9px; gap: 1rem;
+    padding-bottom: calc(2rem + 76px + env(safe-area-inset-bottom, 0px));
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .cs-gallery__img, .cs-figure__img, .cs-next__title,
@@ -953,7 +984,10 @@ export default function ProjectDetail({ project, adjacent, position }: ProjectDe
         </div>
       </section>
 
-      {/* ── NEXT ── */}
+      {/* ── NEXT / PREVIOUS ──
+          The page ends here: the footer stands down on a case study, because
+          the next project is the way out. Both neighbours wrap, so this block
+          is the same on the first case study and the last. */}
       <nav className="cs-next" aria-label="Project navigation">
         {adjacent.next && (
           <Link href={`/work/${adjacent.next.slug}`} className="cs-next__link">
@@ -966,11 +1000,19 @@ export default function ProjectDetail({ project, adjacent, position }: ProjectDe
             </div>
           </Link>
         )}
-        {adjacent.prev && (
-          <Link href={`/work/${adjacent.prev.slug}`} className="cs-next__prev">
-            <ArrowLeft /> Previous, {adjacent.prev.title}
+
+        <div className="cs-next__foot">
+          {adjacent.prev && (
+            <Link href={`/work/${adjacent.prev.slug}`} className="cs-next__prev">
+              <ArrowLeft />
+              <span className="cs-next__prev-label">Previous</span>
+              <span className="cs-next__prev-title">{adjacent.prev.title}</span>
+            </Link>
+          )}
+          <Link href="/work" className="cs-next__all">
+            All work
           </Link>
-        )}
+        </div>
       </nav>
     </div>
   )

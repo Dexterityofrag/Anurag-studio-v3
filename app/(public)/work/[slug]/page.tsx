@@ -1,10 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import {
-    fetchProjectBySlug,
-    fetchAdjacentProjects,
-    fetchProjects,
-} from '@/lib/data/projects'
+import { fetchProjectBySlug, fetchProjects } from '@/lib/data/projects'
 import ProjectDetail from '@/components/work/ProjectDetail'
 
 // Re-validate cached pages every 60s so admin-uploaded images appear quickly
@@ -60,9 +56,8 @@ type PageArgs = { params: Promise<{ slug: string }> }
 
 export default async function ProjectPage({ params }: PageArgs) {
     const { slug } = await params
-    const [project, adjacent, all] = await Promise.all([
+    const [project, all] = await Promise.all([
         fetchProjectBySlug(slug).catch(() => null),
-        fetchAdjacentProjects(slug).catch(() => ({ prev: null, next: null })),
         fetchProjects().catch(() => []),
     ])
 
@@ -74,6 +69,22 @@ export default async function ProjectPage({ params }: PageArgs) {
     const at = all.findIndex((p) => p.slug === slug)
     const position =
         at >= 0 && all.length > 1 ? { index: at + 1, total: all.length } : undefined
+
+    // Both neighbours come off that same ordered list, and both wrap, so the
+    // last project offers the first as next and the first offers the last as
+    // previous. Nobody reaches the end of a case study and finds one way out.
+    //
+    // This replaces fetchAdjacentProjects, which queried for the neighbours
+    // separately and sorted the "previous" side ascending — so it returned the
+    // first project in the set rather than the one immediately before, on
+    // every case study except the second.
+    const adjacent =
+        at >= 0 && all.length > 1
+            ? {
+                  prev: all[(at - 1 + all.length) % all.length],
+                  next: all[(at + 1) % all.length],
+              }
+            : { prev: null, next: null }
 
     return <ProjectDetail project={project} adjacent={adjacent} position={position} />
 

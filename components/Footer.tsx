@@ -713,6 +713,10 @@ export default function Footer({ cvUrl }: { cvUrl?: string }) {
   const marqueeItems = [...MARQUEE_WORDS, ...MARQUEE_WORDS]
 
   if (pathname?.startsWith('/contact')) return null
+  // A case study ends on the next project, which is its own way out of the
+  // page. The marquee and the second set of links underneath it only argue
+  // with that. /work itself keeps the footer.
+  if (/^\/work\/[^/]+/.test(pathname ?? '')) return null
 
   return (
     <>
