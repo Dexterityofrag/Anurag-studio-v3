@@ -466,12 +466,28 @@ const css = /* css */ `
 }
 .cs-prose blockquote p { font: inherit; color: inherit; margin: 0; max-width: 20ch; }
 
-/* ─── FIGURES IN THE WRITING ────────────────────────────────── */
+/* ─── FIGURES IN THE WRITING ──────────────────────────────────
+   Same plate as the chapter figures, done without a wrapper: these arrive as
+   raw <img> inside the stored HTML. The seed bakes real width and height onto
+   every tag, so width:auto keeps the true aspect while max-height stops a
+   portrait phone screenshot running to 1,300px and stretching the page. */
 .cs-prose img {
-  width: 100%; max-width: 100%; height: auto; display: block;
-  margin: clamp(2.5rem,5vh,3.5rem) 0 0;
+  box-sizing: border-box;
+  display: block;
+  width: auto; height: auto;
+  max-width: 100%;
+  max-height: clamp(340px, 56vh, 620px);
+  margin: clamp(2.5rem,5vh,3.5rem) auto 0;
+  padding: clamp(0.75rem, 2.5%, 1.5rem);
   border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 6px; background: #0e0e0e;
+  border-radius: 8px;
+  background:
+    radial-gradient(
+      82% 78% at 50% 42%,
+      color-mix(in srgb, var(--pj-accent) 16%, transparent) 0%,
+      transparent 70%
+    ),
+    var(--pj-field);
 }
 /* Captions are <p class="pd-figcap"><em>…</em></p>. Tiptap's paragraph schema
    has no class attribute, so the class disappears the first time a case study
@@ -483,8 +499,12 @@ const css = /* css */ `
   line-height: 1.6; letter-spacing: 0.02em;
   color: rgba(255,255,255,0.36);
 }
+/* Centred under a centred plate. */
 .cs-prose p.pd-figcap,
-.cs-prose img + p { margin: 0.9rem 0 clamp(2.5rem,5vh,3.5rem); max-width: 58ch; }
+.cs-prose img + p {
+  margin: 0.9rem auto clamp(2.5rem,5vh,3.5rem);
+  max-width: 58ch; text-align: center;
+}
 
 /* ─── FIGURES PLACED WITH A CHAPTER ─────────────────────────── */
 /* Breaks the two-column grid so the pictures run the full measure of the page,
