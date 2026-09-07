@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 200" width="760" height="200" role="img" aria-label="Kharchaaaa">
+  <title>Kharchaaaa lockup</title>
+  <!-- Horizontal lockup. Needs Space Grotesk; the app renders the wordmark
+       as live text instead, so this file is for decks and exports. -->
+  <rect width="760" height="200" fill="#060606"/>
+  <g transform="translate(100,100) scale(0.30)">
+    <circle r="150" fill="none" stroke="#ffffff" stroke-opacity=".09" stroke-width="30"/>
+    <path d="M 26 -147.7 A 150 150 0 1 1 -150 0" fill="none" stroke="#00FF94" stroke-width="30"/>
+    <circle cx="-150" cy="0" r="26" fill="#00FF94"/>
+    <g fill="none" stroke="#f0ede8" stroke-width="22" stroke-linecap="round">
+      <path d="M -34 -92 L -34 92"/><path d="M 30 -26 L -28 22"/><path d="M -28 22 L 34 92"/>
+    </g>
+  </g>
+  <text x="180" y="100" dominant-baseline="central"
+        font-family="Space Grotesk, Helvetica, Arial, sans-serif"
+        font-weight="700" font-size="76" letter-spacing="-3">
+    <tspan fill="#f0ede8">kharch</tspan><tspan fill="#00FF94">a</tspan><tspan fill="#00FF94" opacity=".62">a</tspan><tspan fill="#00FF94" opacity=".38">a</tspan><tspan fill="#00FF94" opacity=".2">a</tspan>
+  </text>
+</svg>

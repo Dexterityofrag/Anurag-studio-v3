@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Kharchaaaa</title>
+<meta name="description" content="An expense book that reads the way you talk.">
+
+<!-- Add to Home Screen, iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kharchaaaa">
+<meta name="theme-color" content="#060606">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Film grain, same treatment as the site -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- Checkpoint crossing takeover -->
+<div class="flash" id="flash" aria-hidden="true">
+  <div class="flash__pct" id="flashPct">40</div>
+  <div class="flash__label" id="flashLabel">of September gone</div>
+  <div class="flash__sub" id="flashSub"></div>
+</div>
+
+<main class="app">
+
+  <!-- ════════════════════════════════════ TODAY ═══ -->
+  <section class="screen is-active" id="screen-today">
+    <header class="head">
+      <div class="head__eyebrow" id="todayEyebrow">—</div>
+      <h1 class="head__title wordmark">kharch<b>a</b><b>a</b><b>a</b><b>a</b></h1>
+    </header>
+
+    <!-- The gauge -->
+    <div class="gauge" id="gauge">
+      <svg class="gauge__svg" viewBox="0 0 240 240" aria-hidden="true">
+        <defs>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="2.5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle class="gauge__track" cx="120" cy="120" r="96"/>
+        <g class="gauge__ticks" id="gaugeTicks"></g>
+        <circle class="gauge__arc" id="gaugeArc" cx="120" cy="120" r="96" filter="url(#glow)"/>
+      </svg>
+      <div class="gauge__inner">
+        <div class="gauge__label" id="gaugeLabel">spent this month</div>
+        <div class="gauge__amount num" id="gaugeAmount">₹0</div>
+        <div class="gauge__of" id="gaugeOf">no budget set</div>
+      </div>
+    </div>
+
+    <div class="stats" id="paceStats"></div>
+
+    <!-- One bar per day of the month -->
+    <div class="block">
+      <div class="block__head">
+        <span class="micro">the month, day by day</span>
+        <span class="micro micro--dim" id="monthStripTotal"></span>
+      </div>
+      <div class="strip" id="monthStrip"></div>
+    </div>
+
+    <!-- Today's spine -->
+    <div class="block">
+      <div class="block__head">
+        <span class="micro">today</span>
+        <span class="micro micro--dim" id="todayTotal"></span>
+      </div>
+      <div class="spine" id="todaySpine"></div>
+    </div>
+
+    <div class="tail"></div>
+  </section>
+
+  <!-- ════════════════════════════════════ LOG ═════ -->
+  <section class="screen" id="screen-log">
+    <header class="head">
+      <div class="head__eyebrow">everything, newest first</div>
+      <h1 class="head__title">Log</h1>
+    </header>
+    <div class="chips" id="logFilters"></div>
+    <div id="logBody"></div>
+    <div class="tail"></div>
+  </section>
+
+  <!-- ════════════════════════════════════ STATS ═══ -->
+  <section class="screen" id="screen-stats">
+    <header class="head">
+      <div class="head__eyebrow">where it actually goes</div>
+      <h1 class="head__title">Shape</h1>
+    </header>
+    <div class="chips" id="statsRange"></div>
+    <div class="marquee" id="statsMarquee" aria-hidden="true"><div class="marquee__track" id="marqueeTrack"></div></div>
+    <div id="statsBody"></div>
+    <div class="tail"></div>
+  </section>
+
+  <!-- ════════════════════════════════════ SETUP ═══ -->
+  <section class="screen" id="screen-setup">
+    <header class="head">
+      <div class="head__eyebrow">the dials</div>
+      <h1 class="head__title">Setup</h1>
+    </header>
+    <div id="setupBody"></div>
+    <div class="tail"></div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════════ COMPOSER ═══ -->
+<div class="dock">
+  <div class="preview" id="preview" hidden>
+    <div class="preview__rows" id="previewRows"></div>
+  </div>
+
+  <form class="composer" id="composer" autocomplete="off">
+    <button type="button" class="composer__cat" id="composerCat" aria-label="detected category">
+      <span id="composerDot" class="dot"></span>
+    </button>
+    <!-- A textarea, not an input: an input silently strips newlines, and one
+         spend per line is the whole point. Enter sends, Shift+Enter adds a line. -->
+    <textarea class="composer__input" id="entry" rows="1"
+              placeholder="uber 105" aria-label="add a spend"
+              autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
+    <button class="composer__go" id="go" type="submit" aria-label="save">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <path d="M5 12h13M12 5l7 7-7 7" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </form>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab is-on" data-screen="today"><span>Today</span></button>
+    <button class="tab" data-screen="log"><span>Log</span></button>
+    <button class="tab" data-screen="stats"><span>Shape</span></button>
+    <button class="tab" data-screen="setup"><span>Setup</span></button>
+  </nav>
+</div>
+
+<!-- Category picker -->
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet__scrim" data-close></div>
+  <div class="sheet__panel">
+    <div class="sheet__grip"></div>
+    <div class="sheet__head">
+      <span class="micro" id="sheetTitle">pick a category</span>
+      <button class="sheet__x" data-close aria-label="close">✕</button>
+    </div>
+    <div class="sheet__body" id="sheetBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="js/core.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
