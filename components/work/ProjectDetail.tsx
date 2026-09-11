@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { paletteFor } from '@/lib/project-palette'
+import { ctaFor } from '@/lib/project-cta'
 import type { Project, ProjectWithTestimonials } from '@/lib/types'
 import type { ImageItem } from '@/lib/db/schema'
 
@@ -333,6 +334,7 @@ const css = /* css */ `
   margin: clamp(2rem,5vh,3.5rem) 0 0 auto;
 }
 
+.cs-hero__cta { margin-top: clamp(28px, 3.5vw, 44px); }
 .cs-hero__visual {
   position: relative; z-index: 1;
   max-width: var(--cs-max); margin: clamp(3rem,7vh,5.5rem) auto 0;
@@ -795,6 +797,7 @@ const css = /* css */ `
 
 export default function ProjectDetail({ project, adjacent, position }: ProjectDetailProps) {
   const palette = paletteFor(project.slug)
+  const cta = ctaFor(project.slug)
   const images = useMemo(() => (project.images ?? []) as ImageItem[], [project.images])
   const descriptionHtml = project.descriptionHtml ?? ''
 
@@ -845,6 +848,31 @@ export default function ProjectDetail({ project, adjacent, position }: ProjectDe
           <h1 className="cs-hero__title">{project.title}</h1>
 
           {project.tagline && <p className="cs-hero__lead">{project.tagline}</p>}
+
+          {/* The same call to action as the closing section, offered before the
+              case study rather than only after it. Somebody who already knows
+              they want the thing should not have to read nine sections to find
+              the way to it. */}
+          <div className="cs-hero__cta">
+            {cta ? (
+              <Link href={cta.href} className="cs-close__cta">
+                {cta.label} <ArrowUpRight />
+              </Link>
+            ) : project.externalUrl ? (
+              <a
+                href={project.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cs-close__cta"
+              >
+                Visit {hostOf(project.externalUrl)} <ArrowUpRight />
+              </a>
+            ) : (
+              <span className="cs-close__cta cs-close__cta--off">
+                Not publicly live <ArrowUpRight />
+              </span>
+            )}
+          </div>
         </div>
 
         {project.coverUrl && (
@@ -964,10 +992,17 @@ export default function ProjectDetail({ project, adjacent, position }: ProjectDe
       <section className="cs-close">
         <div className="cs-close__inner">
           <div>
-            <p className="cs-close__label">The build</p>
+            <p className="cs-close__label">{cta?.note ?? 'The build'}</p>
             <p className="cs-close__line">Designed and built by Anurag.</p>
           </div>
-          {project.externalUrl ? (
+          {/* A project that is built but not open takes an internal CTA, so the
+              closing line offers the way in rather than "Not publicly live",
+              which reads as abandoned. See lib/project-cta.ts. */}
+          {cta ? (
+            <Link href={cta.href} className="cs-close__cta">
+              {cta.label} <ArrowUpRight />
+            </Link>
+          ) : project.externalUrl ? (
             <a
               href={project.externalUrl}
               target="_blank"

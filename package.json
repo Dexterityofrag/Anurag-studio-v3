@@ -13,6 +13,7 @@
     "admin:password": "node scripts/set-admin-password.mjs",
     "env:vercel": "node scripts/env-vercel.mjs",
     "brand": "tsx scripts/build-brand-assets.ts",
+    "seed:hr-os": "tsx --env-file=.env.local scripts/seed-hr-os.ts",
     "seed:lineup": "tsx --env-file=.env.local scripts/seed-lineup.ts",
     "thumbs": "tsx --env-file=.env.local scripts/build-recipes.ts",
     "images:case": "tsx scripts/build-case-images.ts",
@@ -22,7 +23,11 @@
     "reel:sound": "node --experimental-strip-types scripts/build-sound.ts",
     "reel:render:linkedin": "npm run reel:sound && remotion render remotion/index.ts ShowreelSound out/showreel-linkedin.mp4 --codec h264 --crf 18",
     "seed:projects": "tsx --env-file=.env.local scripts/seed-projects.ts",
-    "seed:descriptions": "tsx --env-file=.env.local scripts/seed-descriptions.ts"
+    "seed:descriptions": "tsx --env-file=.env.local scripts/seed-descriptions.ts",
+    "seed:kharchaaaa": "tsx --env-file=.env.local scripts/seed-kharchaaaa.ts",
+    "seed:raj": "tsx --env-file=.env.local scripts/seed-raj-associates.ts",
+    "intro:kharcha": "remotion render remotion/index.ts KharchaIntro public/projects/kharchaaaa/intro.mp4 --codec h264 --crf 18 --muted",
+    "intro:kharcha:still": "remotion still remotion/index.ts KharchaIntro out/kharcha-intro.png --frame=120"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1007.0",

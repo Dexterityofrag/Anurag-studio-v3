@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { fetchProjectBySlug, fetchProjects } from '@/lib/data/projects'
 import ProjectDetail from '@/components/work/ProjectDetail'
+import ComingSoonProject from '@/components/work/ComingSoonProject'
+import { statusFor } from '@/lib/project-status'
 
 // Re-validate cached pages every 60s so admin-uploaded images appear quickly
 export const revalidate = 60
@@ -62,6 +64,12 @@ export default async function ProjectPage({ params }: PageArgs) {
     ])
 
     if (!project) notFound()
+
+    // A project can be seeded, coloured and photographed and still not be ready
+    // to be read. Those get a short holding page instead of the case study, and
+    // publishing one later is deleting its entry in lib/project-status.ts.
+    const status = statusFor(slug)
+    if (status) return <ComingSoonProject project={project} status={status} />
 
     // The hero counter reads "03 / 07". It comes from the published set in
     // display order, the same order /work lists them in, so the number a
