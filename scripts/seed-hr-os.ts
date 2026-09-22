@@ -177,9 +177,18 @@ const CLEAN = '#f5c518'     // --color-accent, the gold the redesign signals wit
  * system" fastest, with the dashboard and roster tilted behind it so the card
  * reads as a product rather than one cropped screenshot.
  *
- * Portrait: the phone alone. The strip card is narrow, a 16:10 desktop screen
- * scaled to fit its width leaves the canvas mostly empty, and most of the staff
- * on this system only ever see it on a phone.
+ * Portrait: two desktop screens stacked, not the phone.
+ *
+ * Most staff on this system only ever see the phone view, which is why the
+ * phone was picked first. But that is a fact about the product's users, not
+ * about what this card is for. The card sells the work to someone deciding
+ * whether to read the case study, and the work is an admin console: payroll
+ * runs, a register, a roster. The employee's phone page is the smallest part
+ * of it and the least distinguishable from any other HR app.
+ *
+ * The 4:5 canvas still cannot carry one 16:10 screen without going empty, so
+ * this stacks two at 0.30 and 0.34, the same geometry the Evolusis and Mission
+ * Control portrait masters use.
  */
 const recipeFor = (v: string): Recipe => ({
   slug: 'hr-os',
@@ -191,7 +200,8 @@ const recipeFor = (v: string): Recipe => ({
     { file: `projects/hr-os/02-register.${v}.webp`, scale: 0.62, dx: 0, dy: 0.02 },
   ],
   portrait: [
-    { file: `projects/hr-os/07-mobile-me.${v}.webp`, scale: 0.78, dx: 0, dy: 0.035 },
+    { file: `projects/hr-os/01-dashboard.${v}.webp`, scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
+    { file: `projects/hr-os/02-register.${v}.webp`, scale: 0.34, dx: -0.02, dy: -0.10 },
   ],
 })
 

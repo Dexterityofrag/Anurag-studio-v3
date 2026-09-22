@@ -155,9 +155,18 @@ const BRASS = '#A8894F'
  * Wide: the practice index in front, because the cause list is the argument,
  * with the landing page and a practice page tilted behind it.
  *
- * Portrait: the phone. Most of this site's readers will never see the desktop
- * layout, and the strip card is narrow enough that a 16:10 screen scaled to
- * fit it leaves the canvas mostly empty.
+ * Portrait: two desktop screens stacked, not the phone.
+ *
+ * The phone was the first choice on the grounds that most of this firm's own
+ * visitors arrive on one. That is true of the site and beside the point for the
+ * card: this card advertises the work, and the work is a desktop site. A phone
+ * screenshot here tells a portfolio visitor the deliverable was a mobile app.
+ *
+ * The objection that beat the desktop screen the first time was real, though.
+ * One 16:10 screen scaled to the width of a 4:5 canvas does leave it mostly
+ * empty. Stacking two at 0.30 and 0.34 is how the Evolusis and Mission Control
+ * portrait masters already solve it, so the geometry is borrowed from there
+ * rather than invented.
  */
 const RECIPE: Recipe = {
   slug: 'raj-associates',
@@ -169,7 +178,8 @@ const RECIPE: Recipe = {
     { file: 'projects/raj-associates/02-practice-index.webp', scale: 0.62, dx: 0, dy: 0.02 },
   ],
   portrait: [
-    { file: 'projects/raj-associates/07-mobile.webp', scale: 0.78, dx: 0, dy: 0.035 },
+    { file: 'projects/raj-associates/01-hero.webp', scale: 0.30, dx: 0.03, dy: 0.16, rotate: 3 },
+    { file: 'projects/raj-associates/02-practice-index.webp', scale: 0.34, dx: -0.02, dy: -0.10 },
   ],
 }
 
