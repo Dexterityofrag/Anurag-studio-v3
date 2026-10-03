@@ -20,9 +20,35 @@ export type ProjectCta = {
     label: string
     /** Sits above the button, in the mono micro-label. */
     note?: string
+    /** A static demo outside the Next router (public/work/<slug>/live), so it needs a full page load. */
+    hard?: boolean
 }
 
 const CTAS: Record<string, ProjectCta> = {
+    'kairo-landing-page': {
+        href: '/work/kairo-landing-page/live',
+        label: 'Open the live landing page',
+        note: 'Rebuilt demo, sample data',
+        hard: true,
+    },
+    'kai-dashboard': {
+        href: '/work/kai-dashboard/live',
+        label: 'Open the live dashboard',
+        note: 'Rebuilt demo, sample data',
+        hard: true,
+    },
+    'kai-chat': {
+        href: '/work/kai-chat/live',
+        label: 'Open the live chatbot',
+        note: 'Rebuilt demo, sample data',
+        hard: true,
+    },
+    'kai-voice-coach': {
+        href: '/work/kai-voice-coach/live',
+        label: 'Open the live voice coach',
+        note: 'Rebuilt demo, sample data',
+        hard: true,
+    },
     kharchaaaa: {
         href: '/waitlist',
         label: 'Invite only, tap to join the waitlist',

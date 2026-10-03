@@ -855,9 +855,15 @@ export default function ProjectDetail({ project, adjacent, position }: ProjectDe
               the way to it. */}
           <div className="cs-hero__cta">
             {cta ? (
-              <Link href={cta.href} className="cs-close__cta">
-                {cta.label} <ArrowUpRight />
-              </Link>
+              cta.hard ? (
+                <a href={cta.href} className="cs-close__cta">
+                  {cta.label} <ArrowUpRight />
+                </a>
+              ) : (
+                <Link href={cta.href} className="cs-close__cta">
+                  {cta.label} <ArrowUpRight />
+                </Link>
+              )
             ) : project.externalUrl ? (
               <a
                 href={project.externalUrl}
@@ -999,9 +1005,15 @@ export default function ProjectDetail({ project, adjacent, position }: ProjectDe
               closing line offers the way in rather than "Not publicly live",
               which reads as abandoned. See lib/project-cta.ts. */}
           {cta ? (
-            <Link href={cta.href} className="cs-close__cta">
-              {cta.label} <ArrowUpRight />
-            </Link>
+            cta.hard ? (
+              <a href={cta.href} className="cs-close__cta">
+                {cta.label} <ArrowUpRight />
+              </a>
+            ) : (
+              <Link href={cta.href} className="cs-close__cta">
+                {cta.label} <ArrowUpRight />
+              </Link>
+            )
           ) : project.externalUrl ? (
             <a
               href={project.externalUrl}

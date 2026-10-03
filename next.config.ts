@@ -36,6 +36,25 @@ const nextConfig: NextConfig = {
     })(),
   },
 
+  /* ── Live demos: static builds in public/work/<slug>/live ───── */
+  async rewrites() {
+    return [{ source: '/work/:slug/live', destination: '/work/:slug/live/index.html' }]
+  },
+
+  async redirects() {
+    return [
+      /* Kharchaaaa is invite only, so its live link is the waitlist */
+      { source: '/work/kharchaaaa/live', destination: '/waitlist', permanent: false },
+      /* The client's own site is the live version */
+      { source: '/work/raj-associates/live', destination: 'https://rajassociateslaw.in', permanent: false },
+      /* The AI coaching suite now presents as a stealth startup under the name Kairo */
+      { source: '/work/evolusis-landing-page', destination: '/work/kairo-landing-page', permanent: true },
+      { source: '/work/evo-dashboard-evo-by-evolusis', destination: '/work/kai-dashboard', permanent: true },
+      { source: '/work/evo-chat-ai-coaching-chatbot', destination: '/work/kai-chat', permanent: true },
+      { source: '/work/evo-coach-ai-voice-coaching', destination: '/work/kai-voice-coach', permanent: true },
+    ]
+  },
+
   /* ── Security headers on every response ─────────────────────── */
   async headers() {
     return [

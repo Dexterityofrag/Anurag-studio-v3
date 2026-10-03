@@ -43,9 +43,10 @@ const PALETTES: Record<string, ProjectPalette> = {
   // Sampled from the firm's own office photographs, not a palette tool: the
   // warm near-black they paint with, and the brass used only for hairlines.
   'raj-associates': { field: '#14120F', accent: '#A8894F' },
-  'evolusis-landing-page': { field: '#0A2327', accent: '#5EC8C8' },
-  'evo-dashboard-evo-by-evolusis': { field: '#0A2327', accent: '#4FB6C4' },
-  'evo-chat-ai-coaching-chatbot': { field: '#0B2129', accent: '#57C2B4' },
+  'kairo-landing-page': { field: '#141633', accent: '#A37CFF' },
+  'kai-dashboard': { field: '#141633', accent: '#9F7BFF' },
+  'kai-chat': { field: '#151433', accent: '#B08CFF' },
+  'kai-voice-coach': { field: '#161433', accent: '#A37CFF' },
   'mission-control': { field: '#0B1418', accent: '#3E9BC4' },
   'awr': { field: '#150E08', accent: '#C8862A' },
   'cloudqa': { field: '#0C1822', accent: '#3B82F6' },

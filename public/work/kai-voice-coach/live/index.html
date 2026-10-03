@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <base href="/work/kai-voice-coach/live/">
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <meta name="description" content="KAIRO — Evolve your potential with AI-powered coaching, chat, and analytics." />
+  <title>Kai by Kairo</title>
+  <script>
+    // FOUC prevention — apply dark class before first paint
+    (function () {
+      var t = localStorage.getItem('theme');
+      if (
+        t === 'dark' ||
+        (t !== 'light' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      )
+        document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/index-B5fNI4bI.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Ck18QwKR.css">
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>
