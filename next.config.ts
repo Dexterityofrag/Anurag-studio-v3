@@ -38,7 +38,11 @@ const nextConfig: NextConfig = {
 
   /* ── Live demos: static builds in public/work/<slug>/live ───── */
   async rewrites() {
-    return [{ source: '/work/:slug/live', destination: '/work/:slug/live/index.html' }]
+    return [
+      { source: '/work/:slug/live', destination: '/work/:slug/live/index.html' },
+      /* Multi-page snapshots (HR OS): every inner page is a folder with an index.html */
+      { source: '/work/:slug/live/:path+', destination: '/work/:slug/live/:path+/index.html' },
+    ]
   },
 
   async redirects() {

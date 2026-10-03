@@ -25,6 +25,12 @@ export type ProjectCta = {
 }
 
 const CTAS: Record<string, ProjectCta> = {
+    'hr-os': {
+        href: '/work/hr-os/live',
+        label: 'Browse the live demo',
+        note: 'Five years of sample data, read only',
+        hard: true,
+    },
     'kairo-landing-page': {
         href: '/work/kairo-landing-page/live',
         label: 'Open the live landing page',
