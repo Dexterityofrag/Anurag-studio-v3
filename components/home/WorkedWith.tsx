@@ -393,7 +393,7 @@ interface Props {
 
 // Fallback if no DB data
 const FALLBACK_PARTNERS: PartnerRow[] = [
-  { id: '1', name: 'EVOLUSIS',  sector: 'AI / SAAS PLATFORM',    link: 'https://evolusis.com', external: true,  comingSoon: false, previewImageUrl: null, displayOrder: 0 },
+  { id: '1', name: 'STEALTH AI STARTUP',  sector: 'AI / SAAS PLATFORM',    link: '/work/kairo-landing-page', external: false,  comingSoon: false, previewImageUrl: null, displayOrder: 0 },
   { id: '2', name: 'LOCALGO',   sector: 'LOCAL SERVICES / APP',   link: '/coming-soon',          external: false, comingSoon: true,  previewImageUrl: null, displayOrder: 1 },
   { id: '3', name: 'BOGAMES',   sector: 'GAMING / ENTERTAINMENT', link: '/coming-soon',          external: false, comingSoon: true,  previewImageUrl: null, displayOrder: 2 },
   { id: '4', name: 'FREELANCE', sector: 'PRODUCT DESIGN / UI',    link: '/coming-soon',          external: false, comingSoon: true,  previewImageUrl: null, displayOrder: 3 },

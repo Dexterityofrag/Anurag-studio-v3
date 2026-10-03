@@ -8,7 +8,7 @@ import { requireAdmin } from '@/lib/auth-guard'
 
 /* ── Seed defaults if table is empty ─────────────────────────── */
 const DEFAULT_PARTNERS = [
-  { name: 'EVOLUSIS',  sector: 'AI / SAAS PLATFORM',      link: 'https://evolusis.com',  external: true,  comingSoon: false, previewImageUrl: null as string | null, displayOrder: 0 },
+  { name: 'STEALTH AI STARTUP',  sector: 'AI / SAAS PLATFORM',      link: '/work/kairo-landing-page',  external: false,  comingSoon: false, previewImageUrl: null as string | null, displayOrder: 0 },
   { name: 'LOCALGO',   sector: 'LOCAL SERVICES / APP',     link: '/coming-soon',           external: false, comingSoon: true,  previewImageUrl: null as string | null, displayOrder: 1 },
   { name: 'BOGAMES',   sector: 'GAMING / ENTERTAINMENT',   link: '/coming-soon',           external: false, comingSoon: true,  previewImageUrl: null as string | null, displayOrder: 2 },
   { name: 'FREELANCE', sector: 'PRODUCT DESIGN / UI',      link: '/coming-soon',           external: false, comingSoon: true,  previewImageUrl: null as string | null, displayOrder: 3 },
