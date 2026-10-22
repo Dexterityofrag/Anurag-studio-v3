@@ -42,6 +42,8 @@ const nextConfig: NextConfig = {
       { source: '/work/:slug/live', destination: '/work/:slug/live/index.html' },
       /* Multi-page snapshots (HR OS): every inner page is a folder with an index.html */
       { source: '/work/:slug/live/:path+', destination: '/work/:slug/live/:path+/index.html' },
+      /* Unlisted working prototypes to share by link: Kharchaaaa stays invite only on /live */
+      { source: '/work/:slug/liveproto', destination: '/work/:slug/liveproto/index.html' },
     ]
   },
 
@@ -51,6 +53,7 @@ const nextConfig: NextConfig = {
       { source: '/work/kharchaaaa/live', destination: '/waitlist', permanent: false },
       /* The client's own site is the live version */
       { source: '/work/raj-associates/live', destination: 'https://rajassociateslaw.in', permanent: false },
+      { source: '/work/raj-associates/liveproto', destination: 'https://rajassociateslaw.in', permanent: false },
       /* The AI coaching suite now presents as a stealth startup under the name Kairo */
       { source: '/work/evolusis-landing-page', destination: '/work/kairo-landing-page', permanent: true },
       { source: '/work/evo-dashboard-evo-by-evolusis', destination: '/work/kai-dashboard', permanent: true },
