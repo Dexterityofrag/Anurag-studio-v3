@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { paletteFor } from '@/lib/project-palette'
 import { ctaFor } from '@/lib/project-cta'
+import { videoFor, type ProjectVideo } from '@/lib/project-video'
 import type { Project, ProjectWithTestimonials } from '@/lib/types'
 import type { ImageItem } from '@/lib/db/schema'
 
@@ -120,6 +121,33 @@ const pad = (n: number) => String(n).padStart(2, '0')
  * stable. useScrollReveal keys its effect on that object, so an inline literal
  * would tear down and rebuild the ScrollTrigger on every render.
  */
+/* A product film in the hero frame. Muted and looping, so it can autoplay;
+   paused while off screen, and left on its poster for reduced motion. */
+function HeroVideo({ video }: { video: ProjectVideo }) {
+  const ref = useRef<HTMLVideoElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.pause(); return }
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) el.play().catch(() => {})
+      else el.pause()
+    }, { threshold: 0.2 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  return (
+    <video
+      ref={ref}
+      className="cs-hero__video"
+      src={video.src}
+      poster={video.poster}
+      aria-label={video.label}
+      muted loop playsInline preload="metadata"
+    />
+  )
+}
+
 function Reveal({
   children,
   className,
@@ -348,6 +376,7 @@ const css = /* css */ `
   aspect-ratio: 16 / 9;
 }
 .cs-hero__img { object-fit: cover; object-position: center; }
+.cs-hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* ─── META STRIP ────────────────────────────────────────────── */
 /* Darkened rather than recoloured, so the band still carries the project's
@@ -714,6 +743,8 @@ const css = /* css */ `
   .cs-hero__title { font-size: clamp(2.6rem, 13vw, 4.5rem); letter-spacing: -0.04em; max-width: none; }
   .cs-hero__eyebrow { font-size: 9px; letter-spacing: 0.12em; }
   .cs-hero__frame { aspect-ratio: 4 / 3; }
+  /* a film keeps its own frame rather than losing its edges to a crop */
+  .cs-hero__frame:has(.cs-hero__video) { aspect-ratio: 16 / 9; }
 
   /* Meta: a tight two-column grid instead of four stacked full-width rows. */
   .cs-meta { padding-top: clamp(3.5rem,7vh,5rem); padding-bottom: 2rem; }
@@ -798,6 +829,7 @@ const css = /* css */ `
 export default function ProjectDetail({ project, adjacent, position }: ProjectDetailProps) {
   const palette = paletteFor(project.slug)
   const cta = ctaFor(project.slug)
+  const video = videoFor(project.slug)
   const images = useMemo(() => (project.images ?? []) as ImageItem[], [project.images])
   const descriptionHtml = project.descriptionHtml ?? ''
 
@@ -881,7 +913,13 @@ export default function ProjectDetail({ project, adjacent, position }: ProjectDe
           </div>
         </div>
 
-        {project.coverUrl && (
+        {video ? (
+          <div className="cs-hero__visual">
+            <div className="cs-hero__frame">
+              <HeroVideo video={video} />
+            </div>
+          </div>
+        ) : project.coverUrl && (
           <div className="cs-hero__visual">
             <div className="cs-hero__frame">
               <Image

@@ -47,7 +47,8 @@ const PALETTES: Record<string, ProjectPalette> = {
   'kai-dashboard': { field: '#141633', accent: '#9F7BFF' },
   'kai-chat': { field: '#151433', accent: '#B08CFF' },
   'kai-voice-coach': { field: '#161433', accent: '#A37CFF' },
-  'mission-control': { field: '#0B1418', accent: '#3E9BC4' },
+  // Rebuilt Oct 2026 in a launch-webcast register: black, white, and colour only for risk.
+  'mission-control': { field: '#000000', accent: '#F4F4F4' },
   'awr': { field: '#150E08', accent: '#C8862A' },
   'cloudqa': { field: '#0C1822', accent: '#3B82F6' },
   'orange': { field: '#180E06', accent: '#F97316' },

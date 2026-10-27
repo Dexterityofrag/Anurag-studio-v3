@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="/work/mission-control/live/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mission Control</title>
+  <meta name="description" content="A no code drone mission planner. Wire blocks like Unreal Blueprints, check the plan, fly it in simulation, export to QGroundControl, Mission Planner or Python." />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="top">
+      <div class="brand">
+        <a class="wordmark" href="/work/mission-control" title="Back to the case study">MISSION&nbsp;CONTROL</a>
+        <span class="rule"></span>
+        <input class="mname" id="mname" spellcheck="false" aria-label="Mission name" />
+        <button class="btn ghost" id="btn-missions">Missions</button>
+      </div>
+      <nav class="modes" role="tablist">
+        <button class="mode on" data-mode="plan" role="tab">Plan</button>
+        <button class="mode" data-mode="sim" role="tab">Simulate</button>
+      </nav>
+      <div class="actions">
+        <button class="status" id="status" title="Preflight checks"><i></i><span>Checking</span></button>
+        <button class="btn icon" id="btn-help" title="Replay the briefing" aria-label="Replay the briefing">?</button>
+        <button class="btn icon" id="btn-undo" title="Undo (⌘Z)" aria-label="Undo">↶</button>
+        <button class="btn icon" id="btn-redo" title="Redo (⇧⌘Z)" aria-label="Redo">↷</button>
+        <div class="menu-wrap">
+          <button class="btn solid" id="btn-export">Export</button>
+          <div class="dropdown" id="export-menu" hidden>
+            <button data-x="plan"><b>QGroundControl</b><span>.plan · PX4 and ArduPilot</span></button>
+            <button data-x="wpl"><b>Mission Planner</b><span>.waypoints · QGC WPL 110</span></button>
+            <button data-x="py"><b>Python script</b><span>MAVSDK · full logic and failsafes</span></button>
+            <button data-x="json"><b>Mission file</b><span>.json · reopen here later</span></button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <aside class="lib" id="lib">
+      <div class="panel-h">Blocks</div>
+      <input class="lib-search" id="lib-search" placeholder="Search" spellcheck="false" />
+      <div class="lib-list" id="lib-list"></div>
+    </aside>
+
+    <main class="stage" id="stage">
+      <section class="graph" id="graph" aria-label="Logic graph"></section>
+      <div class="divider" id="divider" title="Drag to resize"></div>
+      <section class="mapwrap" id="mapwrap">
+        <div class="map" id="map"></div>
+        <div class="map-hint" id="map-hint" hidden></div>
+        <button class="btn ghost map-base" id="btn-base">Satellite</button>
+        <button class="btn ghost map-fit" id="btn-fit">Fit</button>
+
+        <div class="hud" id="hud" hidden>
+          <div class="hud-clock"><span class="hud-k">T</span><span id="hud-t">+00:00</span></div>
+          <div class="hud-mode" id="hud-mode">Main program</div>
+          <div class="gauges">
+            <div class="gauge" id="g-speed"><svg viewBox="0 0 100 100"><circle class="g-track" cx="50" cy="50" r="42"/><circle class="g-val" cx="50" cy="50" r="42"/></svg><b>0</b><span>Speed m/s</span></div>
+            <div class="gauge" id="g-alt"><svg viewBox="0 0 100 100"><circle class="g-track" cx="50" cy="50" r="42"/><circle class="g-val" cx="50" cy="50" r="42"/></svg><b>0</b><span>Altitude m</span></div>
+            <div class="gauge" id="g-batt"><svg viewBox="0 0 100 100"><circle class="g-track" cx="50" cy="50" r="42"/><circle class="g-val" cx="50" cy="50" r="42"/></svg><b>100</b><span>Battery %</span></div>
+          </div>
+          <dl class="hud-kv">
+            <dt>Distance</dt><dd id="hud-dist">0 m</dd>
+            <dt>From home</dt><dd id="hud-home">0 m</dd>
+            <dt>Wind</dt><dd id="hud-wind">0 m/s</dd>
+            <dt>GPS</dt><dd id="hud-gps">14 sats</dd>
+            <dt>Link</dt><dd id="hud-link">OK</dd>
+            <dt>Photos</dt><dd id="hud-photos">0</dd>
+          </dl>
+        </div>
+
+        <div class="simbar" id="simbar" hidden>
+          <div class="timeline" id="timeline"><div class="tl-track"><div class="tl-fill" id="tl-fill"></div></div><div class="tl-marks" id="tl-marks"></div></div>
+          <div class="simctl">
+            <button class="btn solid" id="sim-play">Launch</button>
+            <button class="btn ghost" id="sim-reset">Reset</button>
+            <div class="seg" id="sim-speed">
+              <button data-s="1">1×</button><button data-s="4" class="on">4×</button><button data-s="16">16×</button><button data-s="64">64×</button>
+            </div>
+            <span class="simctl-sep"></span>
+            <span class="simctl-k">Inject fault</span>
+            <button class="btn ghost" data-fault="battery">Cell failure</button>
+            <button class="btn ghost" data-fault="gust">Wind gust</button>
+            <button class="btn ghost" data-fault="gps">GPS loss</button>
+            <button class="btn ghost" data-fault="link" id="fault-link">Cut link</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="insp" id="insp"></aside>
+
+    <footer class="drawer" id="drawer">
+      <div class="tabs" role="tablist">
+        <button class="tab on" data-tab="checks">Checks <em id="n-checks"></em></button>
+        <button class="tab" data-tab="brief">Brief</button>
+        <button class="tab" data-tab="code">Code</button>
+        <button class="tab" data-tab="log">Flight log <em id="n-log"></em></button>
+        <span class="tabs-fill"></span>
+        <button class="btn icon" id="drawer-toggle" aria-label="Collapse panel">▾</button>
+      </div>
+      <div class="pane on" data-pane="checks" id="pane-checks"></div>
+      <div class="pane" data-pane="brief" id="pane-brief"></div>
+      <div class="pane" data-pane="code" id="pane-code">
+        <div class="code-bar">
+          <div class="seg" id="code-fmt"><button data-f="py" class="on">Python</button><button data-f="plan">.plan</button><button data-f="wpl">.waypoints</button></div>
+          <span class="code-note" id="code-note"></span>
+          <button class="btn ghost" id="code-copy">Copy</button>
+          <button class="btn ghost" id="code-dl">Download</button>
+        </div>
+        <pre class="code" id="code"></pre>
+      </div>
+      <div class="pane" data-pane="log" id="pane-log"></div>
+    </footer>
+  </div>
+
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-card">
+      <div class="sheet-h"><span>Missions</span><button class="btn icon" id="sheet-close" aria-label="Close">✕</button></div>
+      <div class="sheet-sec">Start from</div>
+      <div class="tpl" id="tpl"></div>
+      <div class="sheet-sec">Saved in this browser</div>
+      <div class="saved" id="saved"></div>
+      <div class="sheet-foot">
+        <button class="btn ghost" id="btn-import">Import .json</button>
+        <input type="file" id="file" accept=".json,application/json" hidden />
+        <span class="muted">Missions save automatically on this device.</span>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" hidden></div>
+</body>
+</html>
