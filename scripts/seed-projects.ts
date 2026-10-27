@@ -76,14 +76,15 @@ const projectSeeds: ProjectSeed[] = [
   // permission design actually belongs.
   {
     slug: 'mission-control',
-    title: 'Mission Control: Operator-First Drone (No-Code) HMI',
-    tagline: 'Operator-First Autonomous Drone Logic Editor — No-Code HMI for high-stakes mission orchestration',
-    role: 'HMI and UI/UX Designer (End-to-end)',
-    year: 2025,
-    tags: ['HMI Design', 'UI/UX Design', 'Interaction Design', 'Information Architecture', 'Design System', 'High-Fidelity Prototyping'],
+    // kept in step with scripts/seed-mission-control.ts, the script that updates this row
+    title: 'Mission Control: A No Code Drone Mission Planner',
+    tagline: 'Wire a drone mission like an Unreal Blueprint, check it, fly it in simulation, and export it to a real autopilot',
+    role: 'Product Designer and Developer (End to end)',
+    year: 2026,
+    tags: ['Product Design', 'Interaction Design', 'HMI Design', 'Design System', 'Front End Development', 'Simulation'],
     client: null,
-    coverUrl: '/projects/mission-control/Bg1OTmRCa4HBnnu0CMG91vRZ2VY.png',
-    thumbnailUrl: '/projects/mission-control/Bg1OTmRCa4HBnnu0CMG91vRZ2VY.png',
+    coverUrl: '/projects/mission-control/thumb-wide.webp',
+    thumbnailUrl: '/projects/mission-control/thumb-portrait.webp',
     displayOrder: 4,
   },
   {

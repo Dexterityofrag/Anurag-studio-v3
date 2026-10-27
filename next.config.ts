@@ -13,6 +13,9 @@ const parseR2PublicUrl = () => {
 }
 const r2Host = parseR2PublicUrl()
 
+/* ── Map tiles for the Mission Control demo: satellite, with a dark basemap fallback ── */
+const MAP_TILES = 'https://server.arcgisonline.com https://*.basemaps.cartocdn.com'
+
 const nextConfig: NextConfig = {
   /* ── Hide "X-Powered-By: Next.js" header ────────────────────── */
   poweredByHeader: false,
@@ -95,13 +98,13 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               ...(r2Host ? [
-                `img-src 'self' data: blob: https://${r2Host} https://miro.medium.com https://cdn-images-1.medium.com`,
+                `img-src 'self' data: blob: https://${r2Host} https://miro.medium.com https://cdn-images-1.medium.com ${MAP_TILES}`,
                 `connect-src 'self' https://${r2Host}`,
                 // the showreel is served from R2; without media-src it falls back to
                 // default-src 'self' and the <video> is blocked
                 `media-src 'self' blob: https://${r2Host}`,
               ] : [
-                "img-src 'self' data: blob: https://miro.medium.com https://cdn-images-1.medium.com",
+                `img-src 'self' data: blob: https://miro.medium.com https://cdn-images-1.medium.com ${MAP_TILES}`,
                 "connect-src 'self'",
                 "media-src 'self' blob:",
               ]),

@@ -318,44 +318,52 @@ const DESCRIPTIONS: Record<string, Block[]> = {
     { type: 'paragraph', text: 'A drone mission is a program. In most systems today somebody writes it in code, or clicks through a form and hopes.' },
 
     { type: 'heading', level: 2, text: 'Blueprints, For Drones' },
-    { type: 'paragraph', text: 'Mission Control is a no-code editor that lets the person who actually understands the mission build its logic themselves, by connecting blocks on a canvas. Take off, fly this perimeter, hold if the battery drops below reserve, come home.' },
-    { type: 'paragraph', text: 'The reference was Unreal Engine’s Blueprint system. If a game designer can build complex behaviour visually without touching C++, an operator should be able to plan a survey flight without touching Python.' },
+    { type: 'paragraph', text: 'Mission Control is a no code editor that lets the person who actually understands the mission build its logic themselves, by connecting blocks on a canvas. Take off, survey this field, hold if the wind picks up, come home if the battery drops.' },
+    { type: 'paragraph', text: 'The reference is Unreal Engine’s Blueprint system. If a game designer can build complex behaviour visually without touching C++, an operator should be able to plan a survey flight without touching Python.' },
 
-    fig('mission-control', 'cover', 'Mission Control title slide reading Operator-First Autonomous Drone Logic Editor',
-      'Mission Control. A no-code HMI for high-stakes mission orchestration, designed end to end.'),
+    fig('mission-control', 'live-plan', 'The Mission Control planner: block library on the left, logic graph in the middle, satellite map on the right, mission settings beside it',
+      'The planner. Library, graph, map and inspector on one screen, because nothing about a mission should require leaving it.'),
 
-    { type: 'heading', level: 2, text: 'The Gap Worth Closing' },
-    { type: 'paragraph', text: 'Drone operations are unforgiving in a specific way. There is a gap between the person who understands the mission and the person who can express it in code, and every handoff across that gap is a chance to lose intent.' },
-    { type: 'paragraph', text: 'These mistakes do not fail politely. A wrong sequence is a lost aircraft, a violated airspace boundary, or worse.' },
+    { type: 'heading', level: 2, text: 'From Concept To Working Tool' },
+    { type: 'paragraph', text: 'The first version, in 2025, was a high fidelity concept: the interaction model and the safety argument, shown as frames. In 2026 I rebuilt it as a tool that runs. The graph compiles, the plan is checked, the flight is simulated, and the result exports to the software that flies real aircraft.' },
+    { type: 'paragraph', text: 'It runs entirely in the browser. No account, no install, missions saved on the device. The look moved too, from a cyan sci-fi HUD to something closer to a launch webcast: black, white, condensed type, and big numbers where the numbers matter.' },
 
-    fig('mission-control', 'cognitive-gap', 'Slide titled The Cognitive Gap in Command and Control listing three problems with code-first tooling',
-      'The framing. Code-first tools bury risk in logs, fragmented panels slow down state parsing, and safety ends up reactive rather than built in.'),
+    { type: 'heading', level: 2, text: 'Failsafes Are Events' },
+    { type: 'paragraph', text: 'In Unreal, an event interrupts whatever the graph was doing. The same idea carries the safety model here. On Battery Low, On Link Lost, On GPS Degraded and On Geofence Breach sit at the left edge of the graph, and when one fires it takes over from the main program and runs its own chain.' },
+    { type: 'paragraph', text: 'Severity decides who wins. A critical event can interrupt a warning handler that is already running, never the other way round, so a dead battery always outranks a dropped link.' },
 
-    { type: 'heading', level: 2, text: 'One View, Four Regions' },
-    { type: 'paragraph', text: 'The interface is a single screen on purpose. A block library on the left, the phase canvas in the middle, an inspector on the right, and the generated code with its live errors underneath.' },
-    { type: 'paragraph', text: 'Operators do not get to hunt through tabs while an aircraft is airborne. Everything needed to answer "what will this thing do next" stays in peripheral vision. Tabs are a filing decision, and filing is the wrong thing to be doing under time pressure.' },
+    fig('mission-control', 'live-survey', 'A Survey Area block selected, with its polygon drawn over farmland, the generated survey lines, and dashed contingency routes back to home',
+      'Draw the field on real imagery and the survey lines lay themselves out. The dashed routes show where each failsafe would take the aircraft from the furthest point of the flight.'),
 
-    fig('mission-control', 'unified-hmi', 'Annotated Mission Control interface showing the block library, phase canvas, inspector box and code with errors',
-      'Library, canvas, inspector and faults in one operator view. Nothing about a mission requires leaving this screen.'),
+    { type: 'heading', level: 2, text: 'Colour Carries Risk, And Nothing Else' },
+    { type: 'paragraph', text: 'White is normal. Orange is a warning. Red is critical. Three states, and colour means nothing else anywhere in the interface. Selection is a white outline, primary actions are white, and the wires out of a failsafe take that failsafe’s colour.' },
+    { type: 'paragraph', text: 'That restraint is the whole trick. The moment colour also means selected or primary, the operator learns to filter it out, and the day it means your battery reserve will not get you home, they filter that out too.' },
 
-    { type: 'heading', level: 2, text: 'Colour Carries Risk, and Nothing Else' },
-    { type: 'paragraph', text: 'Cyan is normal. Orange is a warning. Red is critical. Three states, and colour is used for nothing else in the entire interface.' },
-    { type: 'paragraph', text: 'That restraint is the whole trick. The moment colour also means "selected" or "primary action", the operator learns to filter it out, and the day it means "your battery reserve will not get you home" they filter that out too.' },
-    { type: 'paragraph', text: 'Multi-condition gates, battery reserve checks and return-to-base routes all inherit the same three-step scale, so risk reads identically wherever it appears on the canvas.' },
+    fig('mission-control', 'live-checks', 'A survey raised above the 120 metre ceiling, flagged red on the block, in the inspector and in the preflight checks',
+      'Checks run on every edit. Raise the survey above the 120 m ceiling and the block, the check and the status light all turn red.'),
 
-    fig('mission-control', 'safety-logic', 'Slide showing a node graph with cyan, orange and red paths for normal, warning and critical conditions',
-      'Safety logic on the canvas. One scale, applied everywhere, so severity never has to be decoded.'),
+    { type: 'heading', level: 2, text: 'Fly It Before It Flies' },
+    { type: 'paragraph', text: 'Simulate mode runs the compiled program against a simple flight model: climb rate, cruise speed, wind, and a battery that drains harder against the wind. Speed, altitude and battery sit in gauges over the map, with a T+ clock and the flight’s milestones on one line.' },
+    { type: 'paragraph', text: 'The point is to break it on purpose. A cell failure, a wind gust, GPS loss or a dead link can be injected mid flight, and the log shows which failsafe took over and where the aircraft came down.' },
+
+    fig('mission-control', 'live-sim', 'Simulate mode mid survey, with speed, altitude and battery gauges, the T+ clock and a timeline of milestones',
+      'Mid survey, a cell failure drops the battery. On Battery Low takes over, and the trail turns orange on the way home.'),
 
     { type: 'heading', level: 2, text: 'Glass Box, Not Black Box' },
-    { type: 'paragraph', text: 'The editor writes real code, and it shows it. The generated source sits under the canvas with errors inline, next to a plain-language mission brief.' },
-    { type: 'paragraph', text: 'Two audiences, one screen. The operator reads the brief in order to fly. The engineer or the auditor reads the code in order to sign it off. A no-code tool that hides its own output cannot be trusted with anything consequential, so this one does not hide it.' },
+    { type: 'paragraph', text: 'A no code tool that hides its own output cannot be trusted with anything consequential, so this one shows its working. Every edit regenerates a plain language brief for the operator, and real files for everyone else:' },
+    { type: 'bulletList', items: [
+      'A QGroundControl plan, for PX4 and ArduPilot',
+      'A Mission Planner waypoint file',
+      'A Python script for MAVSDK that carries the whole graph: branches, loops, and every failsafe as a live telemetry watcher',
+    ] },
+    { type: 'paragraph', text: 'Waypoint missions cannot branch, so the first two carry the nominal flight and say so in the interface. The Python carries everything.' },
 
-    fig('mission-control', 'glass-box', 'Slide showing generated code with inline errors beside a plain-language mission brief panel',
-      'The generated code and the mission brief, side by side. Clarity for execution on one side, transparency for audit on the other.'),
+    fig('mission-control', 'live-code', 'The export menu open over the generated Python script',
+      'The generated code and the four ways out. The operator reads the brief to fly; the engineer reads this to sign it off.'),
 
     { type: 'heading', level: 2, text: 'Where It Stands' },
-    { type: 'paragraph', text: 'Mission Control is a design project: an end-to-end HMI concept taken to a high-fidelity prototype, with its own design system, information architecture and interaction model.' },
-    { type: 'paragraph', text: 'It has not flown an aircraft. The safety model here is designed and argued, not certified, and the distance between those two things in aviation is considerable. I would want a real operator to break it before I claimed anything more.' },
+    { type: 'paragraph', text: 'Mission Control is a working planner and simulator, designed and built end to end: interaction model, design system, and the code underneath.' },
+    { type: 'paragraph', text: 'It has not flown an aircraft. The exports follow the published formats, but they have not yet been run in a software in the loop simulator, let alone in a field. The safety model is designed and argued, not certified, and in aviation that distance is considerable. I would want a real operator to try to break it before I claimed anything more.' },
   ],
 
   /* ══ AWR ═════════════════════════════════════════════════════ */
@@ -512,11 +520,12 @@ const IMAGES: Record<string, ImageItem[]> = {
     { url: '/projects/evo-chat-ai-coaching-chatbot/case/voice-check.webp', alt: 'Evo Coach voice permission screen' },
   ],
   'mission-control': [
-    { url: '/projects/mission-control/case/cover.webp', alt: 'Mission Control title slide' },
-    { url: '/projects/mission-control/case/cognitive-gap.webp', alt: 'The cognitive gap in command and control' },
-    { url: '/projects/mission-control/case/unified-hmi.webp', alt: 'The unified Mission Control HMI, annotated' },
-    { url: '/projects/mission-control/case/safety-logic.webp', alt: 'Safety logic and spatial risk on the canvas' },
-    { url: '/projects/mission-control/case/glass-box.webp', alt: 'Generated code and operator brief side by side' },
+    { url: '/projects/mission-control/case/live-plan.webp', alt: 'The Mission Control planner' },
+    { url: '/projects/mission-control/case/live-survey.webp', alt: 'A survey area drawn on satellite imagery' },
+    { url: '/projects/mission-control/case/live-checks.webp', alt: 'A critical preflight check' },
+    { url: '/projects/mission-control/case/live-sim.webp', alt: 'Simulate mode mid flight' },
+    { url: '/projects/mission-control/case/live-code.webp', alt: 'The export menu and generated code' },
+    { url: '/projects/mission-control/case/live-boot.webp', alt: 'The systems check that opens a first visit', caption: 'A first visit opens on a systems check, then an optional briefing over the real interface.' },
   ],
   awr: [
     { url: '/projects/awr/case/brand.webp', alt: 'Anurag Whiskey Reserve brand slide' },
@@ -547,7 +556,12 @@ async function main() {
     process.exit(1)
   }
 
-  const rows = await db.select().from(projects)
+  // `npm run seed:descriptions -- mission-control` touches only the slugs named;
+  // add --dry to build and measure everything without writing to the database
+  const args = process.argv.slice(2)
+  const dry = args.includes('--dry')
+  const only = args.filter((a) => a !== '--dry')
+  const rows = (await db.select().from(projects)).filter((r) => !only.length || only.includes(r.slug))
 
   let updated = 0
   const missing: string[] = []
@@ -563,11 +577,15 @@ async function main() {
     // Fails loudly on a missing figure rather than seeding a broken image.
     await measure(blocks, dims)
 
-    await db
+    const html = buildHtml(blocks, dims)
+    if (dry) {
+      const imgs = [...html.matchAll(/src="([^"]+)"/g)].map((m) => m[1])
+      console.log(`  [dry] ${project.slug}: ${html.length} chars of html, figures ${imgs.join(', ')}`)
+    } else await db
       .update(projects)
       .set({
         description: buildTiptapJson(blocks),
-        descriptionHtml: buildHtml(blocks, dims),
+        descriptionHtml: html,
         images: IMAGES[project.slug] ?? [],
         updatedAt: new Date(),
       })
@@ -587,7 +605,7 @@ async function main() {
   if (missing.length) {
     console.log(`\n  no copy written for: ${missing.join(', ')}`)
   }
-  console.log(`\n  updated ${updated}/${rows.length} projects`)
+  console.log(`\n  ${dry ? 'dry run, nothing written for' : 'updated'} ${updated}/${rows.length} projects`)
   process.exit(0)
 }
 

@@ -25,8 +25,10 @@
     "seed:projects": "tsx --env-file=.env.local scripts/seed-projects.ts",
     "seed:descriptions": "tsx --env-file=.env.local scripts/seed-descriptions.ts",
     "seed:kharchaaaa": "tsx --env-file=.env.local scripts/seed-kharchaaaa.ts",
+    "seed:mission-control": "tsx --env-file=.env.local scripts/seed-mission-control.ts && tsx --env-file=.env.local scripts/seed-descriptions.ts mission-control",
     "seed:raj": "tsx --env-file=.env.local scripts/seed-raj-associates.ts",
     "intro:kharcha": "remotion render remotion/index.ts KharchaIntro public/projects/kharchaaaa/intro.mp4 --codec h264 --crf 18 --muted",
+    "reel:mission": "remotion render remotion/index.ts MissionControlReel out/mission-control-reel.mp4 --codec h264 --crf 18 --muted && ffmpeg -y -loglevel error -i out/mission-control-reel.mp4 -c:v libx264 -crf 25 -preset slow -pix_fmt yuv420p -movflags +faststart public/projects/mission-control/reel.mp4",
     "intro:kharcha:still": "remotion still remotion/index.ts KharchaIntro out/kharcha-intro.png --frame=120"
   },
   "dependencies": {

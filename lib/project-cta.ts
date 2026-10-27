@@ -55,6 +55,12 @@ const CTAS: Record<string, ProjectCta> = {
         note: 'Rebuilt demo, sample data',
         hard: true,
     },
+    'mission-control': {
+        href: '/work/mission-control/live',
+        label: 'Open the mission planner',
+        note: 'Runs in your browser, simulated flight',
+        hard: true,
+    },
     kharchaaaa: {
         href: '/waitlist',
         label: 'Invite only, tap to join the waitlist',
